@@ -24,6 +24,10 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Pages가 꺼져 있으면 자동 활성화 (Source: GitHub Actions)
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       # 데이터 JSON은 저장소에 커밋되어 있어 빌드 중 외부 네트워크 호출 없음
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
