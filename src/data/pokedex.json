@@ -1,0 +1,5552 @@
+{
+ "1": {
+  "id": 1,
+  "ko": "이상해씨",
+  "types": [
+   "grass",
+   "poison"
+  ],
+  "hp": 45,
+  "atk": 65,
+  "def": 57,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   2
+  ]
+ },
+ "2": {
+  "id": 2,
+  "ko": "이상해풀",
+  "types": [
+   "grass",
+   "poison"
+  ],
+  "hp": 60,
+  "atk": 80,
+  "def": 72,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   3
+  ]
+ },
+ "3": {
+  "id": 3,
+  "ko": "이상해꽃",
+  "types": [
+   "grass",
+   "poison"
+  ],
+  "hp": 80,
+  "atk": 100,
+  "def": 92,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "4": {
+  "id": 4,
+  "ko": "파이리",
+  "types": [
+   "fire"
+  ],
+  "hp": 39,
+  "atk": 60,
+  "def": 47,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   5
+  ]
+ },
+ "5": {
+  "id": 5,
+  "ko": "리자드",
+  "types": [
+   "fire"
+  ],
+  "hp": 58,
+  "atk": 80,
+  "def": 62,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   6
+  ]
+ },
+ "6": {
+  "id": 6,
+  "ko": "리자몽",
+  "types": [
+   "fire",
+   "flying"
+  ],
+  "hp": 78,
+  "atk": 109,
+  "def": 82,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "7": {
+  "id": 7,
+  "ko": "꼬부기",
+  "types": [
+   "water"
+  ],
+  "hp": 44,
+  "atk": 50,
+  "def": 65,
+  "spd": 43,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   8
+  ]
+ },
+ "8": {
+  "id": 8,
+  "ko": "어니부기",
+  "types": [
+   "water"
+  ],
+  "hp": 59,
+  "atk": 65,
+  "def": 80,
+  "spd": 58,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   9
+  ]
+ },
+ "9": {
+  "id": 9,
+  "ko": "거북왕",
+  "types": [
+   "water"
+  ],
+  "hp": 79,
+  "atk": 85,
+  "def": 103,
+  "spd": 78,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "16": {
+  "id": 16,
+  "ko": "구구",
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "hp": 40,
+  "atk": 45,
+  "def": 38,
+  "spd": 56,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 257,
+    "ko": "열풍",
+    "type": "fire",
+    "power": 95
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   17
+  ]
+ },
+ "17": {
+  "id": 17,
+  "ko": "피죤",
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "hp": 63,
+  "atk": 60,
+  "def": 53,
+  "spd": 71,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 257,
+    "ko": "열풍",
+    "type": "fire",
+    "power": 95
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   18
+  ]
+ },
+ "18": {
+  "id": 18,
+  "ko": "피죤투",
+  "types": [
+   "normal",
+   "flying"
+  ],
+  "hp": 83,
+  "atk": 80,
+  "def": 73,
+  "spd": 101,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 257,
+    "ko": "열풍",
+    "type": "fire",
+    "power": 95
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ]
+ },
+ "25": {
+  "id": 25,
+  "ko": "피카츄",
+  "types": [
+   "electric"
+  ],
+  "hp": 35,
+  "atk": 55,
+  "def": 45,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 85,
+    "ko": "10만볼트",
+    "type": "electric",
+    "power": 90
+   },
+   {
+    "id": 98,
+    "ko": "전광석화",
+    "type": "normal",
+    "power": 40
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   26
+  ]
+ },
+ "26": {
+  "id": 26,
+  "ko": "라이츄",
+  "types": [
+   "electric"
+  ],
+  "hp": 60,
+  "atk": 90,
+  "def": 68,
+  "spd": 110,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "39": {
+  "id": 39,
+  "ko": "푸린",
+  "types": [
+   "normal",
+   "fairy"
+  ],
+  "hp": 115,
+  "atk": 45,
+  "def": 23,
+  "spd": 20,
+  "moves": [
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   40
+  ]
+ },
+ "40": {
+  "id": 40,
+  "ko": "푸크린",
+  "types": [
+   "normal",
+   "fairy"
+  ],
+  "hp": 140,
+  "atk": 85,
+  "def": 48,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ]
+ },
+ "41": {
+  "id": 41,
+  "ko": "주뱃",
+  "types": [
+   "poison",
+   "flying"
+  ],
+  "hp": 40,
+  "atk": 45,
+  "def": 38,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 413,
+    "ko": "브레이브버드",
+    "type": "flying",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   42
+  ]
+ },
+ "42": {
+  "id": 42,
+  "ko": "골뱃",
+  "types": [
+   "poison",
+   "flying"
+  ],
+  "hp": 75,
+  "atk": 80,
+  "def": 73,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 413,
+    "ko": "브레이브버드",
+    "type": "flying",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   169
+  ]
+ },
+ "52": {
+  "id": 52,
+  "ko": "나옹",
+  "types": [
+   "normal"
+  ],
+  "hp": 40,
+  "atk": 45,
+  "def": 38,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   53
+  ]
+ },
+ "53": {
+  "id": 53,
+  "ko": "페르시온",
+  "types": [
+   "normal"
+  ],
+  "hp": 65,
+  "atk": 70,
+  "def": 63,
+  "spd": 115,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ]
+ },
+ "54": {
+  "id": 54,
+  "ko": "고라파덕",
+  "types": [
+   "water"
+  ],
+  "hp": 50,
+  "atk": 65,
+  "def": 49,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   55
+  ]
+ },
+ "55": {
+  "id": 55,
+  "ko": "골덕",
+  "types": [
+   "water"
+  ],
+  "hp": 80,
+  "atk": 95,
+  "def": 79,
+  "spd": 85,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ]
+ },
+ "58": {
+  "id": 58,
+  "ko": "가디",
+  "types": [
+   "fire"
+  ],
+  "hp": 55,
+  "atk": 70,
+  "def": 48,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   59
+  ]
+ },
+ "59": {
+  "id": 59,
+  "ko": "윈디",
+  "types": [
+   "fire"
+  ],
+  "hp": 90,
+  "atk": 110,
+  "def": 80,
+  "spd": 95,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "63": {
+  "id": 63,
+  "ko": "캐이시",
+  "types": [
+   "psychic"
+  ],
+  "hp": 25,
+  "atk": 105,
+  "def": 35,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 138,
+    "ko": "꿈먹기",
+    "type": "psychic",
+    "power": 100
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   64
+  ]
+ },
+ "64": {
+  "id": 64,
+  "ko": "윤겔라",
+  "types": [
+   "psychic"
+  ],
+  "hp": 40,
+  "atk": 120,
+  "def": 50,
+  "spd": 105,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   65
+  ]
+ },
+ "65": {
+  "id": 65,
+  "ko": "후딘",
+  "types": [
+   "psychic"
+  ],
+  "hp": 55,
+  "atk": 135,
+  "def": 70,
+  "spd": 120,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "66": {
+  "id": 66,
+  "ko": "알통몬",
+  "types": [
+   "fighting"
+  ],
+  "hp": 70,
+  "atk": 80,
+  "def": 43,
+  "spd": 35,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   67
+  ]
+ },
+ "67": {
+  "id": 67,
+  "ko": "근육몬",
+  "types": [
+   "fighting"
+  ],
+  "hp": 80,
+  "atk": 100,
+  "def": 65,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   68
+  ]
+ },
+ "68": {
+  "id": 68,
+  "ko": "괴력몬",
+  "types": [
+   "fighting"
+  ],
+  "hp": 90,
+  "atk": 130,
+  "def": 83,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "74": {
+  "id": 74,
+  "ko": "꼬마돌",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 40,
+  "atk": 80,
+  "def": 65,
+  "spd": 20,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   75
+  ]
+ },
+ "75": {
+  "id": 75,
+  "ko": "데구리",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 55,
+  "atk": 95,
+  "def": 80,
+  "spd": 35,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   76
+  ]
+ },
+ "76": {
+  "id": 76,
+  "ko": "딱구리",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 80,
+  "atk": 120,
+  "def": 98,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "79": {
+  "id": 79,
+  "ko": "야돈",
+  "types": [
+   "water",
+   "psychic"
+  ],
+  "hp": 90,
+  "atk": 65,
+  "def": 53,
+  "spd": 15,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   80
+  ]
+ },
+ "80": {
+  "id": 80,
+  "ko": "야도란",
+  "types": [
+   "water",
+   "psychic"
+  ],
+  "hp": 95,
+  "atk": 100,
+  "def": 95,
+  "spd": 30,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ]
+ },
+ "92": {
+  "id": 92,
+  "ko": "고오스",
+  "types": [
+   "ghost",
+   "poison"
+  ],
+  "hp": 30,
+  "atk": 100,
+  "def": 33,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 441,
+    "ko": "더스트슈트",
+    "type": "poison",
+    "power": 120
+   },
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   93
+  ]
+ },
+ "93": {
+  "id": 93,
+  "ko": "고우스트",
+  "types": [
+   "ghost",
+   "poison"
+  ],
+  "hp": 45,
+  "atk": 115,
+  "def": 50,
+  "spd": 95,
+  "moves": [
+   {
+    "id": 441,
+    "ko": "더스트슈트",
+    "type": "poison",
+    "power": 120
+   },
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   94
+  ]
+ },
+ "94": {
+  "id": 94,
+  "ko": "팬텀",
+  "types": [
+   "ghost",
+   "poison"
+  ],
+  "hp": 60,
+  "atk": 130,
+  "def": 68,
+  "spd": 110,
+  "moves": [
+   {
+    "id": 441,
+    "ko": "더스트슈트",
+    "type": "poison",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "95": {
+  "id": 95,
+  "ko": "롱스톤",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 35,
+  "atk": 45,
+  "def": 103,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 800,
+    "ko": "메테오빔",
+    "type": "rock",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   208
+  ]
+ },
+ "104": {
+  "id": 104,
+  "ko": "탕구리",
+  "types": [
+   "ground"
+  ],
+  "hp": 50,
+  "atk": 50,
+  "def": 73,
+  "spd": 35,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   105
+  ]
+ },
+ "105": {
+  "id": 105,
+  "ko": "텅구리",
+  "types": [
+   "ground"
+  ],
+  "hp": 60,
+  "atk": 80,
+  "def": 95,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ]
+ },
+ "123": {
+  "id": 123,
+  "ko": "스라크",
+  "types": [
+   "bug",
+   "flying"
+  ],
+  "hp": 70,
+  "atk": 110,
+  "def": 80,
+  "spd": 105,
+  "moves": [
+   {
+    "id": 405,
+    "ko": "벌레의야단법석",
+    "type": "bug",
+    "power": 90
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   212
+  ]
+ },
+ "127": {
+  "id": 127,
+  "ko": "쁘사이저",
+  "types": [
+   "bug"
+  ],
+  "hp": 65,
+  "atk": 125,
+  "def": 85,
+  "spd": 85,
+  "moves": [
+   {
+    "id": 404,
+    "ko": "시저크로스",
+    "type": "bug",
+    "power": 80
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "129": {
+  "id": 129,
+  "ko": "잉어킹",
+  "types": [
+   "water"
+  ],
+  "hp": 20,
+  "atk": 15,
+  "def": 38,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 340,
+    "ko": "뛰어오르다",
+    "type": "flying",
+    "power": 85
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   130
+  ]
+ },
+ "130": {
+  "id": 130,
+  "ko": "갸라도스",
+  "types": [
+   "water",
+   "flying"
+  ],
+  "hp": 95,
+  "atk": 125,
+  "def": 90,
+  "spd": 81,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "sea"
+  ]
+ },
+ "131": {
+  "id": 131,
+  "ko": "라프라스",
+  "types": [
+   "water",
+   "ice"
+  ],
+  "hp": 130,
+  "atk": 85,
+  "def": 88,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "sea"
+  ]
+ },
+ "133": {
+  "id": 133,
+  "ko": "이브이",
+  "types": [
+   "normal"
+  ],
+  "hp": 55,
+  "atk": 55,
+  "def": 58,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 485,
+    "ko": "싱크로노이즈",
+    "type": "psychic",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   134,
+   135,
+   136,
+   196,
+   197,
+   470,
+   471,
+   700
+  ]
+ },
+ "134": {
+  "id": 134,
+  "ko": "샤미드",
+  "types": [
+   "water"
+  ],
+  "hp": 130,
+  "atk": 110,
+  "def": 78,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "135": {
+  "id": 135,
+  "ko": "쥬피썬더",
+  "types": [
+   "electric"
+  ],
+  "hp": 65,
+  "atk": 110,
+  "def": 78,
+  "spd": 130,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "136": {
+  "id": 136,
+  "ko": "부스터",
+  "types": [
+   "fire"
+  ],
+  "hp": 65,
+  "atk": 130,
+  "def": 85,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "143": {
+  "id": 143,
+  "ko": "잠만보",
+  "types": [
+   "normal"
+  ],
+  "hp": 160,
+  "atk": 110,
+  "def": 88,
+  "spd": 30,
+  "moves": [
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "grass"
+  ]
+ },
+ "147": {
+  "id": 147,
+  "ko": "미뇽",
+  "types": [
+   "dragon"
+  ],
+  "hp": 41,
+  "atk": 64,
+  "def": 48,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   148
+  ]
+ },
+ "148": {
+  "id": 148,
+  "ko": "신뇽",
+  "types": [
+   "dragon"
+  ],
+  "hp": 61,
+  "atk": 84,
+  "def": 68,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   149
+  ]
+ },
+ "149": {
+  "id": 149,
+  "ko": "망나뇽",
+  "types": [
+   "dragon",
+   "flying"
+  ],
+  "hp": 91,
+  "atk": 134,
+  "def": 98,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "sea"
+  ]
+ },
+ "150": {
+  "id": 150,
+  "ko": "뮤츠",
+  "types": [
+   "psychic"
+  ],
+  "hp": 106,
+  "atk": 154,
+  "def": 90,
+  "spd": 130,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "151": {
+  "id": 151,
+  "ko": "뮤",
+  "types": [
+   "psychic"
+  ],
+  "hp": 100,
+  "atk": 100,
+  "def": 100,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "152": {
+  "id": 152,
+  "ko": "치코리타",
+  "types": [
+   "grass"
+  ],
+  "hp": 45,
+  "atk": 49,
+  "def": 65,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   153
+  ]
+ },
+ "153": {
+  "id": 153,
+  "ko": "베이리프",
+  "types": [
+   "grass"
+  ],
+  "hp": 60,
+  "atk": 63,
+  "def": 80,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   154
+  ]
+ },
+ "154": {
+  "id": 154,
+  "ko": "메가니움",
+  "types": [
+   "grass"
+  ],
+  "hp": 80,
+  "atk": 83,
+  "def": 100,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "155": {
+  "id": 155,
+  "ko": "브케인",
+  "types": [
+   "fire"
+  ],
+  "hp": 39,
+  "atk": 60,
+  "def": 47,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   156
+  ]
+ },
+ "156": {
+  "id": 156,
+  "ko": "마그케인",
+  "types": [
+   "fire"
+  ],
+  "hp": 58,
+  "atk": 80,
+  "def": 62,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   157
+  ]
+ },
+ "157": {
+  "id": 157,
+  "ko": "블레이범",
+  "types": [
+   "fire"
+  ],
+  "hp": 78,
+  "atk": 109,
+  "def": 82,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "158": {
+  "id": 158,
+  "ko": "리아코",
+  "types": [
+   "water"
+  ],
+  "hp": 50,
+  "atk": 65,
+  "def": 56,
+  "spd": 43,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   159
+  ]
+ },
+ "159": {
+  "id": 159,
+  "ko": "엘리게이",
+  "types": [
+   "water"
+  ],
+  "hp": 65,
+  "atk": 80,
+  "def": 72,
+  "spd": 58,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   160
+  ]
+ },
+ "160": {
+  "id": 160,
+  "ko": "장크로다일",
+  "types": [
+   "water"
+  ],
+  "hp": 85,
+  "atk": 105,
+  "def": 92,
+  "spd": 78,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "169": {
+  "id": 169,
+  "ko": "크로뱃",
+  "types": [
+   "poison",
+   "flying"
+  ],
+  "hp": 85,
+  "atk": 90,
+  "def": 80,
+  "spd": 130,
+  "moves": [
+   {
+    "id": 413,
+    "ko": "브레이브버드",
+    "type": "flying",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "179": {
+  "id": 179,
+  "ko": "메리프",
+  "types": [
+   "electric"
+  ],
+  "hp": 55,
+  "atk": 65,
+  "def": 43,
+  "spd": 35,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   180
+  ]
+ },
+ "180": {
+  "id": 180,
+  "ko": "보송송",
+  "types": [
+   "electric"
+  ],
+  "hp": 70,
+  "atk": 80,
+  "def": 58,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   181
+  ]
+ },
+ "181": {
+  "id": 181,
+  "ko": "전룡",
+  "types": [
+   "electric"
+  ],
+  "hp": 90,
+  "atk": 115,
+  "def": 88,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "196": {
+  "id": 196,
+  "ko": "에브이",
+  "types": [
+   "psychic"
+  ],
+  "hp": 65,
+  "atk": 130,
+  "def": 78,
+  "spd": 110,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "197": {
+  "id": 197,
+  "ko": "블래키",
+  "types": [
+   "dark"
+  ],
+  "hp": 95,
+  "atk": 65,
+  "def": 120,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 492,
+    "ko": "속임수",
+    "type": "dark",
+    "power": 95
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "208": {
+  "id": 208,
+  "ko": "강철톤",
+  "types": [
+   "steel",
+   "ground"
+  ],
+  "hp": 75,
+  "atk": 85,
+  "def": 133,
+  "spd": 30,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "212": {
+  "id": 212,
+  "ko": "핫삼",
+  "types": [
+   "bug",
+   "steel"
+  ],
+  "hp": 70,
+  "atk": 130,
+  "def": 90,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 405,
+    "ko": "벌레의야단법석",
+    "type": "bug",
+    "power": 90
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "214": {
+  "id": 214,
+  "ko": "헤라크로스",
+  "types": [
+   "bug",
+   "fighting"
+  ],
+  "hp": 80,
+  "atk": 125,
+  "def": 85,
+  "spd": 85,
+  "moves": [
+   {
+    "id": 224,
+    "ko": "메가폰",
+    "type": "bug",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "243": {
+  "id": 243,
+  "ko": "라이코",
+  "types": [
+   "electric"
+  ],
+  "hp": 90,
+  "atk": 115,
+  "def": 88,
+  "spd": 115,
+  "moves": [
+   {
+    "id": 192,
+    "ko": "전자포",
+    "type": "electric",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "244": {
+  "id": 244,
+  "ko": "앤테이",
+  "types": [
+   "fire"
+  ],
+  "hp": 115,
+  "atk": 115,
+  "def": 80,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "245": {
+  "id": 245,
+  "ko": "스이쿤",
+  "types": [
+   "water"
+  ],
+  "hp": 100,
+  "atk": 90,
+  "def": 115,
+  "spd": 85,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "246": {
+  "id": 246,
+  "ko": "애버라스",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 50,
+  "atk": 64,
+  "def": 50,
+  "spd": 41,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   247
+  ]
+ },
+ "247": {
+  "id": 247,
+  "ko": "데기라스",
+  "types": [
+   "rock",
+   "ground"
+  ],
+  "hp": 70,
+  "atk": 84,
+  "def": 70,
+  "spd": 51,
+  "moves": [
+   {
+    "id": 89,
+    "ko": "지진",
+    "type": "ground",
+    "power": 100
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   248
+  ]
+ },
+ "248": {
+  "id": 248,
+  "ko": "마기라스",
+  "types": [
+   "rock",
+   "dark"
+  ],
+  "hp": 100,
+  "atk": 134,
+  "def": 105,
+  "spd": 61,
+  "moves": [
+   {
+    "id": 444,
+    "ko": "스톤에지",
+    "type": "rock",
+    "power": 100
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "249": {
+  "id": 249,
+  "ko": "루기아",
+  "types": [
+   "psychic",
+   "flying"
+  ],
+  "hp": 106,
+  "atk": 90,
+  "def": 142,
+  "spd": 110,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "250": {
+  "id": 250,
+  "ko": "칠색조",
+  "types": [
+   "fire",
+   "flying"
+  ],
+  "hp": 106,
+  "atk": 130,
+  "def": 122,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "252": {
+  "id": 252,
+  "ko": "나무지기",
+  "types": [
+   "grass"
+  ],
+  "hp": 40,
+  "atk": 65,
+  "def": 45,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   253
+  ]
+ },
+ "253": {
+  "id": 253,
+  "ko": "나무돌이",
+  "types": [
+   "grass"
+  ],
+  "hp": 50,
+  "atk": 85,
+  "def": 55,
+  "spd": 95,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   254
+  ]
+ },
+ "254": {
+  "id": 254,
+  "ko": "나무킹",
+  "types": [
+   "grass"
+  ],
+  "hp": 70,
+  "atk": 105,
+  "def": 75,
+  "spd": 120,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "255": {
+  "id": 255,
+  "ko": "아차모",
+  "types": [
+   "fire"
+  ],
+  "hp": 45,
+  "atk": 70,
+  "def": 45,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   256
+  ]
+ },
+ "256": {
+  "id": 256,
+  "ko": "영치코",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 60,
+  "atk": 85,
+  "def": 60,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   257
+  ]
+ },
+ "257": {
+  "id": 257,
+  "ko": "번치코",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 80,
+  "atk": 120,
+  "def": 70,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "258": {
+  "id": 258,
+  "ko": "물짱이",
+  "types": [
+   "water"
+  ],
+  "hp": 50,
+  "atk": 70,
+  "def": 50,
+  "spd": 40,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   259
+  ]
+ },
+ "259": {
+  "id": 259,
+  "ko": "늪짱이",
+  "types": [
+   "water",
+   "ground"
+  ],
+  "hp": 70,
+  "atk": 85,
+  "def": 70,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   260
+  ]
+ },
+ "260": {
+  "id": 260,
+  "ko": "대짱이",
+  "types": [
+   "water",
+   "ground"
+  ],
+  "hp": 100,
+  "atk": 110,
+  "def": 90,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "280": {
+  "id": 280,
+  "ko": "랄토스",
+  "types": [
+   "psychic",
+   "fairy"
+  ],
+  "hp": 28,
+  "atk": 45,
+  "def": 30,
+  "spd": 40,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   281
+  ]
+ },
+ "281": {
+  "id": 281,
+  "ko": "킬리아",
+  "types": [
+   "psychic",
+   "fairy"
+  ],
+  "hp": 38,
+  "atk": 65,
+  "def": 45,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   282
+  ]
+ },
+ "282": {
+  "id": 282,
+  "ko": "가디안",
+  "types": [
+   "psychic",
+   "fairy"
+  ],
+  "hp": 68,
+  "atk": 125,
+  "def": 90,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "grass"
+  ]
+ },
+ "304": {
+  "id": 304,
+  "ko": "가보리",
+  "types": [
+   "steel",
+   "rock"
+  ],
+  "hp": 50,
+  "atk": 70,
+  "def": 70,
+  "spd": 30,
+  "moves": [
+   {
+    "id": 231,
+    "ko": "아이언테일",
+    "type": "steel",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   305
+  ]
+ },
+ "305": {
+  "id": 305,
+  "ko": "갱도라",
+  "types": [
+   "steel",
+   "rock"
+  ],
+  "hp": 60,
+  "atk": 90,
+  "def": 95,
+  "spd": 40,
+  "moves": [
+   {
+    "id": 231,
+    "ko": "아이언테일",
+    "type": "steel",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   306
+  ]
+ },
+ "306": {
+  "id": 306,
+  "ko": "보스로라",
+  "types": [
+   "steel",
+   "rock"
+  ],
+  "hp": 70,
+  "atk": 110,
+  "def": 120,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 800,
+    "ko": "메테오빔",
+    "type": "rock",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "359": {
+  "id": 359,
+  "ko": "앱솔",
+  "types": [
+   "dark"
+  ],
+  "hp": 65,
+  "atk": 130,
+  "def": 60,
+  "spd": 75,
+  "moves": [
+   {
+    "id": 492,
+    "ko": "속임수",
+    "type": "dark",
+    "power": 95
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "371": {
+  "id": 371,
+  "ko": "아공이",
+  "types": [
+   "dragon"
+  ],
+  "hp": 45,
+  "atk": 75,
+  "def": 45,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   372
+  ]
+ },
+ "372": {
+  "id": 372,
+  "ko": "쉘곤",
+  "types": [
+   "dragon"
+  ],
+  "hp": 65,
+  "atk": 95,
+  "def": 75,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   373
+  ]
+ },
+ "373": {
+  "id": 373,
+  "ko": "보만다",
+  "types": [
+   "dragon",
+   "flying"
+  ],
+  "hp": 95,
+  "atk": 135,
+  "def": 80,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "374": {
+  "id": 374,
+  "ko": "메탕",
+  "types": [
+   "steel",
+   "psychic"
+  ],
+  "hp": 40,
+  "atk": 55,
+  "def": 70,
+  "spd": 30,
+  "moves": [
+   {
+    "id": 428,
+    "ko": "사념의박치기",
+    "type": "psychic",
+    "power": 80
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   375
+  ]
+ },
+ "375": {
+  "id": 375,
+  "ko": "메탕구",
+  "types": [
+   "steel",
+   "psychic"
+  ],
+  "hp": 60,
+  "atk": 75,
+  "def": 90,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   376
+  ]
+ },
+ "376": {
+  "id": 376,
+  "ko": "메타그로스",
+  "types": [
+   "steel",
+   "psychic"
+  ],
+  "hp": 80,
+  "atk": 135,
+  "def": 110,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "382": {
+  "id": 382,
+  "ko": "가이오가",
+  "types": [
+   "water"
+  ],
+  "hp": 100,
+  "atk": 150,
+  "def": 115,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "383": {
+  "id": 383,
+  "ko": "그란돈",
+  "types": [
+   "ground"
+  ],
+  "hp": 100,
+  "atk": 150,
+  "def": 115,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 619,
+    "ko": "단애의칼",
+    "type": "ground",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "384": {
+  "id": 384,
+  "ko": "레쿠쟈",
+  "types": [
+   "dragon",
+   "flying"
+  ],
+  "hp": 105,
+  "atk": 150,
+  "def": 90,
+  "spd": 95,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "387": {
+  "id": 387,
+  "ko": "모부기",
+  "types": [
+   "grass"
+  ],
+  "hp": 55,
+  "atk": 68,
+  "def": 60,
+  "spd": 31,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   388
+  ]
+ },
+ "388": {
+  "id": 388,
+  "ko": "수풀부기",
+  "types": [
+   "grass"
+  ],
+  "hp": 75,
+  "atk": 89,
+  "def": 75,
+  "spd": 36,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   389
+  ]
+ },
+ "389": {
+  "id": 389,
+  "ko": "토대부기",
+  "types": [
+   "grass",
+   "ground"
+  ],
+  "hp": 95,
+  "atk": 109,
+  "def": 95,
+  "spd": 56,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "390": {
+  "id": 390,
+  "ko": "불꽃숭이",
+  "types": [
+   "fire"
+  ],
+  "hp": 44,
+  "atk": 58,
+  "def": 44,
+  "spd": 61,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   391
+  ]
+ },
+ "391": {
+  "id": 391,
+  "ko": "파이숭이",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 64,
+  "atk": 78,
+  "def": 52,
+  "spd": 81,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   392
+  ]
+ },
+ "392": {
+  "id": 392,
+  "ko": "초염몽",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 76,
+  "atk": 104,
+  "def": 71,
+  "spd": 108,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "393": {
+  "id": 393,
+  "ko": "팽도리",
+  "types": [
+   "water"
+  ],
+  "hp": 53,
+  "atk": 61,
+  "def": 55,
+  "spd": 40,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   394
+  ]
+ },
+ "394": {
+  "id": 394,
+  "ko": "팽태자",
+  "types": [
+   "water"
+  ],
+  "hp": 64,
+  "atk": 81,
+  "def": 72,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   395
+  ]
+ },
+ "395": {
+  "id": 395,
+  "ko": "엠페르트",
+  "types": [
+   "water",
+   "steel"
+  ],
+  "hp": 84,
+  "atk": 111,
+  "def": 95,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "403": {
+  "id": 403,
+  "ko": "꼬링크",
+  "types": [
+   "electric"
+  ],
+  "hp": 45,
+  "atk": 65,
+  "def": 34,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 87,
+    "ko": "번개",
+    "type": "electric",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   404
+  ]
+ },
+ "404": {
+  "id": 404,
+  "ko": "럭시오",
+  "types": [
+   "electric"
+  ],
+  "hp": 60,
+  "atk": 85,
+  "def": 49,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 87,
+    "ko": "번개",
+    "type": "electric",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   405
+  ]
+ },
+ "405": {
+  "id": 405,
+  "ko": "렌트라",
+  "types": [
+   "electric"
+  ],
+  "hp": 80,
+  "atk": 120,
+  "def": 79,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 87,
+    "ko": "번개",
+    "type": "electric",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "443": {
+  "id": 443,
+  "ko": "딥상어동",
+  "types": [
+   "dragon",
+   "ground"
+  ],
+  "hp": 58,
+  "atk": 70,
+  "def": 45,
+  "spd": 42,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   444
+  ]
+ },
+ "444": {
+  "id": 444,
+  "ko": "한바이트",
+  "types": [
+   "dragon",
+   "ground"
+  ],
+  "hp": 68,
+  "atk": 90,
+  "def": 60,
+  "spd": 82,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   445
+  ]
+ },
+ "445": {
+  "id": 445,
+  "ko": "한카리아스",
+  "types": [
+   "dragon",
+   "ground"
+  ],
+  "hp": 108,
+  "atk": 130,
+  "def": 90,
+  "spd": 102,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "447": {
+  "id": 447,
+  "ko": "리오르",
+  "types": [
+   "fighting"
+  ],
+  "hp": 40,
+  "atk": 70,
+  "def": 40,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   448
+  ]
+ },
+ "448": {
+  "id": 448,
+  "ko": "루카리오",
+  "types": [
+   "fighting",
+   "steel"
+  ],
+  "hp": 70,
+  "atk": 115,
+  "def": 70,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "470": {
+  "id": 470,
+  "ko": "리피아",
+  "types": [
+   "grass"
+  ],
+  "hp": 65,
+  "atk": 110,
+  "def": 98,
+  "spd": 95,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "471": {
+  "id": 471,
+  "ko": "글레이시아",
+  "types": [
+   "ice"
+  ],
+  "hp": 65,
+  "atk": 130,
+  "def": 103,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "483": {
+  "id": 483,
+  "ko": "디아루가",
+  "types": [
+   "steel",
+   "dragon"
+  ],
+  "hp": 100,
+  "atk": 150,
+  "def": 110,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 411,
+    "ko": "기합구슬",
+    "type": "fighting",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "484": {
+  "id": 484,
+  "ko": "펄기아",
+  "types": [
+   "water",
+   "dragon"
+  ],
+  "hp": 90,
+  "atk": 150,
+  "def": 110,
+  "spd": 100,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 411,
+    "ko": "기합구슬",
+    "type": "fighting",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "487": {
+  "id": 487,
+  "ko": "기라티나",
+  "types": [
+   "ghost",
+   "dragon"
+  ],
+  "hp": 150,
+  "atk": 100,
+  "def": 120,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 87,
+    "ko": "번개",
+    "type": "electric",
+    "power": 110
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "491": {
+  "id": 491,
+  "ko": "다크라이",
+  "types": [
+   "dark"
+  ],
+  "hp": 70,
+  "atk": 135,
+  "def": 90,
+  "spd": 125,
+  "moves": [
+   {
+    "id": 492,
+    "ko": "속임수",
+    "type": "dark",
+    "power": 95
+   },
+   {
+    "id": 411,
+    "ko": "기합구슬",
+    "type": "fighting",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "495": {
+  "id": 495,
+  "ko": "주리비얀",
+  "types": [
+   "grass"
+  ],
+  "hp": 45,
+  "atk": 45,
+  "def": 55,
+  "spd": 63,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   496
+  ]
+ },
+ "496": {
+  "id": 496,
+  "ko": "샤비",
+  "types": [
+   "grass"
+  ],
+  "hp": 60,
+  "atk": 60,
+  "def": 75,
+  "spd": 83,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   497
+  ]
+ },
+ "497": {
+  "id": 497,
+  "ko": "샤로다",
+  "types": [
+   "grass"
+  ],
+  "hp": 75,
+  "atk": 75,
+  "def": 95,
+  "spd": 113,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "498": {
+  "id": 498,
+  "ko": "뚜꾸리",
+  "types": [
+   "fire"
+  ],
+  "hp": 65,
+  "atk": 63,
+  "def": 45,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   499
+  ]
+ },
+ "499": {
+  "id": 499,
+  "ko": "차오꿀",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 90,
+  "atk": 93,
+  "def": 55,
+  "spd": 55,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   500
+  ]
+ },
+ "500": {
+  "id": 500,
+  "ko": "염무왕",
+  "types": [
+   "fire",
+   "fighting"
+  ],
+  "hp": 110,
+  "atk": 123,
+  "def": 65,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 276,
+    "ko": "엄청난힘",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ]
+ },
+ "501": {
+  "id": 501,
+  "ko": "수댕이",
+  "types": [
+   "water"
+  ],
+  "hp": 55,
+  "atk": 63,
+  "def": 45,
+  "spd": 45,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   502
+  ]
+ },
+ "502": {
+  "id": 502,
+  "ko": "쌍검자비",
+  "types": [
+   "water"
+  ],
+  "hp": 75,
+  "atk": 83,
+  "def": 60,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   503
+  ]
+ },
+ "503": {
+  "id": 503,
+  "ko": "대검귀",
+  "types": [
+   "water"
+  ],
+  "hp": 95,
+  "atk": 108,
+  "def": 78,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 224,
+    "ko": "메가폰",
+    "type": "bug",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "570": {
+  "id": 570,
+  "ko": "조로아",
+  "types": [
+   "dark"
+  ],
+  "hp": 40,
+  "atk": 80,
+  "def": 40,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 492,
+    "ko": "속임수",
+    "type": "dark",
+    "power": 95
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   571
+  ]
+ },
+ "571": {
+  "id": 571,
+  "ko": "조로아크",
+  "types": [
+   "dark"
+  ],
+  "hp": 60,
+  "atk": 120,
+  "def": 60,
+  "spd": 105,
+  "moves": [
+   {
+    "id": 492,
+    "ko": "속임수",
+    "type": "dark",
+    "power": 95
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "610": {
+  "id": 610,
+  "ko": "터검니",
+  "types": [
+   "dragon"
+  ],
+  "hp": 46,
+  "atk": 87,
+  "def": 50,
+  "spd": 57,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   611
+  ]
+ },
+ "611": {
+  "id": 611,
+  "ko": "액슨도",
+  "types": [
+   "dragon"
+  ],
+  "hp": 66,
+  "atk": 117,
+  "def": 60,
+  "spd": 67,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   612
+  ]
+ },
+ "612": {
+  "id": 612,
+  "ko": "액스라이즈",
+  "types": [
+   "dragon"
+  ],
+  "hp": 76,
+  "atk": 147,
+  "def": 80,
+  "spd": 97,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "643": {
+  "id": 643,
+  "ko": "레시라무",
+  "types": [
+   "dragon",
+   "fire"
+  ],
+  "hp": 100,
+  "atk": 150,
+  "def": 110,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "644": {
+  "id": 644,
+  "ko": "제크로무",
+  "types": [
+   "dragon",
+   "electric"
+  ],
+  "hp": 100,
+  "atk": 150,
+  "def": 110,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "656": {
+  "id": 656,
+  "ko": "개구마르",
+  "types": [
+   "water"
+  ],
+  "hp": 41,
+  "atk": 62,
+  "def": 42,
+  "spd": 71,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   657
+  ]
+ },
+ "657": {
+  "id": 657,
+  "ko": "개굴반장",
+  "types": [
+   "water"
+  ],
+  "hp": 54,
+  "atk": 83,
+  "def": 54,
+  "spd": 97,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 441,
+    "ko": "더스트슈트",
+    "type": "poison",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   658
+  ]
+ },
+ "658": {
+  "id": 658,
+  "ko": "개굴닌자",
+  "types": [
+   "water",
+   "dark"
+  ],
+  "hp": 72,
+  "atk": 103,
+  "def": 69,
+  "spd": 122,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 441,
+    "ko": "더스트슈트",
+    "type": "poison",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "sea"
+  ]
+ },
+ "700": {
+  "id": 700,
+  "ko": "님피아",
+  "types": [
+   "fairy"
+  ],
+  "hp": 95,
+  "atk": 110,
+  "def": 98,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 802,
+    "ko": "미스트버스트",
+    "type": "fairy",
+    "power": 100
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "722": {
+  "id": 722,
+  "ko": "나몰빼미",
+  "types": [
+   "grass",
+   "flying"
+  ],
+  "hp": 68,
+  "atk": 55,
+  "def": 53,
+  "spd": 42,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   723
+  ]
+ },
+ "723": {
+  "id": 723,
+  "ko": "빼미스로우",
+  "types": [
+   "grass",
+   "flying"
+  ],
+  "hp": 78,
+  "atk": 75,
+  "def": 73,
+  "spd": 52,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   724
+  ]
+ },
+ "724": {
+  "id": 724,
+  "ko": "모크나이퍼",
+  "types": [
+   "grass",
+   "ghost"
+  ],
+  "hp": 78,
+  "atk": 107,
+  "def": 88,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "725": {
+  "id": 725,
+  "ko": "냐오불",
+  "types": [
+   "fire"
+  ],
+  "hp": 45,
+  "atk": 65,
+  "def": 40,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   726
+  ]
+ },
+ "726": {
+  "id": 726,
+  "ko": "냐오히트",
+  "types": [
+   "fire"
+  ],
+  "hp": 65,
+  "atk": 85,
+  "def": 50,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 37,
+    "ko": "난동부리기",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   727
+  ]
+ },
+ "727": {
+  "id": 727,
+  "ko": "어흥염",
+  "types": [
+   "fire",
+   "dark"
+  ],
+  "hp": 95,
+  "atk": 115,
+  "def": 90,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "728": {
+  "id": 728,
+  "ko": "누리공",
+  "types": [
+   "water"
+  ],
+  "hp": 50,
+  "atk": 66,
+  "def": 55,
+  "spd": 40,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   729
+  ]
+ },
+ "729": {
+  "id": 729,
+  "ko": "키요공",
+  "types": [
+   "water"
+  ],
+  "hp": 60,
+  "atk": 91,
+  "def": 75,
+  "spd": 50,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   730
+  ]
+ },
+ "730": {
+  "id": 730,
+  "ko": "누리레느",
+  "types": [
+   "water",
+   "fairy"
+  ],
+  "hp": 80,
+  "atk": 126,
+  "def": 95,
+  "spd": 60,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "778": {
+  "id": 778,
+  "ko": "따라큐",
+  "types": [
+   "ghost",
+   "fairy"
+  ],
+  "hp": 55,
+  "atk": 90,
+  "def": 93,
+  "spd": 96,
+  "moves": [
+   {
+    "id": 566,
+    "ko": "고스트다이브",
+    "type": "ghost",
+    "power": 90
+   },
+   {
+    "id": 452,
+    "ko": "우드해머",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "791": {
+  "id": 791,
+  "ko": "솔가레오",
+  "types": [
+   "psychic",
+   "steel"
+  ],
+  "hp": 137,
+  "atk": 137,
+  "def": 98,
+  "spd": 97,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "792": {
+  "id": 792,
+  "ko": "루나아라",
+  "types": [
+   "psychic",
+   "ghost"
+  ],
+  "hp": 137,
+  "atk": 137,
+  "def": 98,
+  "spd": 97,
+  "moves": [
+   {
+    "id": 248,
+    "ko": "미래예지",
+    "type": "psychic",
+    "power": 120
+   },
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "810": {
+  "id": 810,
+  "ko": "흥나숭",
+  "types": [
+   "grass"
+  ],
+  "hp": 50,
+  "atk": 65,
+  "def": 45,
+  "spd": 65,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   811
+  ]
+ },
+ "811": {
+  "id": 811,
+  "ko": "채키몽",
+  "types": [
+   "grass"
+  ],
+  "hp": 70,
+  "atk": 85,
+  "def": 65,
+  "spd": 80,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   812
+  ]
+ },
+ "812": {
+  "id": 812,
+  "ko": "고릴타",
+  "types": [
+   "grass"
+  ],
+  "hp": 100,
+  "atk": 125,
+  "def": 80,
+  "spd": 85,
+  "moves": [
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "813": {
+  "id": 813,
+  "ko": "염버니",
+  "types": [
+   "fire"
+  ],
+  "hp": 50,
+  "atk": 71,
+  "def": 40,
+  "spd": 69,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   814
+  ]
+ },
+ "814": {
+  "id": 814,
+  "ko": "래비풋",
+  "types": [
+   "fire"
+  ],
+  "hp": 65,
+  "atk": 86,
+  "def": 60,
+  "spd": 94,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   815
+  ]
+ },
+ "815": {
+  "id": 815,
+  "ko": "에이스번",
+  "types": [
+   "fire"
+  ],
+  "hp": 80,
+  "atk": 116,
+  "def": 75,
+  "spd": 119,
+  "moves": [
+   {
+    "id": 394,
+    "ko": "플레어드라이브",
+    "type": "fire",
+    "power": 120
+   },
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "816": {
+  "id": 816,
+  "ko": "울머기",
+  "types": [
+   "water"
+  ],
+  "hp": 50,
+  "atk": 70,
+  "def": 40,
+  "spd": 70,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   817
+  ]
+ },
+ "817": {
+  "id": 817,
+  "ko": "누겔레온",
+  "types": [
+   "water"
+  ],
+  "hp": 65,
+  "atk": 95,
+  "def": 55,
+  "spd": 90,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 36,
+    "ko": "돌진",
+    "type": "normal",
+    "power": 90
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "sea"
+  ],
+  "evolvesTo": [
+   818
+  ]
+ },
+ "818": {
+  "id": 818,
+  "ko": "인텔리레온",
+  "types": [
+   "water"
+  ],
+  "hp": 70,
+  "atk": 125,
+  "def": 65,
+  "spd": 120,
+  "moves": [
+   {
+    "id": 56,
+    "ko": "하이드로펌프",
+    "type": "water",
+    "power": 110
+   },
+   {
+    "id": 59,
+    "ko": "눈보라",
+    "type": "ice",
+    "power": 110
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "sea"
+  ]
+ },
+ "823": {
+  "id": 823,
+  "ko": "아머까오",
+  "types": [
+   "flying",
+   "steel"
+  ],
+  "hp": 98,
+  "atk": 87,
+  "def": 95,
+  "spd": 67,
+  "moves": [
+   {
+    "id": 413,
+    "ko": "브레이브버드",
+    "type": "flying",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "grass"
+  ]
+ },
+ "831": {
+  "id": 831,
+  "ko": "우르",
+  "types": [
+   "normal"
+  ],
+  "hp": 42,
+  "atk": 40,
+  "def": 50,
+  "spd": 48,
+  "moves": [
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 528,
+    "ko": "와일드볼트",
+    "type": "electric",
+    "power": 90
+   }
+  ],
+  "rarity": "C",
+  "courses": [
+   "grass"
+  ],
+  "evolvesTo": [
+   832
+  ]
+ },
+ "832": {
+  "id": 832,
+  "ko": "배우르",
+  "types": [
+   "normal"
+  ],
+  "hp": 72,
+  "atk": 80,
+  "def": 95,
+  "spd": 88,
+  "moves": [
+   {
+    "id": 25,
+    "ko": "메가톤킥",
+    "type": "normal",
+    "power": 120
+   },
+   {
+    "id": 528,
+    "ko": "와일드볼트",
+    "type": "electric",
+    "power": 90
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "grass"
+  ]
+ },
+ "885": {
+  "id": 885,
+  "ko": "드라꼰",
+  "types": [
+   "dragon",
+   "ghost"
+  ],
+  "hp": 28,
+  "atk": 60,
+  "def": 30,
+  "spd": 82,
+  "moves": [
+   {
+    "id": 525,
+    "ko": "드래곤테일",
+    "type": "dragon",
+    "power": 60
+   },
+   {
+    "id": 263,
+    "ko": "객기",
+    "type": "normal",
+    "power": 70
+   }
+  ],
+  "rarity": "B",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   886
+  ]
+ },
+ "886": {
+  "id": 886,
+  "ko": "드래런치",
+  "types": [
+   "dragon",
+   "ghost"
+  ],
+  "hp": 68,
+  "atk": 80,
+  "def": 50,
+  "spd": 102,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "A",
+  "courses": [
+   "cave"
+  ],
+  "evolvesTo": [
+   887
+  ]
+ },
+ "887": {
+  "id": 887,
+  "ko": "드래펄트",
+  "types": [
+   "dragon",
+   "ghost"
+  ],
+  "hp": 88,
+  "atk": 120,
+  "def": 75,
+  "spd": 142,
+  "moves": [
+   {
+    "id": 200,
+    "ko": "역린",
+    "type": "dragon",
+    "power": 120
+   },
+   {
+    "id": 38,
+    "ko": "이판사판태클",
+    "type": "normal",
+    "power": 120
+   }
+  ],
+  "rarity": "S",
+  "courses": [
+   "cave"
+  ]
+ },
+ "888": {
+  "id": 888,
+  "ko": "자시안",
+  "types": [
+   "fairy"
+  ],
+  "hp": 92,
+  "atk": 120,
+  "def": 115,
+  "spd": 138,
+  "moves": [
+   {
+    "id": 585,
+    "ko": "문포스",
+    "type": "fairy",
+    "power": 95
+   },
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ },
+ "889": {
+  "id": 889,
+  "ko": "자마젠타",
+  "types": [
+   "fighting"
+  ],
+  "hp": 92,
+  "atk": 120,
+  "def": 115,
+  "spd": 138,
+  "moves": [
+   {
+    "id": 370,
+    "ko": "인파이트",
+    "type": "fighting",
+    "power": 120
+   },
+   {
+    "id": 76,
+    "ko": "솔라빔",
+    "type": "grass",
+    "power": 120
+   }
+  ],
+  "rarity": "SS",
+  "courses": [
+   "legend"
+  ]
+ }
+}
