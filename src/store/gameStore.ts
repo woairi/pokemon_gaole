@@ -32,11 +32,16 @@ interface GameStore {
   selectCourse: (c: CourseId) => void;
   startBattle: (team: DiskInstance[]) => void;
   setBattle: (b: BattleState) => void;
+  markSeen: (ids: number[]) => void;
   recordCatchAttempt: (speciesId: number, success: boolean) => CatchOutcome;
   endBattle: () => void;
   applyEvolution: (ev: EvolutionEvent) => void;
   toggleSound: () => void;
+  markTutorialSeen: () => void;
+  replaceSave: (save: SaveData) => void;
 }
+
+const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD (로컬)
 
 const initialSave = loadSave();
 setSoundEnabled(initialSave.settings.sound);
@@ -58,9 +63,14 @@ export const useGame = create<GameStore>((set, get) => ({
   startBattle: (team) => {
     const { save, courseId } = get();
     if (!courseId) return;
-    const battle = createBattle(team, courseId, save);
+    // 오늘 첫 배틀 또는 참가 스탬프 5개 교환 → 등급 UP 찬스
+    const dailyBonus = save.daily.lastDate !== today();
+    const gradeBoost = dailyBonus || save.pendingBoost;
+    const battle = createBattle(team, courseId, save, gradeBoost);
     const next: SaveData = {
       ...save,
+      daily: { lastDate: today() },
+      pendingBoost: dailyBonus ? save.pendingBoost : false,
       disks: { ...save.disks },
       dex: {
         ...save.dex,
@@ -81,13 +91,23 @@ export const useGame = create<GameStore>((set, get) => ({
 
   setBattle: (battle) => set({ battle }),
 
-  recordCatchAttempt: (speciesId, success) => {
+  markSeen: (ids) => {
     const { save } = get();
+    const next: SaveData = {
+      ...save,
+      dex: { ...save.dex, seen: uniq([...save.dex.seen, ...ids]) },
+    };
+    saveSave(next);
+    set({ save: next });
+  },
+
+  recordCatchAttempt: (speciesId, success) => {
+    const { save, battle } = get();
     const species = getSpecies(speciesId);
     if (!success) {
       return { speciesId, grade: 1, result: 'escaped' } as CatchOutcome;
     }
-    const grade = rollGrade(species.rarity);
+    const grade = rollGrade(species.rarity, battle?.gradeBoost);
     const existing = save.disks[speciesId];
     let outcome: CatchOutcome;
     const disks = { ...save.disks };
@@ -115,18 +135,28 @@ export const useGame = create<GameStore>((set, get) => ({
     const { battle, save, team } = get();
     if (!battle) return;
     const won = battle.phase === 'victory';
+    // 패배 시 참가 스탬프 +1, 5개 모이면 다음 배틀 등급 UP 찬스로 교환
+    let stamps = save.stats.stamps + (won ? 0 : 1);
+    let pendingBoost = save.pendingBoost;
+    if (stamps >= 5) {
+      stamps -= 5;
+      pendingBoost = true;
+    }
     const next: SaveData = {
       ...save,
+      pendingBoost,
       stats: {
         ...save.stats,
         battles: save.stats.battles + 1,
         wins: save.stats.wins + (won ? 1 : 0),
         zMovesUsed: save.stats.zMovesUsed + battle.zUsedCount,
+        stamps,
       },
     };
     const result: GameResult = {
       won,
       courseId: battle.courseId,
+      stageReached: battle.stage,
       team,
       catchOutcomes: battle.catchOutcomes,
       zUsed: battle.zUsedCount,
@@ -134,6 +164,22 @@ export const useGame = create<GameStore>((set, get) => ({
     };
     saveSave(next);
     set({ save: next, battle: null, result, screen: 'result' });
+  },
+
+  markTutorialSeen: () => {
+    const { save } = get();
+    const next: SaveData = {
+      ...save,
+      settings: { ...save.settings, tutorialSeen: true },
+    };
+    saveSave(next);
+    set({ save: next });
+  },
+
+  replaceSave: (save) => {
+    setSoundEnabled(save.settings.sound);
+    saveSave(save);
+    set({ save });
   },
 
   applyEvolution: (ev) => {

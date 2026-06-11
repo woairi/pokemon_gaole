@@ -9,8 +9,8 @@ export const TUNING = {
   gradeDmgStep: 0.12, // 등급당 공격 +12%
   playerAtkBase: 0.35,
   playerAtkDiv: 200,
-  enemyAtkBase: 0.25,
-  enemyAtkDiv: 250,
+  enemyAtkBase: 0.23,
+  enemyAtkDiv: 270,
   defScale: 140, // 방어 감쇠: defScale / (defScale + def)
   tapBase: 0.5, // 연타 0회여도 보장되는 배율
   tapsToFill: 18, // 게이지 풀충전에 필요한 탭 수
@@ -19,6 +19,7 @@ export const TUNING = {
   critChance: 0.1,
   critMult: 1.5,
   immunitySoftener: 0.25, // 면역(×0)을 ×0.25로 완화 (아이 배려)
+  megaStatMult: 1.3, // 메가진화 시 공격·방어 배율
   zPower: 180,
   zSplash: 0.4, // Z기술이 다른 야생에게 주는 비율
   zGainPerRush: 18,

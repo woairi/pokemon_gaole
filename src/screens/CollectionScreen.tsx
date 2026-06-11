@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { DiskCard } from '../components/DiskCard';
+import { DiskDetailModal } from '../components/DiskDetailModal';
 import { useGame } from '../store/gameStore';
 
 export function CollectionScreen() {
   const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
+  const [detail, setDetail] = useState<number | null>(null);
 
   const owned = Object.entries(save.disks)
     .map(([id, d]) => ({ speciesId: +id, ...d }))
@@ -27,10 +30,22 @@ export function CollectionScreen() {
         <div className="collection__scroll">
           <div className="disk-grid">
             {owned.map((d) => (
-              <DiskCard key={d.speciesId} speciesId={d.speciesId} grade={d.grade} />
+              <DiskCard
+                key={d.speciesId}
+                speciesId={d.speciesId}
+                grade={d.grade}
+                onClick={() => setDetail(d.speciesId)}
+              />
             ))}
           </div>
         </div>
+      )}
+      {detail !== null && save.disks[detail] && (
+        <DiskDetailModal
+          speciesId={detail}
+          disk={save.disks[detail]}
+          onClose={() => setDetail(null)}
+        />
       )}
     </div>
   );

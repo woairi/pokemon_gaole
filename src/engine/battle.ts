@@ -17,7 +17,8 @@ export const allSpecies = (): PokemonData[] => Object.values(dex);
 
 export type BattlePhase =
   | 'intro' | 'legendIntro' | 'selectMove' | 'rush' | 'attack'
-  | 'getChance' | 'enemyAttack' | 'victory' | 'defeat';
+  | 'getChance' | 'enemyAttack' | 'stageClear' | 'battleEvolution' | 'megaAnim'
+  | 'victory' | 'defeat';
 
 export interface Combatant {
   speciesId: number;
@@ -25,6 +26,7 @@ export interface Combatant {
   rental?: boolean;
   maxHp: number;
   hp: number;
+  mega?: boolean;
   intruder?: boolean; // 전설 난입 개체 (포획률 절반)
   catchResolved?: boolean;
   caught?: boolean;
@@ -51,9 +53,16 @@ export interface CatchOutcome {
   prevGrade?: Grade;
 }
 
+export interface BattleEvo {
+  monIdx: number;
+  fromId: number;
+  toId: number;
+}
+
 export interface BattleState {
   courseId: CourseId;
   phase: BattlePhase;
+  stage: number; // 1~3 (3 = 보스전)
   round: number;
   player: Combatant[];
   wild: Combatant[];
@@ -61,6 +70,11 @@ export interface BattleState {
   lastAttack?: AttackEvent;
   zGauge: number;
   zUsedCount: number;
+  megaUsed: boolean;
+  gradeBoost: boolean; // 오늘 첫 배틀/스탬프 보너스: 등급 추첨 2회 중 최고
+  targetOverride?: number;
+  battleEvo?: BattleEvo;
+  evoTriggered: boolean[];
   getChanceQueue: number[];
   catchOutcomes: CatchOutcome[];
   nextWildAttacker: number;
@@ -70,13 +84,23 @@ export interface BattleState {
 export interface BattleResult {
   won: boolean;
   courseId: CourseId;
+  stageReached: number;
   team: DiskInstance[];
   catchOutcomes: CatchOutcome[];
   zUsed: number;
 }
 
+export const STAGE_COUNT = 3;
+const STAGE_HP_MULT = [0.85, 1.0, 1.25]; // 스테이지별 야생 HP 배율
+const STAGE_HEAL = 0.5; // 스테이지 클리어 시 회복 (최대 HP 비율)
+const STAGE_REVIVE = 0.35; // 기절한 동료는 다음 스테이지에서 이 비율로 부활
+const BOSS_WEIGHTS: Record<Rarity, number> = { C: 10, B: 25, A: 35, S: 22, SS: 8 };
+const BOSS_WEIGHTS_LEGEND: Record<Rarity, number> = { C: 0, B: 0, A: 0, S: 20, SS: 80 };
 const LEGEND_INTRUSION_CHANCE = 0.08;
 const LEGEND_INTRUSION_MIN_WINS = 3;
+const BATTLE_EVO_CHANCE = 0.25;
+const BATTLE_EVO_HP_RATIO = 0.3;
+const BATTLE_EVO_HEAL = 0.5;
 export const INTRUDER_CATCH_MOD = 0.5;
 
 function makeWild(species: PokemonData, hpMult: number, intruder = false): Combatant {
@@ -84,17 +108,24 @@ function makeWild(species: PokemonData, hpMult: number, intruder = false): Comba
   return { speciesId: species.id, grade: 1, maxHp, hp: maxHp, intruder: intruder || undefined };
 }
 
-function rollWildPair(courseId: CourseId): PokemonData[] {
+function rollWildPair(courseId: CourseId, stage: number): PokemonData[] {
   const course = getCourse(courseId);
+  const weights =
+    stage === STAGE_COUNT
+      ? courseId === 'legend'
+        ? BOSS_WEIGHTS_LEGEND
+        : BOSS_WEIGHTS
+      : course.rarityWeights;
   const pool = allSpecies().filter((p) => p.courses.includes(courseId));
   const byRarity = new Map<Rarity, PokemonData[]>();
   for (const p of pool) {
     byRarity.set(p.rarity, [...(byRarity.get(p.rarity) ?? []), p]);
   }
-  const rarities = [...byRarity.keys()];
+  const rarities = [...byRarity.keys()].filter((r) => weights[r] > 0);
+  const usable = rarities.length ? rarities : [...byRarity.keys()];
   const pair: PokemonData[] = [];
   while (pair.length < 2) {
-    const rarity = weightedPick(rarities, rarities.map((r) => course.rarityWeights[r]));
+    const rarity = weightedPick(usable, usable.map((r) => weights[r] || 1));
     const candidates = byRarity.get(rarity)!.filter((p) => !pair.includes(p));
     if (!candidates.length) continue;
     pair.push(pickRandom(candidates));
@@ -102,10 +133,18 @@ function rollWildPair(courseId: CourseId): PokemonData[] {
   return pair;
 }
 
-export function createBattle(team: DiskInstance[], courseId: CourseId, save: SaveData): BattleState {
-  const course = getCourse(courseId);
-  const wildSpecies = rollWildPair(courseId);
-  const wild = wildSpecies.map((s) => makeWild(s, course.hpMult));
+const stageWildHpMult = (courseId: CourseId, stage: number) =>
+  getCourse(courseId).hpMult * STAGE_HP_MULT[stage - 1];
+
+export function createBattle(
+  team: DiskInstance[],
+  courseId: CourseId,
+  save: SaveData,
+  gradeBoost = false
+): BattleState {
+  const wildSpecies = rollWildPair(courseId, 1);
+  const hpMult = stageWildHpMult(courseId, 1);
+  const wild = wildSpecies.map((s) => makeWild(s, hpMult));
 
   let legendEvent = false;
   if (
@@ -114,7 +153,7 @@ export function createBattle(team: DiskInstance[], courseId: CourseId, save: Sav
     chance(LEGEND_INTRUSION_CHANCE)
   ) {
     const legends = allSpecies().filter((p) => p.rarity === 'SS');
-    wild[1] = makeWild(pickRandom(legends), course.hpMult, true);
+    wild[1] = makeWild(pickRandom(legends), hpMult, true);
     legendEvent = true;
   }
 
@@ -127,11 +166,15 @@ export function createBattle(team: DiskInstance[], courseId: CourseId, save: Sav
   return {
     courseId,
     phase: legendEvent ? 'legendIntro' : 'intro',
+    stage: 1,
     round: 1,
     player,
     wild,
     zGauge: 0,
     zUsedCount: 0,
+    megaUsed: false,
+    gradeBoost,
+    evoTriggered: team.map(() => false),
     getChanceQueue: [],
     catchOutcomes: [],
     nextWildAttacker: 0,
@@ -140,6 +183,28 @@ export function createBattle(team: DiskInstance[], courseId: CourseId, save: Sav
 }
 
 export const beginSelect = (s: BattleState): BattleState => ({ ...s, phase: 'selectMove' });
+
+/** 스테이지 클리어 후 다음 스테이지로 (야생 새로 등장 + 아군 일부 회복) */
+export function advanceStage(s: BattleState): BattleState {
+  const stage = s.stage + 1;
+  const hpMult = stageWildHpMult(s.courseId, stage);
+  const wild = rollWildPair(s.courseId, stage).map((sp) => makeWild(sp, hpMult));
+  const player = s.player.map((c) =>
+    c.hp > 0
+      ? { ...c, hp: Math.min(c.maxHp, Math.round(c.hp + c.maxHp * STAGE_HEAL)) }
+      : { ...c, hp: Math.round(c.maxHp * STAGE_REVIVE) }
+  );
+  return {
+    ...s,
+    phase: 'intro',
+    stage,
+    player,
+    wild,
+    targetOverride: undefined,
+    nextWildAttacker: 0,
+    lastAttack: undefined,
+  };
+}
 
 export function chooseMove(s: BattleState, monIdx: number, moveIdx: number): BattleState {
   const mon = s.player[monIdx];
@@ -158,11 +223,42 @@ export function chooseZ(s: BattleState, monIdx: number): BattleState {
   return { ...s, phase: 'rush', pending: { monIdx, move, isZ: true } };
 }
 
+/** 메가진화: 5성 디스크 + 메가 폼 보유 종, 코스당 1회. 턴을 소모하지 않는다. */
+export function canMega(s: BattleState, monIdx: number): boolean {
+  const mon = s.player[monIdx];
+  if (!mon || mon.hp <= 0 || mon.mega || s.megaUsed) return false;
+  return mon.grade === 5 && !!getSpecies(mon.speciesId).megaId;
+}
+
+export function chooseMega(s: BattleState, monIdx: number): BattleState {
+  if (!canMega(s, monIdx)) return s;
+  const player = s.player.map((c, i) => (i === monIdx ? { ...c, mega: true } : c));
+  return { ...s, phase: 'megaAnim', player, megaUsed: true, pending: { monIdx, move: getSpecies(s.player[monIdx].speciesId).moves[0], isZ: false } };
+}
+
+export const afterMegaAnim = (s: BattleState): BattleState => ({
+  ...s,
+  phase: 'selectMove',
+  pending: undefined,
+});
+
+/** 야생 직접 조준 (탭으로 선택) */
+export function setTarget(s: BattleState, wildIdx: number): BattleState {
+  if (s.wild[wildIdx]?.hp <= 0) return s;
+  return { ...s, targetOverride: s.targetOverride === wildIdx ? undefined : wildIdx };
+}
+
 const livingIdx = (side: Combatant[]) =>
   side.map((c, i) => (c.hp > 0 ? i : -1)).filter((i) => i >= 0);
 
-/** 타입 상성이 가장 잘 통하는(같으면 HP 낮은) 야생을 자동 조준 */
+const megaStat = (c: Combatant, base: number) =>
+  Math.round(base * (c.mega ? TUNING.megaStatMult : 1));
+
+/** 직접 조준이 없으면 타입 상성이 가장 잘 통하는(같으면 HP 낮은) 야생을 자동 조준 */
 function pickTarget(s: BattleState, moveType: TypeName): number {
+  if (s.targetOverride !== undefined && s.wild[s.targetOverride]?.hp > 0) {
+    return s.targetOverride;
+  }
   const living = livingIdx(s.wild);
   return living.reduce((best, i) => {
     if (best < 0) return i;
@@ -185,7 +281,7 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
 
   const { dmg, typeMult, crit } = playerDamage({
     power: move.power,
-    atk: attackerSpecies.atk,
+    atk: megaStat(attacker, attackerSpecies.atk),
     fill,
     moveType: move.type,
     defenderTypes: targetSpecies.types,
@@ -228,7 +324,9 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
 }
 
 function proceedAfterPlayerPhase(s: BattleState): BattleState {
-  if (livingIdx(s.wild).length === 0) return { ...s, phase: 'victory' };
+  if (livingIdx(s.wild).length === 0) {
+    return { ...s, phase: s.stage < STAGE_COUNT ? 'stageClear' : 'victory' };
+  }
   return performEnemyAttack(s);
 }
 
@@ -280,7 +378,7 @@ function performEnemyAttack(s: BattleState): BattleState {
     atk: attackerSpecies.atk,
     moveType: move.type,
     defenderTypes: targetSpecies.types,
-    defenderDef: targetSpecies.def,
+    defenderDef: megaStat(target, targetSpecies.def),
     courseDmgMult: course.dmgMult,
   });
 
@@ -306,7 +404,46 @@ function performEnemyAttack(s: BattleState): BattleState {
   };
 }
 
+/** 위기에 몰리면 배틀 중 진화가 발동할 수 있다 (포켓몬당 코스에서 1회 판정) */
+function checkBattleEvolution(s: BattleState): BattleState {
+  for (let i = 0; i < s.player.length; i++) {
+    const mon = s.player[i];
+    if (s.evoTriggered[i] || mon.hp <= 0 || mon.mega) continue;
+    if (mon.hp > mon.maxHp * BATTLE_EVO_HP_RATIO) continue;
+    const species = getSpecies(mon.speciesId);
+    if (!species.evolvesTo?.length) continue;
+    const evoTriggered = [...s.evoTriggered];
+    evoTriggered[i] = true;
+    if (!chance(BATTLE_EVO_CHANCE)) {
+      return { ...s, evoTriggered };
+    }
+    return {
+      ...s,
+      evoTriggered,
+      phase: 'battleEvolution',
+      battleEvo: { monIdx: i, fromId: mon.speciesId, toId: pickRandom(species.evolvesTo) },
+    };
+  }
+  return s;
+}
+
+/** 배틀 중 진화 적용: 종 교체 + HP 회복 */
+export function applyBattleEvolution(s: BattleState): BattleState {
+  if (!s.battleEvo) return s;
+  const { monIdx, toId } = s.battleEvo;
+  const player = s.player.map((c) => ({ ...c }));
+  const mon = player[monIdx];
+  const newSpecies = getSpecies(toId);
+  const newMax = playerMaxHp(newSpecies.hp, mon.grade);
+  mon.speciesId = toId;
+  mon.maxHp = newMax;
+  mon.hp = Math.min(newMax, Math.round(mon.hp + newMax * BATTLE_EVO_HEAL));
+  return { ...s, player, battleEvo: undefined, phase: 'selectMove', round: s.round + 1 };
+}
+
 export function continueAfterEnemyAttack(s: BattleState): BattleState {
   if (livingIdx(s.player).length === 0) return { ...s, phase: 'defeat' };
-  return { ...s, phase: 'selectMove', round: s.round + 1, lastAttack: undefined };
+  const evoChecked = checkBattleEvolution(s);
+  if (evoChecked.phase === 'battleEvolution') return evoChecked;
+  return { ...evoChecked, phase: 'selectMove', round: s.round + 1, lastAttack: undefined };
 }

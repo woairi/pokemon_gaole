@@ -16,6 +16,33 @@ export const BALLS: Ball[] = [
   { id: 'master', ko: '마스터볼', mult: Infinity, arc: 5, color: '#9333ea' },
 ];
 
+/** 도감 마일스톤 보상: 포획 수에 따라 좋은 볼의 룰렛 칸이 넓어진다 */
+export const BALL_MILESTONES = [
+  { catches: 20, desc: '하이퍼볼 칸 UP!' },
+  { catches: 50, desc: '마스터볼 칸 UP!' },
+  { catches: 100, desc: '마스터볼 칸 MAX!' },
+];
+
+export function getBalls(caughtCount: number): Ball[] {
+  let [poke, great, ultra, master] = [50, 30, 15, 5];
+  if (caughtCount >= 20) {
+    ultra = 20;
+    poke = 45;
+  }
+  if (caughtCount >= 50) {
+    master = 8;
+    poke = 42;
+  }
+  if (caughtCount >= 100) {
+    master = 12;
+    ultra = 22;
+    great = 28;
+    poke = 38;
+  }
+  const arcs = { poke, great, ultra, master };
+  return BALLS.map((b) => ({ ...b, arc: arcs[b.id] }));
+}
+
 export const BASE_CATCH: Record<Rarity, number> = {
   C: 0.85,
   B: 0.7,
@@ -40,6 +67,9 @@ export const GRADE_WEIGHTS: Record<Rarity, number[]> = {
   SS: [0, 0, 40, 35, 25],
 };
 
-export function rollGrade(rarity: Rarity): Grade {
-  return weightedPick([1, 2, 3, 4, 5] as Grade[], GRADE_WEIGHTS[rarity]);
+export function rollGrade(rarity: Rarity, boost = false): Grade {
+  const roll = () => weightedPick([1, 2, 3, 4, 5] as Grade[], GRADE_WEIGHTS[rarity]);
+  if (!boost) return roll();
+  // 등급 UP 찬스: 두 번 굴려 높은 쪽
+  return Math.max(roll(), roll()) as Grade;
 }

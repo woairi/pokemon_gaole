@@ -5,11 +5,12 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { ROSTER } from './roster.mjs';
+import { MEGA_MAP, ROSTER } from './roster.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CACHE_DIR = path.join(__dirname, '.cache');
 const OUT_DIR = path.join(__dirname, '..', 'src', 'data');
+const SPRITES_DIR = path.join(__dirname, '..', 'public', 'sprites');
 
 const RAW = 'https://raw.githubusercontent.com';
 const API = `${RAW}/PokeAPI/api-data/master/data/api/v2`;
@@ -54,13 +55,44 @@ async function fetchText(url) {
   });
 }
 
-async function urlExists(url) {
-  const result = await cached(`HEAD ${url}`, async () => {
-    const res = await fetchWithRetry(url, { method: 'HEAD' });
-    await new Promise((r) => setTimeout(r, 30));
-    return String(res.ok);
-  });
-  return result === 'true';
+// 이미지를 public/sprites/{kind}/{id}.{ext}로 다운로드 (셀프호스팅).
+// 이미 존재하면 건너뜀. 404면 false 반환 (게임에서 폴백 처리).
+async function downloadImage(url, kind, filename) {
+  const dir = path.join(SPRITES_DIR, kind);
+  const file = path.join(dir, filename);
+  try {
+    await fs.access(file);
+    return true;
+  } catch {
+    /* 다운로드 진행 */
+  }
+  const missMarker = path.join(CACHE_DIR, `miss-${kind}-${filename}`);
+  try {
+    await fs.access(missMarker);
+    return false; // 이전 실행에서 404 확인됨
+  } catch {
+    /* 시도 */
+  }
+  const res = await fetchWithRetry(url);
+  if (!res.ok) {
+    await fs.mkdir(CACHE_DIR, { recursive: true });
+    await fs.writeFile(missMarker, '');
+    return false;
+  }
+  const buf = Buffer.from(await res.arrayBuffer());
+  await fs.mkdir(dir, { recursive: true });
+  await fs.writeFile(file, buf);
+  await new Promise((r) => setTimeout(r, 40));
+  return true;
+}
+
+async function downloadSpriteSet(id) {
+  const [artwork, front, back] = await Promise.all([
+    downloadImage(`${SPRITES}/other/official-artwork/${id}.png`, 'artwork', `${id}.png`),
+    downloadImage(`${SPRITES}/other/showdown/${id}.gif`, 'front', `${id}.gif`),
+    downloadImage(`${SPRITES}/other/showdown/back/${id}.gif`, 'back', `${id}.gif`),
+  ]);
+  return { artwork, front, back };
 }
 
 // 따옴표 필드를 처리하는 최소 CSV 파서
@@ -199,10 +231,21 @@ for (const entry of ROSTER) {
     if (!rosterIds.has(evo)) errors.push(`#${entry.id} ${ko}: 진화 대상 #${evo}가 로스터에 없음`);
   }
 
-  const [frontGif, backGif] = await Promise.all([
-    urlExists(`${SPRITES}/other/showdown/${entry.id}.gif`),
-    urlExists(`${SPRITES}/other/showdown/back/${entry.id}.gif`),
-  ]);
+  const sprites = await downloadSpriteSet(entry.id);
+  if (!sprites.artwork) errors.push(`#${entry.id} ${ko}: 아트워크 다운로드 실패`);
+
+  // 메가진화 폼 이미지
+  const megaId = MEGA_MAP[entry.id];
+  let megaFront = false;
+  let megaBack = false;
+  if (megaId) {
+    const megaSprites = await downloadSpriteSet(megaId);
+    megaFront = megaSprites.front;
+    megaBack = megaSprites.back;
+    if (!megaSprites.artwork && !megaFront) {
+      errors.push(`#${entry.id} ${ko}: 메가 폼 #${megaId} 이미지 없음`);
+    }
+  }
 
   pokedex[entry.id] = {
     id: entry.id,
@@ -216,9 +259,15 @@ for (const entry of ROSTER) {
     rarity: entry.rarity,
     courses: entry.courses,
     ...(entry.evolvesTo ? { evolvesTo: entry.evolvesTo } : {}),
-    ...(frontGif && backGif ? {} : { noGif: true }),
+    ...(sprites.front && sprites.back ? {} : { noGif: true }),
+    ...(megaId ? { megaId } : {}),
+    ...(megaId && !megaBack ? { megaNoBack: true } : {}),
   };
-  process.stdout.write(`  #${String(entry.id).padStart(3)} ${ko ?? mon.name}${frontGif && backGif ? '' : ' (GIF 없음)'}\n`);
+  process.stdout.write(
+    `  #${String(entry.id).padStart(4)} ${ko ?? mon.name}` +
+      `${sprites.front && sprites.back ? '' : ' (GIF 없음)'}` +
+      `${megaId ? ` [메가${megaFront ? '' : ' GIF 없음'}]` : ''}\n`
+  );
 }
 
 // 코스별 레어도 분포 리포트

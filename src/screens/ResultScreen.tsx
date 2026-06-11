@@ -5,6 +5,7 @@ import { StarGrade } from '../components/StarGrade';
 import { getSpecies } from '../engine/battle';
 import type { EvolutionEvent } from '../engine/events';
 import { useGame } from '../store/gameStore';
+import { haptic } from '../utils/haptics';
 import { iGa } from '../utils/korean';
 import { artworkUrl } from '../utils/sprites';
 
@@ -42,6 +43,7 @@ function EvolutionOverlay({ ev, onClose }: { ev: EvolutionEvent; onClose: () => 
     }
     if (stage === 'evolving') {
       sfx.evolve();
+      haptic.evolve();
       applyEvolution(ev);
       const t = setTimeout(() => setStage('done'), 2600);
       return () => clearTimeout(t);
@@ -117,6 +119,7 @@ function EvolutionOverlay({ ev, onClose }: { ev: EvolutionEvent; onClose: () => 
 
 export function ResultScreen() {
   const result = useGame((s) => s.result);
+  const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
   const [evoQueue, setEvoQueue] = useState<EvolutionEvent[] | null>(null);
 
@@ -131,7 +134,16 @@ export function ResultScreen() {
 
   return (
     <div className={`screen result result--${result.won ? 'win' : 'lose'}`}>
-      <div className="result__banner">{result.won ? '🏆 승리!!' : '다음엔 이길 수 있어!'}</div>
+      <div className="result__banner">{result.won ? '🏆 코스 클리어!!' : '다음엔 이길 수 있어!'}</div>
+      {!result.won && (
+        <div className="result__stage">스테이지 {result.stageReached}까지 도달!</div>
+      )}
+      {!result.won && (
+        <div className="result__stamps">
+          🎫 참가 스탬프 +1 (모은 스탬프 {save.stats.stamps}/5)
+          {save.pendingBoost && <div className="result__boost">🎁 다음 배틀에서 등급 UP 찬스!</div>}
+        </div>
+      )}
 
       {catches.length > 0 && (
         <div className="result__catches">

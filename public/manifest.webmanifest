@@ -1,0 +1,17 @@
+{
+  "name": "포켓몬 가오레",
+  "short_name": "가오레",
+  "description": "포켓몬 가오레 팬 게임 — 배틀하고 잡아서 디스크를 모으자!",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "background_color": "#1a1f4e",
+  "theme_color": "#1a1f4e",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

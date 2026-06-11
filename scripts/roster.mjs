@@ -200,4 +200,62 @@ export const ROSTER = [
   { id: 887, rarity: 'S', courses: ['cave'] },
   { id: 888, rarity: 'SS', courses: ['legend'] },
   { id: 889, rarity: 'SS', courses: ['legend'] },
+
+  // ===== 9세대 =====
+  { id: 906, rarity: 'C', courses: ['grass'], evolvesTo: [907] },
+  { id: 907, rarity: 'B', courses: ['grass'], evolvesTo: [908] },
+  { id: 908, rarity: 'A', courses: ['grass'] },
+  { id: 909, rarity: 'C', courses: ['cave'], evolvesTo: [910] },
+  { id: 910, rarity: 'B', courses: ['cave'], evolvesTo: [911] },
+  { id: 911, rarity: 'A', courses: ['cave'] },
+  { id: 912, rarity: 'C', courses: ['sea'], evolvesTo: [913] },
+  { id: 913, rarity: 'B', courses: ['sea'], evolvesTo: [914] },
+  { id: 914, rarity: 'A', courses: ['sea'] },
+  { id: 915, rarity: 'C', courses: ['grass'], evolvesTo: [916] },
+  { id: 916, rarity: 'B', courses: ['grass'] },
+  { id: 921, rarity: 'C', courses: ['grass'], evolvesTo: [922] },
+  { id: 922, rarity: 'B', courses: ['grass'], evolvesTo: [923] },
+  { id: 923, rarity: 'A', courses: ['grass'] },
+  { id: 926, rarity: 'C', courses: ['grass'], evolvesTo: [927] },
+  { id: 927, rarity: 'B', courses: ['grass'] },
+  { id: 936, rarity: 'A', courses: ['cave'] },
+  { id: 937, rarity: 'S', courses: ['cave'] },
+  { id: 957, rarity: 'B', courses: ['cave'], evolvesTo: [958] },
+  { id: 958, rarity: 'A', courses: ['cave'], evolvesTo: [959] },
+  { id: 959, rarity: 'S', courses: ['cave'] },
+  { id: 967, rarity: 'B', courses: ['cave'] },
+  { id: 975, rarity: 'A', courses: ['sea'] },
+  { id: 996, rarity: 'B', courses: ['cave'], evolvesTo: [997] },
+  { id: 997, rarity: 'A', courses: ['cave'], evolvesTo: [998] },
+  { id: 998, rarity: 'S', courses: ['cave'] },
+  { id: 1000, rarity: 'S', courses: ['cave'] },
+  { id: 1007, rarity: 'SS', courses: ['legend'] },
+  { id: 1008, rarity: 'SS', courses: ['legend'] },
 ];
+
+// 메가진화 가능 종 → 메가 폼 도감 id (5성 디스크 한정으로 배틀 중 1회 사용)
+export const MEGA_MAP = {
+  3: 10033,   // 이상해꽃
+  6: 10034,   // 리자몽 X
+  9: 10036,   // 거북왕
+  65: 10037,  // 후딘
+  94: 10038,  // 팬텀
+  127: 10039, // 쁘사이저
+  130: 10041, // 갸라도스
+  150: 10043, // 뮤츠 X
+  181: 10045, // 전룡
+  212: 10046, // 핫삼
+  214: 10047, // 헤라크로스
+  248: 10049, // 마기라스
+  254: 10065, // 나무킹
+  257: 10050, // 번치코
+  260: 10064, // 대짱이
+  282: 10051, // 가디안
+  306: 10053, // 보스로라
+  359: 10057, // 앱솔
+  373: 10089, // 보만다
+  376: 10076, // 메타그로스
+  384: 10079, // 레쿠쟈
+  445: 10058, // 한카리아스
+  448: 10059, // 루카리오
+};

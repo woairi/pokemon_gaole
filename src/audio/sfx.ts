@@ -6,6 +6,12 @@ export function setSoundEnabled(on: boolean) {
   enabled = on;
 }
 
+export const isSoundEnabled = () => enabled;
+
+export function getAudioContext(): AudioContext | null {
+  return ensureCtx();
+}
+
 function ensureCtx(): AudioContext | null {
   if (!enabled) return null;
   try {

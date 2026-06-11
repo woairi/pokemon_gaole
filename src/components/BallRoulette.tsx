@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { sfx } from '../audio/sfx';
-import { BALLS, type Ball } from '../engine/catch';
+import type { Ball } from '../engine/catch';
 
 /** 볼 룰렛: 빠르게 도는 휠을 탭으로 멈춰 볼을 고른다 */
-export function BallRoulette({ onSelect }: { onSelect: (ball: Ball) => void }) {
+export function BallRoulette({ balls, onSelect }: { balls: Ball[]; onSelect: (ball: Ball) => void }) {
   const [stopped, setStopped] = useState(false);
   const [selected, setSelected] = useState<Ball | null>(null);
   const rotation = useRef(0);
@@ -40,8 +40,8 @@ export function BallRoulette({ onSelect }: { onSelect: (ball: Ball) => void }) {
       // 포인터(12시 방향) 아래의 칸 계산
       const angle = (360 - rotation.current + 360) % 360;
       let acc = 0;
-      let ball = BALLS[0];
-      for (const b of BALLS) {
+      let ball = balls[0];
+      for (const b of balls) {
         acc += b.arc * 3.6;
         if (angle < acc) {
           ball = b;
@@ -71,7 +71,7 @@ export function BallRoulette({ onSelect }: { onSelect: (ball: Ball) => void }) {
 
   const gradient = (() => {
     let acc = 0;
-    const stops = BALLS.map((b) => {
+    const stops = balls.map((b) => {
       const from = acc;
       acc += b.arc;
       return `${b.color} ${from}% ${acc}%`;
@@ -83,8 +83,8 @@ export function BallRoulette({ onSelect }: { onSelect: (ball: Ball) => void }) {
     <div className="roulette">
       <div className="roulette__pointer">▼</div>
       <div className="roulette__wheel" ref={wheelRef} style={{ background: gradient }}>
-        {BALLS.map((b, i) => {
-          const before = BALLS.slice(0, i).reduce((a, x) => a + x.arc, 0);
+        {balls.map((b, i) => {
+          const before = balls.slice(0, i).reduce((a, x) => a + x.arc, 0);
           const mid = (before + b.arc / 2) * 3.6;
           return (
             <span
@@ -92,7 +92,7 @@ export function BallRoulette({ onSelect }: { onSelect: (ball: Ball) => void }) {
               className="roulette__label"
               style={{ transform: `rotate(${mid}deg) translateY(max(-21vw, -92px)) rotate(${-mid}deg)` }}
             >
-              ●
+              <span className="mini-ball" style={{ background: b.color }} />
             </span>
           );
         })}

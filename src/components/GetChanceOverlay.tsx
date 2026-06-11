@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { sfx } from '../audio/sfx';
 import { type CatchOutcome, INTRUDER_CATCH_MOD, getSpecies } from '../engine/battle';
-import { type Ball, catchProbability, rollCatch } from '../engine/catch';
+import { type Ball, catchProbability, getBalls, rollCatch } from '../engine/catch';
+import { useGame } from '../store/gameStore';
+import { haptic } from '../utils/haptics';
 import { eulReul, iGa } from '../utils/korean';
 import { artworkUrl } from '../utils/sprites';
 import { BallRoulette } from './BallRoulette';
@@ -10,6 +12,7 @@ import { StarGrade } from './StarGrade';
 interface Props {
   speciesId: number;
   intruder?: boolean;
+  gradeBoost?: boolean;
   recordCatch: (speciesId: number, success: boolean) => CatchOutcome;
   onDone: (outcome: CatchOutcome) => void;
 }
@@ -17,12 +20,14 @@ interface Props {
 type Stage = 'banner' | 'roulette' | 'throw' | 'shake' | 'result';
 
 /** 야생 포켓몬을 쓰러뜨렸을 때의 겟 찬스(포획) 연출 */
-export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: Props) {
+export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch, onDone }: Props) {
   const species = getSpecies(speciesId);
+  const caughtCount = useGame((s) => s.save.dex.caught.length);
   const [stage, setStage] = useState<Stage>('banner');
   const [shakeCount, setShakeCount] = useState(0);
   const [outcome, setOutcome] = useState<CatchOutcome | null>(null);
   const ballRef = useRef<Ball | null>(null);
+  const probRef = useRef(0);
   const successRef = useRef(false);
 
   useEffect(() => {
@@ -47,8 +52,10 @@ export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: P
           setTimeout(() => {
             const result = recordCatch(speciesId, successRef.current);
             setOutcome(result);
-            if (successRef.current) sfx.catchSuccess();
-            else sfx.escape();
+            if (successRef.current) {
+              sfx.catchSuccess();
+              haptic.catch();
+            } else sfx.escape();
             setStage('result');
           }, 600);
         }
@@ -60,9 +67,12 @@ export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: P
   const onBallSelected = (ball: Ball) => {
     ballRef.current = ball;
     const p = catchProbability(species.rarity, ball, intruder ? INTRUDER_CATCH_MOD : 1);
+    probRef.current = p;
     successRef.current = rollCatch(p);
     setStage('throw');
   };
+
+  const probStars = Math.min(5, Math.max(1, Math.round(probRef.current * 5)));
 
   const resultLabel = () => {
     if (!outcome) return null;
@@ -73,7 +83,9 @@ export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: P
             <div className="getchance__got">GET!!</div>
             <div className="getchance__label">{eulReul(species.ko)} 잡았다!</div>
             <StarGrade grade={outcome.grade} size="big" />
-            <div className="getchance__sub">새로운 디스크 획득!</div>
+            <div className="getchance__sub">
+              새로운 디스크 획득!{gradeBoost ? ' (등급 UP 찬스 적용)' : ''}
+            </div>
           </>
         );
       case 'gradeUp':
@@ -106,7 +118,12 @@ export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: P
 
   return (
     <div className="getchance" onClick={() => stage === 'result' && outcome && onDone(outcome)}>
-      {stage === 'banner' && <div className="getchance__banner">GET CHANCE!!</div>}
+      {stage === 'banner' && (
+        <>
+          <div className="getchance__banner">GET CHANCE!!</div>
+          {gradeBoost && <div className="getchance__boost">🎁 등급 UP 찬스!</div>}
+        </>
+      )}
 
       {stage !== 'banner' && (
         <div
@@ -122,16 +139,25 @@ export function GetChanceOverlay({ speciesId, intruder, recordCatch, onDone }: P
         </div>
       )}
 
-      {stage === 'roulette' && <BallRoulette onSelect={onBallSelected} />}
+      {stage === 'roulette' && <BallRoulette balls={getBalls(caughtCount)} onSelect={onBallSelected} />}
 
       {(stage === 'throw' || stage === 'shake') && (
-        <div
-          className={`getchance__ball${stage === 'throw' ? ' getchance__ball--throw' : ''}${
-            stage === 'shake' ? ' getchance__ball--shake' : ''
-          }`}
-          style={{ background: ballRef.current?.color }}
-          key={stage === 'shake' ? shakeCount : 'throw'}
-        />
+        <>
+          <div
+            className={`getchance__ball${stage === 'throw' ? ' getchance__ball--throw' : ''}${
+              stage === 'shake' ? ' getchance__ball--shake' : ''
+            }`}
+            style={{ background: ballRef.current?.color }}
+            key={stage === 'shake' ? shakeCount : 'throw'}
+          />
+          <div className="getchance__prob">
+            잡힐 확률{' '}
+            <span className="getchance__prob-stars">
+              {'●'.repeat(probStars)}
+              <span className="getchance__prob-empty">{'●'.repeat(5 - probStars)}</span>
+            </span>
+          </div>
+        </>
       )}
 
       {stage === 'result' && (

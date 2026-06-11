@@ -22,6 +22,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm test
       # 데이터 JSON은 저장소에 커밋되어 있어 빌드 중 외부 네트워크 호출 없음
       - run: npm run build
       # gh-pages 브랜치로 배포 (브랜치가 생기면 GitHub이 Pages를 자동 활성화)

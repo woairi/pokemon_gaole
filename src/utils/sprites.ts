@@ -1,11 +1,10 @@
-const SPRITES = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+// 이미지는 빌드 시 다운로드해 함께 배포 (public/sprites/) — 외부 CDN 의존 없음
+const BASE = `${import.meta.env.BASE_URL}sprites`;
 
-export const artworkUrl = (id: number) => `${SPRITES}/other/official-artwork/${id}.png`;
+export const artworkUrl = (id: number) => `${BASE}/artwork/${id}.png`;
 
 export const battleSpriteUrl = (id: number, side: 'front' | 'back') =>
-  side === 'front'
-    ? `${SPRITES}/other/showdown/${id}.gif`
-    : `${SPRITES}/other/showdown/back/${id}.gif`;
+  `${BASE}/${side}/${id}.gif`;
 
 /** 이미지 프리로드 (실패/타임아웃해도 게임은 진행) */
 export function preloadImages(urls: string[], timeoutMs = 6000): Promise<void> {

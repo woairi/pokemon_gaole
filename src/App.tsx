@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { bgm } from './audio/bgm';
 import { BattleScreen } from './screens/BattleScreen';
 import { CollectionScreen } from './screens/CollectionScreen';
 import { CourseSelect } from './screens/CourseSelect';
@@ -10,6 +12,13 @@ import { useGame } from './store/gameStore';
 
 export default function App() {
   const screen = useGame((s) => s.screen);
+
+  useEffect(() => {
+    if (screen === 'title') bgm.stop();
+    else if (screen === 'battle') bgm.play('battle');
+    else bgm.play('menu');
+  }, [screen]);
+
   switch (screen) {
     case 'title':
       return <TitleScreen />;

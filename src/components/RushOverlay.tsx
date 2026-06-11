@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { sfx } from '../audio/sfx';
 import { TUNING } from '../engine/damage';
+import { haptic } from '../utils/haptics';
 
 interface Props {
   durationMs: number;
@@ -44,6 +45,7 @@ export function RushOverlay({ durationMs, isZ, moveKo, onDone }: Props) {
     setFill(fillRef.current);
     setBump((b) => b + 1);
     sfx.tap(fillRef.current);
+    haptic.tap();
   };
 
   return (

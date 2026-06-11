@@ -5,11 +5,13 @@ import { HpBar } from '../components/HpBar';
 import { RushOverlay } from '../components/RushOverlay';
 import { getCourse } from '../data/courses';
 import {
-  type BattleState, beginSelect, chooseMove, chooseZ, continueAfterAttack,
-  continueAfterEnemyAttack, finishCatch, getSpecies, resolveRush,
+  type BattleState, STAGE_COUNT, advanceStage, afterMegaAnim, applyBattleEvolution,
+  beginSelect, canMega, chooseMega, chooseMove, chooseZ, continueAfterAttack,
+  continueAfterEnemyAttack, finishCatch, getSpecies, resolveRush, setTarget,
 } from '../engine/battle';
-import { TUNING } from '../engine/damage';
+import { TUNING, typeMultiplier } from '../engine/damage';
 import { useGame } from '../store/gameStore';
+import { haptic } from '../utils/haptics';
 import { iGa, wa } from '../utils/korean';
 import { artworkUrl, battleSpriteUrl, preloadImages } from '../utils/sprites';
 import { TYPE_COLORS } from '../utils/typeColors';
@@ -21,7 +23,8 @@ function buildMessage(b: BattleState): string {
   switch (b.phase) {
     case 'intro': {
       const [w1, w2] = b.wild.map((w) => getSpecies(w.speciesId).ko);
-      return `야생의 ${wa(w1)} ${iGa(w2)} 나타났다!`;
+      const prefix = b.stage === STAGE_COUNT ? '보스 스테이지! ' : b.stage > 1 ? `스테이지 ${b.stage}! ` : '';
+      return `${prefix}야생의 ${wa(w1)} ${iGa(w2)} 나타났다!`;
     }
     case 'legendIntro':
       return '!!거대한 그림자가 나타났다!';
@@ -45,8 +48,16 @@ function buildMessage(b: BattleState): string {
       if (a.typeMult >= 2) msg += ' 효과가 굉장했다!';
       return msg;
     }
+    case 'stageClear':
+      return b.stage === STAGE_COUNT - 1 ? '스테이지 클리어! 다음은 보스 스테이지!' : '스테이지 클리어!';
+    case 'megaAnim': {
+      const monIdx = b.pending?.monIdx ?? 0;
+      return `${getSpecies(b.player[monIdx].speciesId).ko}, 메가진화!!`;
+    }
+    case 'battleEvolution':
+      return b.battleEvo ? `어라…?! ${getSpecies(b.battleEvo.fromId).ko}의 상태가…!` : '';
     case 'victory':
-      return '승리했다!!';
+      return '코스 클리어!!';
     case 'defeat':
       return '아쉽다! 다음엔 이길 수 있어!';
     default:
@@ -54,10 +65,31 @@ function buildMessage(b: BattleState): string {
   }
 }
 
+/** 살아있는 야생 기준 최대 상성 배율 (자동 조준이 최적 대상을 고르므로) */
+function moveHint(b: BattleState, moveType: Parameters<typeof typeMultiplier>[0]): number {
+  const living = b.wild.filter((w) => w.hp > 0);
+  if (!living.length) return 1;
+  return Math.max(...living.map((w) => typeMultiplier(moveType, getSpecies(w.speciesId).types)));
+}
+
+function playerSpriteUrl(c: { speciesId: number; mega?: boolean }): {
+  src: string;
+  mirror: boolean;
+} {
+  const species = getSpecies(c.speciesId);
+  if (c.mega && species.megaId) {
+    if (species.megaNoBack) return { src: battleSpriteUrl(species.megaId, 'front'), mirror: true };
+    return { src: battleSpriteUrl(species.megaId, 'back'), mirror: false };
+  }
+  return { src: battleSpriteUrl(c.speciesId, 'back'), mirror: false };
+}
+
 export function BattleScreen() {
   const battle = useGame((s) => s.battle);
   const setBattle = useGame((s) => s.setBattle);
+  const markSeen = useGame((s) => s.markSeen);
   const recordCatchAttempt = useGame((s) => s.recordCatchAttempt);
+  const applyEvolution = useGame((s) => s.applyEvolution);
   const endBattle = useGame((s) => s.endBattle);
 
   const phase = battle?.phase;
@@ -70,7 +102,7 @@ export function BattleScreen() {
       if (phase === 'legendIntro') sfx.legend();
       const urls = [
         ...battle.wild.map((w) => battleSpriteUrl(w.speciesId, 'front')),
-        ...battle.player.map((p) => battleSpriteUrl(p.speciesId, 'back')),
+        ...battle.player.map((p) => playerSpriteUrl(p).src),
         ...battle.wild.map((w) => artworkUrl(w.speciesId)),
       ];
       let cancelled = false;
@@ -88,9 +120,14 @@ export function BattleScreen() {
 
     if (phase === 'attack') {
       const a = battle.lastAttack!;
-      if (a.typeMult >= 2) sfx.superHit();
-      else if (a.typeMult <= 0.5) sfx.weakHit();
-      else sfx.hit();
+      if (a.typeMult >= 2) {
+        sfx.superHit();
+        haptic.superHit();
+      } else if (a.typeMult <= 0.5) sfx.weakHit();
+      else {
+        sfx.hit();
+        haptic.hit();
+      }
       if (battle.wild.some((w) => w.hp <= 0 && !w.catchResolved)) {
         setTimeout(() => sfx.faint(), 600);
       }
@@ -104,13 +141,57 @@ export function BattleScreen() {
     if (phase === 'enemyAttack') {
       const a = battle.lastAttack!;
       if (a.dodged) sfx.dodge();
-      else if (a.typeMult >= 2) sfx.superHit();
-      else sfx.hit();
+      else if (a.typeMult >= 2) {
+        sfx.superHit();
+        haptic.superHit();
+      } else {
+        sfx.hit();
+        haptic.hit();
+      }
       if (battle.player.some((p) => p.hp <= 0)) setTimeout(() => sfx.faint(), 600);
       const t = setTimeout(() => {
         const b = current();
         if (b?.phase === 'enemyAttack') setBattle(continueAfterEnemyAttack(b));
       }, ATTACK_ANIM_MS);
+      return () => clearTimeout(t);
+    }
+
+    if (phase === 'stageClear') {
+      sfx.fanfare();
+      const t = setTimeout(() => {
+        const b = current();
+        if (b?.phase !== 'stageClear') return;
+        const next = advanceStage(b);
+        setBattle(next);
+        markSeen(next.wild.map((w) => w.speciesId));
+      }, 2200);
+      return () => clearTimeout(t);
+    }
+
+    if (phase === 'megaAnim') {
+      sfx.zCharge();
+      haptic.mega();
+      const t = setTimeout(() => {
+        const b = current();
+        if (b?.phase === 'megaAnim') setBattle(afterMegaAnim(b));
+      }, 2400);
+      return () => clearTimeout(t);
+    }
+
+    if (phase === 'battleEvolution') {
+      sfx.evolve();
+      haptic.evolve();
+      const t = setTimeout(() => {
+        const b = current();
+        if (b?.phase !== 'battleEvolution' || !b.battleEvo) return;
+        const { monIdx, fromId, toId } = b.battleEvo;
+        // 소유 디스크면 컬렉션에도 진화 반영 (렌탈은 배틀 한정)
+        const mon = b.player[monIdx];
+        if (!mon.rental) {
+          applyEvolution({ fromId, toId, grade: mon.grade });
+        }
+        setBattle(applyBattleEvolution(b));
+      }, 3000);
       return () => clearTimeout(t);
     }
 
@@ -128,13 +209,22 @@ export function BattleScreen() {
   const message = buildMessage(battle);
   const attack = battle.lastAttack;
   const zReady = battle.zGauge >= 100;
+  const superFlash =
+    (battle.phase === 'attack' || battle.phase === 'enemyAttack') &&
+    attack &&
+    !attack.dodged &&
+    attack.typeMult >= 2;
 
   return (
     <div
-      className={`screen battle${battle.phase === 'legendIntro' ? ' battle--dark' : ''}`}
+      className={`screen battle battle--${battle.courseId}${
+        battle.phase === 'legendIntro' ? ' battle--dark' : ''
+      }`}
       style={{ background: course.bg }}
     >
-      {/* Z 게이지 */}
+      <div className="battle__scenery" />
+
+      {/* 상단: Z게이지 + 스테이지 */}
       <div className="battle__zbar">
         <span className={`battle__zlabel${zReady ? ' battle__zlabel--ready' : ''}`}>Z</span>
         <div className="battle__ztrack">
@@ -143,8 +233,11 @@ export function BattleScreen() {
             style={{ width: `${battle.zGauge}%` }}
           />
         </div>
-        <span className="battle__round">{battle.round}라운드</span>
+        <span className="battle__round">
+          {battle.stage === STAGE_COUNT ? '👑보스' : `스테이지 ${battle.stage}/${STAGE_COUNT}`}
+        </span>
       </div>
+      {battle.gradeBoost && <div className="battle__boost">🎁 등급 UP 찬스 발동 중!</div>}
 
       {/* 야생 포켓몬 */}
       <div className="battle__enemies">
@@ -162,9 +255,20 @@ export function BattleScreen() {
                   ? attack.splashDmg
                   : null
               : null;
+          const targeted = battle.targetOverride === i && w.hp > 0;
           return (
-            <div key={i} className="battle__slot">
+            <div
+              key={`${battle.stage}-${i}`}
+              className={`battle__slot${targeted ? ' battle__slot--targeted' : ''}`}
+              onClick={() => {
+                if (battle.phase === 'selectMove' && w.hp > 0) {
+                  sfx.click();
+                  setBattle(setTarget(battle, i));
+                }
+              }}
+            >
               <HpBar hp={w.hp} maxHp={w.maxHp} label={`${sp.ko}${w.intruder ? ' ⚠️' : ''}`} />
+              {targeted && <div className="battle__target-mark">🎯 조준!</div>}
               <div className={`battle__sprite-box${hitNow ? ' battle__sprite-box--hit' : ''}`}>
                 {w.caught ? (
                   <div className="battle__caught">🔴 GET!</div>
@@ -203,18 +307,24 @@ export function BattleScreen() {
           const attacking =
             (battle.phase === 'attack' && attack?.side === 'player' && attack.attackerIdx === i) ||
             (battle.phase === 'rush' && battle.pending?.monIdx === i);
+          const megaNow = battle.phase === 'megaAnim' && battle.pending?.monIdx === i;
+          const evolvingNow = battle.phase === 'battleEvolution' && battle.battleEvo?.monIdx === i;
+          const sprite = playerSpriteUrl(p);
           return (
             <div key={i} className="battle__slot">
               <div
                 className={`battle__sprite-box${hitNow ? ' battle__sprite-box--hit' : ''}${
                   attacking ? ' battle__sprite-box--attacking' : ''
+                }${megaNow ? ' battle__sprite-box--mega' : ''}${
+                  evolvingNow ? ' battle__sprite-box--evolving' : ''
                 }`}
               >
                 <img
                   className={`battle__sprite battle__sprite--back${
                     p.hp <= 0 ? ' battle__sprite--fainted' : ''
-                  }`}
-                  src={battleSpriteUrl(p.speciesId, 'back')}
+                  }${p.mega ? ' battle__sprite--megaform' : ''}`}
+                  style={sprite.mirror ? { transform: 'scaleX(-1)' } : undefined}
+                  src={sprite.src}
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = artworkUrl(p.speciesId);
                   }}
@@ -227,7 +337,7 @@ export function BattleScreen() {
                   </div>
                 )}
               </div>
-              <HpBar hp={p.hp} maxHp={p.maxHp} label={sp.ko} />
+              <HpBar hp={p.hp} maxHp={p.maxHp} label={`${p.mega ? '메가' : ''}${sp.ko}`} />
             </div>
           );
         })}
@@ -256,22 +366,41 @@ export function BattleScreen() {
                     Z기술!!
                   </button>
                 )}
-                {sp.moves.map((m, mi) => (
+                {canMega(battle, i) && (
                   <button
-                    key={mi}
                     type="button"
-                    className="move-btn"
-                    style={{ background: TYPE_COLORS[m.type] }}
-                    disabled={dead}
+                    className="move-btn move-btn--mega"
                     onClick={() => {
                       sfx.click();
-                      setBattle(chooseMove(battle, i, mi));
+                      setBattle(chooseMega(battle, i));
                     }}
                   >
-                    <span className="move-btn__name">{m.ko}</span>
-                    <span className="move-btn__power">{m.power}</span>
+                    🔥 메가진화!
                   </button>
-                ))}
+                )}
+                {sp.moves.map((m, mi) => {
+                  const hint = dead ? 1 : moveHint(battle, m.type);
+                  return (
+                    <button
+                      key={mi}
+                      type="button"
+                      className="move-btn"
+                      style={{ background: TYPE_COLORS[m.type] }}
+                      disabled={dead}
+                      onClick={() => {
+                        sfx.click();
+                        setBattle(chooseMove(battle, i, mi));
+                      }}
+                    >
+                      <span className="move-btn__name">
+                        {m.ko}
+                        {hint >= 2 && <span className="move-btn__hint move-btn__hint--good">💥 효과 굉장!</span>}
+                        {hint <= 0.5 && <span className="move-btn__hint move-btn__hint--bad">효과 별로…</span>}
+                      </span>
+                      <span className="move-btn__power">{m.power}</span>
+                    </button>
+                  );
+                })}
               </div>
             );
           })}
@@ -294,9 +423,10 @@ export function BattleScreen() {
       {/* 겟 찬스 */}
       {battle.phase === 'getChance' && battle.getChanceQueue.length > 0 && (
         <GetChanceOverlay
-          key={battle.getChanceQueue[0]}
+          key={`${battle.stage}-${battle.getChanceQueue[0]}`}
           speciesId={battle.wild[battle.getChanceQueue[0]].speciesId}
           intruder={battle.wild[battle.getChanceQueue[0]].intruder}
+          gradeBoost={battle.gradeBoost}
           recordCatch={recordCatchAttempt}
           onDone={(outcome) => {
             const b = useGame.getState().battle;
@@ -305,7 +435,13 @@ export function BattleScreen() {
         />
       )}
 
-      {/* 승리/패배 배너 */}
+      {/* 효과 굉장 화면 플래시 */}
+      {superFlash && <div className="flash-overlay" />}
+
+      {/* 스테이지 클리어 / 승리 / 패배 배너 */}
+      {battle.phase === 'stageClear' && (
+        <div className="battle__banner battle__banner--stage">STAGE CLEAR!</div>
+      )}
       {(battle.phase === 'victory' || battle.phase === 'defeat') && (
         <div className={`battle__banner battle__banner--${battle.phase}`}>
           {battle.phase === 'victory' ? 'WIN!!' : 'LOSE…'}
