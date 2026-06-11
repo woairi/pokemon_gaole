@@ -136,6 +136,13 @@ for (const m of movesCsv) {
   moveByIdent.set(entry.identifier, entry);
 }
 
+// 타입별 일반 Z기술 한국어 이름 (move id 622~657: Breakneck Blitz 등)
+const zmoveKo = {};
+for (let id = 622; id <= 657; id++) {
+  const m = moveById.get(id);
+  if (m && m.type && m.ko && !zmoveKo[m.type]) zmoveKo[m.type] = m.ko;
+}
+
 // 한국어 종족 이름
 const speciesKo = new Map();
 for (const n of speciesNamesCsv) {
@@ -233,7 +240,7 @@ await fs.mkdir(OUT_DIR, { recursive: true });
 await fs.writeFile(path.join(OUT_DIR, 'pokedex.json'), JSON.stringify(pokedex, null, 1));
 await fs.writeFile(
   path.join(OUT_DIR, 'typechart.json'),
-  JSON.stringify({ ko: typeKo, chart }, null, 1)
+  JSON.stringify({ ko: typeKo, chart, zmoveKo }, null, 1)
 );
 const size = (await fs.stat(path.join(OUT_DIR, 'pokedex.json'))).size;
 console.log(`\n완료: pokedex.json ${(size / 1024).toFixed(1)}KB, ${Object.keys(pokedex).length}마리`);
