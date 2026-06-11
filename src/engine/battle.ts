@@ -279,7 +279,7 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
   const target = s.wild[targetIdx];
   const targetSpecies = getSpecies(target.speciesId);
 
-  const { dmg, typeMult, crit } = playerDamage({
+  const { dmg: rawDmg, typeMult, crit } = playerDamage({
     power: move.power,
     atk: megaStat(attacker, attackerSpecies.atk),
     fill,
@@ -288,6 +288,8 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
     defenderDef: targetSpecies.def,
     grade: attacker.grade,
   });
+  // 일반 공격은 원킬 방지 상한 적용 (Z기술은 그대로)
+  const dmg = isZ ? rawDmg : Math.min(rawDmg, Math.round(target.maxHp * TUNING.wildDmgCapRatio));
 
   const wild = s.wild.map((c) => ({ ...c }));
   wild[targetIdx].hp = Math.max(0, wild[targetIdx].hp - dmg);

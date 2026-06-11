@@ -85,6 +85,33 @@ describe('포획', () => {
 });
 
 describe('배틀 흐름', () => {
+  it('일반 공격은 야생 최대 HP의 70%를 넘지 않는다 (원킬 방지)', () => {
+    // 최강 조건(5성 만렙 연타 + 약한 야생)에서도 한 방에 죽지 않아야 한다
+    for (let i = 0; i < 50; i++) {
+      let b = createBattle(
+        [{ speciesId: 150, grade: 5 }, { speciesId: 25, grade: 1, rental: true }],
+        'grass',
+        save
+      );
+      b = beginSelect(b);
+      b = chooseMove(b, 0, 0);
+      b = resolveRush(b, 1);
+      const target = b.wild[b.lastAttack!.targetIdx];
+      expect(b.lastAttack!.dmg).toBeLessThanOrEqual(Math.round(target.maxHp * TUNING.wildDmgCapRatio));
+      expect(target.hp).toBeGreaterThan(0);
+    }
+  });
+
+  it('Z기술은 데미지 상한이 없다', () => {
+    let b = createBattle(team, 'grass', save);
+    b = beginSelect(b);
+    b = { ...b, zGauge: 100, wild: b.wild.map((w) => ({ ...w, maxHp: 10, hp: 10 })) };
+    b = chooseZ(b, 0);
+    b = resolveRush(b, 1);
+    // 상한(7)보다 큰 데미지 허용 → 원킬 가능
+    expect(b.wild[b.lastAttack!.targetIdx].hp).toBe(0);
+  });
+
   it('생성 → 기술 선택 → 러시 → 공격', () => {
     let b = createBattle(team, 'grass', save);
     expect(b.stage).toBe(1);

@@ -19,6 +19,8 @@ export const TUNING = {
   critChance: 0.1,
   critMult: 1.5,
   immunitySoftener: 0.25, // 면역(×0)을 ×0.25로 완화 (아이 배려)
+  // 일반 공격은 야생 최대 HP의 70%까지만 — 원킬 방지로 주고받는 재미 보장 (Z기술은 예외)
+  wildDmgCapRatio: 0.7,
   megaStatMult: 1.3, // 메가진화 시 공격·방어 배율
   zPower: 180,
   zSplash: 0.4, // Z기술이 다른 야생에게 주는 비율
