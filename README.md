@@ -73,6 +73,8 @@ public/sprites/          # 셀프호스팅 이미지 (아트워크·배틀 GIF, 
 `main` 브랜치에 푸시하면 GitHub Actions가 테스트 → 빌드 → `gh-pages` 브랜치로 자동 배포합니다.
 (저장소 Settings → Pages → Source: `gh-pages` 브랜치)
 
+변경 기록은 [CHANGELOG.md](CHANGELOG.md)에서 확인할 수 있어요.
+
 ---
 
 이 프로젝트는 비상업적 팬 게임입니다. 포켓몬 관련 명칭·이미지의 권리는
