@@ -1326,7 +1326,13 @@ button {
   z-index: 0;
 }
 
-.battle > *:not(.battle__scenery) {
+/* 배경 위에 그려야 하는 일반 흐름 요소만 명시 (러시/겟찬스 등 absolute 오버레이는 건드리지 않는다) */
+.battle__zbar,
+.battle__boost,
+.battle__enemies,
+.battle__players,
+.battle .message-box,
+.battle__controls {
   position: relative;
   z-index: 1;
 }
