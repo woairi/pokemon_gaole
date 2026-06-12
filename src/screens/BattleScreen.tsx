@@ -4,10 +4,12 @@ import { GetChanceOverlay } from '../components/GetChanceOverlay';
 import { HpBar } from '../components/HpBar';
 import { RushOverlay } from '../components/RushOverlay';
 import { getCourse } from '../data/courses';
+import { MultiplierRoulette } from '../components/MultiplierRoulette';
 import {
-  type BattleState, STAGE_COUNT, advanceStage, afterMegaAnim, applyBattleEvolution,
-  beginSelect, canMega, chooseMega, chooseMove, chooseZ, continueAfterAttack,
-  continueAfterEnemyAttack, finishCatch, getSpecies, resolveRush, setTarget,
+  ATK_ROULETTE, type BattleState, DEF_ROULETTE, STAGE_COUNT, advanceStage, afterMegaAnim,
+  afterRush, applyBattleEvolution, beginSelect, canMega, chooseMega, chooseMove, chooseZ,
+  continueAfterAttack, continueAfterEnemyAttack, finishCatch, getSpecies, resolveDefense,
+  resolveRush, setTarget,
 } from '../engine/battle';
 import { TUNING, typeMultiplier } from '../engine/damage';
 import { useGame } from '../store/gameStore';
@@ -34,17 +36,22 @@ function buildMessage(b: BattleState): string {
       if (!a) return '';
       const name = getSpecies(b.player[a.attackerIdx].speciesId).ko;
       let msg = `${name}의 ${a.moveKo}!`;
+      if (a.rouletteMult >= 2) msg += ` 배율 ×${a.rouletteMult}!!`;
       if (a.crit) msg += ' 급소에 맞았다!';
       if (a.typeMult >= 2) msg += ' 효과가 굉장했다!';
       else if (a.typeMult <= 0.5) msg += ' 효과가 별로인 듯하다…';
       return msg;
     }
+    case 'defRoulette':
+      return '야생 포켓몬이 공격해온다! 막아라!';
     case 'enemyAttack': {
       if (!a) return '';
       const name = getSpecies(b.wild[a.attackerIdx].speciesId).ko;
       const target = getSpecies(b.player[a.targetIdx].speciesId).ko;
       if (a.dodged) return `야생 ${name}의 ${a.moveKo}! ${iGa(target)} 재빨리 피했다!`;
+      if (a.blocked) return `야생 ${name}의 ${a.moveKo}! 완전 방어 성공!!`;
       let msg = `야생 ${name}의 ${a.moveKo}!`;
+      if (a.rouletteMult <= 0.5) msg += ' 절반으로 막았다!';
       if (a.typeMult >= 2) msg += ' 효과가 굉장했다!';
       return msg;
     }
@@ -316,7 +323,12 @@ export function BattleScreen() {
         {battle.player.map((p, i) => {
           const sp = getSpecies(p.speciesId);
           const hitNow =
-            battle.phase === 'enemyAttack' && !attack?.dodged && attack?.targetIdx === i;
+            battle.phase === 'enemyAttack' &&
+            !attack?.dodged &&
+            !attack?.blocked &&
+            attack?.targetIdx === i;
+          const blockedNow =
+            battle.phase === 'enemyAttack' && attack?.blocked && attack?.targetIdx === i;
           const attacking =
             (battle.phase === 'attack' && attack?.side === 'player' && attack.attackerIdx === i) ||
             (battle.phase === 'rush' && battle.pending?.monIdx === i);
@@ -347,6 +359,11 @@ export function BattleScreen() {
                 {hitNow && attack && (
                   <div key={`p-${battle.round}-${i}`} className="dmg-popup dmg-popup--enemy">
                     {attack.dmg}
+                  </div>
+                )}
+                {blockedNow && (
+                  <div key={`b-${battle.round}-${i}`} className="dmg-popup dmg-popup--block">
+                    🛡️ 방어!
                   </div>
                 )}
               </div>
@@ -428,7 +445,31 @@ export function BattleScreen() {
           moveKo={battle.pending.move.ko}
           onDone={(fill) => {
             const b = useGame.getState().battle;
-            if (b?.phase === 'rush') setBattle(resolveRush(b, fill));
+            if (b?.phase === 'rush') setBattle(afterRush(b, fill));
+          }}
+        />
+      )}
+
+      {/* 공격 배율 룰렛 */}
+      {battle.phase === 'atkRoulette' && (
+        <MultiplierRoulette
+          mode="attack"
+          segments={ATK_ROULETTE}
+          onStop={(mult) => {
+            const b = useGame.getState().battle;
+            if (b?.phase === 'atkRoulette') setBattle(resolveRush(b, b.pendingFill ?? 0, mult));
+          }}
+        />
+      )}
+
+      {/* 방어 배율 룰렛 */}
+      {battle.phase === 'defRoulette' && (
+        <MultiplierRoulette
+          mode="defense"
+          segments={DEF_ROULETTE}
+          onStop={(mult) => {
+            const b = useGame.getState().battle;
+            if (b?.phase === 'defRoulette') setBattle(resolveDefense(b, mult));
           }}
         />
       )}

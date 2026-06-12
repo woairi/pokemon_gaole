@@ -2115,3 +2115,65 @@ button {
   font-size: 16px;
   flex-shrink: 0;
 }
+
+/* ===== 배율 룰렛 ===== */
+.mult-roulette {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(10, 5, 40, 0.82);
+}
+
+.mult-roulette--defense {
+  background: rgba(5, 25, 55, 0.85);
+}
+
+.mult-roulette__title {
+  font-size: 30px;
+  color: #ffd54f;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.6);
+}
+
+.mult-roulette__value {
+  min-width: 64vw;
+  text-align: center;
+  font-size: 64px;
+  color: #fff;
+  padding: 26px 30px;
+  border-radius: 26px;
+  border: 5px solid rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.4);
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.5);
+}
+
+.mult-roulette--defense .mult-roulette__value {
+  font-size: 42px;
+}
+
+.mult-roulette__value--big {
+  color: #ffd54f;
+  border-color: #ffd54f;
+  box-shadow: 0 0 28px rgba(255, 213, 79, 0.6);
+}
+
+.mult-roulette__value--stopped {
+  animation: banner-pop 0.45s;
+}
+
+.mult-roulette__hint {
+  font-size: 19px;
+  color: #ffe082;
+  min-height: 26px;
+  animation: blink 0.9s infinite;
+}
+
+.dmg-popup--block {
+  font-size: 24px;
+  color: #81d4fa;
+  text-shadow: 2px 2px 0 #01579b;
+}

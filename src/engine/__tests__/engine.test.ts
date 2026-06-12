@@ -3,9 +3,10 @@ import type { DiskInstance, SaveData } from '../../types';
 import { defaultSave } from '../../store/persistence';
 import { rollEvolutions } from '../events';
 import {
-  STAGE_COUNT, advanceStage, applyBattleEvolution, beginSelect, canMega, chooseMega,
-  chooseMove, chooseZ, continueAfterAttack, continueAfterEnemyAttack, createBattle,
-  finishCatch, getSpecies, resolveRush, setTarget,
+  ATK_ROULETTE, DEF_ROULETTE, STAGE_COUNT, advanceStage, afterRush, applyBattleEvolution,
+  beginSelect, canMega, chooseMega, chooseMove, chooseZ, continueAfterAttack,
+  continueAfterEnemyAttack, createBattle, finishCatch, getSpecies, resolveDefense,
+  resolveRush, setTarget,
 } from '../battle';
 import { BASE_CATCH, GRADE_WEIGHTS, catchProbability, getBalls, rollGrade } from '../catch';
 import { TUNING, enemyDamage, playerDamage, playerMaxHp, typeMultiplier, wildMaxHp } from '../damage';
@@ -131,7 +132,7 @@ describe('배틀 흐름', () => {
     expect(b.wild[b.lastAttack!.targetIdx].hp).toBe(0);
   });
 
-  it('생성 → 기술 선택 → 러시 → 공격', () => {
+  it('생성 → 기술 선택 → 러시 → 공격 룰렛 → 공격', () => {
     let b = createBattle(team, 'grass', save);
     expect(b.stage).toBe(1);
     expect(b.player).toHaveLength(2);
@@ -139,9 +140,52 @@ describe('배틀 흐름', () => {
     b = beginSelect(b);
     b = chooseMove(b, 0, 0);
     expect(b.phase).toBe('rush');
-    b = resolveRush(b, 1);
+    b = afterRush(b, 1);
+    expect(b.phase).toBe('atkRoulette'); // 일반 기술은 공격 룰렛 경유
+    expect(b.pendingFill).toBe(1);
+    b = resolveRush(b, b.pendingFill!, 2);
     expect(b.phase).toBe('attack');
     expect(b.lastAttack?.dmg).toBeGreaterThan(0);
+    expect(b.lastAttack?.rouletteMult).toBe(2);
+  });
+
+  it('공격 룰렛: 배율이 높을수록 데미지 증가 (상한 내)', () => {
+    let base = createBattle(team, 'sea', save);
+    base = beginSelect(base);
+    // 충분히 큰 야생 HP로 상한 영향 제거
+    base = { ...base, wild: base.wild.map((w) => ({ ...w, maxHp: 9999, hp: 9999 })) };
+    const d1 = resolveRush(chooseMove(base, 0, 0), 1, 1).lastAttack!.dmg;
+    const d3 = resolveRush(chooseMove(base, 0, 0), 1, 3).lastAttack!.dmg;
+    expect(d3).toBeGreaterThan(d1 * 2); // 랜덤폭 감안해도 3배 부근
+  });
+
+  it('Z기술은 공격 룰렛을 건너뛴다', () => {
+    let b = createBattle(team, 'grass', save);
+    b = beginSelect(b);
+    b = { ...b, zGauge: 100 };
+    b = chooseZ(b, 0);
+    b = afterRush(b, 1);
+    expect(b.phase).toBe('attack'); // 룰렛 없이 바로 공격
+  });
+
+  it('방어 룰렛: ×0은 완전 방어(무피해), ×1은 피해', () => {
+    let b = createBattle(team, 'grass', save);
+    b = beginSelect(b);
+    const before = b.player.map((p) => p.hp);
+    const blockedState = resolveDefense({ ...b, phase: 'defRoulette' }, 0);
+    expect(blockedState.lastAttack?.blocked).toBe(true);
+    expect(blockedState.player.map((p) => p.hp)).toEqual(before);
+    const hitState = resolveDefense({ ...b, phase: 'defRoulette' }, 1);
+    if (!hitState.lastAttack?.dodged) {
+      expect(hitState.player.some((p, i) => p.hp < before[i])).toBe(true);
+    }
+  });
+
+  it('룰렛 순환표 기대값 검증 (밸런스 보정 기준)', () => {
+    const atkAvg = ATK_ROULETTE.reduce((a, b) => a + b, 0) / ATK_ROULETTE.length;
+    const defAvg = DEF_ROULETTE.reduce((a, b) => a + b, 0) / DEF_ROULETTE.length;
+    expect(atkAvg).toBeCloseTo(1.375, 2);
+    expect(defAvg).toBeCloseTo(0.733, 2);
   });
 
   it('야생 전멸 + 포획 처리 후 스테이지 클리어', () => {
@@ -156,6 +200,7 @@ describe('배틀 흐름', () => {
       while (b.phase === 'getChance') {
         b = finishCatch(b, { speciesId: b.wild[b.getChanceQueue[0]].speciesId, grade: 1, result: 'escaped' });
       }
+      if (b.phase === 'defRoulette') b = resolveDefense(b, 1);
       if (b.phase === 'enemyAttack') b = continueAfterEnemyAttack(b);
     }
     expect(b.phase).toBe('stageClear');
@@ -178,6 +223,7 @@ describe('배틀 흐름', () => {
       while (b.phase === 'getChance') {
         b = finishCatch(b, { speciesId: b.wild[b.getChanceQueue[0]].speciesId, grade: 1, result: 'escaped' });
       }
+      if (b.phase === 'defRoulette') b = resolveDefense(b, 1);
       if (b.phase === 'enemyAttack') b = continueAfterEnemyAttack(b);
     }
     expect(b.phase).toBe('victory');

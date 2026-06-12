@@ -16,9 +16,14 @@ export const getSpecies = (id: number): PokemonData => dex[String(id)];
 export const allSpecies = (): PokemonData[] => Object.values(dex);
 
 export type BattlePhase =
-  | 'intro' | 'legendIntro' | 'selectMove' | 'rush' | 'attack'
-  | 'getChance' | 'enemyAttack' | 'stageClear' | 'battleEvolution' | 'megaAnim'
+  | 'intro' | 'legendIntro' | 'selectMove' | 'rush' | 'atkRoulette' | 'attack'
+  | 'getChance' | 'defRoulette' | 'enemyAttack' | 'stageClear' | 'battleEvolution' | 'megaAnim'
   | 'victory' | 'defeat';
+
+/** 공격 배율 룰렛 순환표 (등장 횟수 = 확률 가중치, 평균 ×1.375) */
+export const ATK_ROULETTE = [1, 1.5, 1, 2, 1, 1.5, 1, 3, 1, 1.5, 1, 2, 1, 1.5, 1, 1];
+/** 방어 배율 룰렛 순환표 (평균 ×0.73 — 0 = 완전 방어) */
+export const DEF_ROULETTE = [1, 0.7, 1, 0.5, 0.7, 1, 0, 0.7, 1, 0.5, 1, 0.7];
 
 export interface Combatant {
   speciesId: number;
@@ -42,6 +47,10 @@ export interface AttackEvent {
   typeMult: number;
   crit: boolean;
   dodged: boolean;
+  /** 방어 룰렛 완전 방어 */
+  blocked: boolean;
+  /** 룰렛 배율 (공격: ×1~×3, 방어: ×0~×1) */
+  rouletteMult: number;
   isZ: boolean;
   splashDmg?: number; // Z기술이 나머지 야생에게 준 데미지
 }
@@ -67,6 +76,8 @@ export interface BattleState {
   player: Combatant[];
   wild: Combatant[];
   pending?: { monIdx: number; move: MoveData; isZ: boolean };
+  /** 러시 종료 후 공격 룰렛 대기 중인 충전량 */
+  pendingFill?: number;
   lastAttack?: AttackEvent;
   zGauge: number;
   zUsedCount: number;
@@ -270,7 +281,14 @@ function pickTarget(s: BattleState, moveType: TypeName): number {
   }, -1);
 }
 
-export function resolveRush(s: BattleState, fill: number): BattleState {
+/** 러시 종료 → 공격 배율 룰렛으로 (Z기술은 룰렛 없이 바로 공격) */
+export function afterRush(s: BattleState, fill: number): BattleState {
+  if (!s.pending) return s;
+  if (s.pending.isZ) return resolveRush(s, fill, 1);
+  return { ...s, phase: 'atkRoulette', pendingFill: fill };
+}
+
+export function resolveRush(s: BattleState, fill: number, atkMult = 1): BattleState {
   if (!s.pending) return s;
   const { monIdx, move, isZ } = s.pending;
   const attacker = s.player[monIdx];
@@ -288,8 +306,9 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
     defenderDef: targetSpecies.def,
     grade: attacker.grade,
   });
-  // 일반 공격은 원킬 방지 상한 적용 (Z기술은 그대로)
-  const dmg = isZ ? rawDmg : Math.min(rawDmg, Math.round(target.maxHp * TUNING.wildDmgCapRatio));
+  // 룰렛 배율 적용 후, 일반 공격은 원킬 방지 상한 (Z기술은 그대로)
+  const boosted = Math.round(rawDmg * atkMult);
+  const dmg = isZ ? boosted : Math.min(boosted, Math.round(target.maxHp * TUNING.wildDmgCapRatio));
 
   const wild = s.wild.map((c) => ({ ...c }));
   wild[targetIdx].hp = Math.max(0, wild[targetIdx].hp - dmg);
@@ -313,11 +332,12 @@ export function resolveRush(s: BattleState, fill: number): BattleState {
     ...s,
     phase: 'attack',
     pending: undefined,
+    pendingFill: undefined,
     wild,
     lastAttack: {
       side: 'player', attackerIdx: monIdx, targetIdx,
       moveKo: move.ko, moveType: move.type,
-      dmg, typeMult, crit, dodged: false, isZ, splashDmg,
+      dmg, typeMult, crit, dodged: false, blocked: false, rouletteMult: atkMult, isZ, splashDmg,
     },
     zGauge: isZ ? 0 : Math.min(100, s.zGauge + TUNING.zGainPerRush * fill),
     zUsedCount: s.zUsedCount + (isZ ? 1 : 0),
@@ -329,7 +349,8 @@ function proceedAfterPlayerPhase(s: BattleState): BattleState {
   if (livingIdx(s.wild).length === 0) {
     return { ...s, phase: s.stage < STAGE_COUNT ? 'stageClear' : 'victory' };
   }
-  return performEnemyAttack(s);
+  // 적 공격 전에 방어 배율 룰렛
+  return { ...s, phase: 'defRoulette' };
 }
 
 export function continueAfterAttack(s: BattleState): BattleState {
@@ -352,7 +373,12 @@ export function finishCatch(s: BattleState, outcome: CatchOutcome): BattleState 
   return proceedAfterPlayerPhase(next);
 }
 
-function performEnemyAttack(s: BattleState): BattleState {
+/** 방어 룰렛 결과(defMult)를 적용해 적 공격 실행 */
+export function resolveDefense(s: BattleState, defMult: number): BattleState {
+  return performEnemyAttack(s, defMult);
+}
+
+function performEnemyAttack(s: BattleState, defMult = 1): BattleState {
   const living = livingIdx(s.wild);
   // 교대로 공격 (기절한 야생은 건너뜀)
   const attackerIdx = living.includes(s.nextWildAttacker % s.wild.length)
@@ -374,8 +400,9 @@ function performEnemyAttack(s: BattleState): BattleState {
   );
 
   const dodged = chance(dodgeChance(targetSpecies.spd, attackerSpecies.spd));
+  const blocked = defMult === 0;
   const course = getCourse(s.courseId);
-  const { dmg, typeMult } = enemyDamage({
+  const { dmg: rawDmg, typeMult } = enemyDamage({
     power: move.power,
     atk: attackerSpecies.atk,
     moveType: move.type,
@@ -383,14 +410,17 @@ function performEnemyAttack(s: BattleState): BattleState {
     defenderDef: megaStat(target, targetSpecies.def),
     courseDmgMult: course.dmgMult,
   });
+  const dmg = Math.round(rawDmg * defMult);
 
   const player = s.player.map((c) => ({ ...c }));
   let zGauge = s.zGauge;
-  if (!dodged) {
+  if (!dodged && dmg > 0) {
     player[targetIdx].hp = Math.max(0, player[targetIdx].hp - dmg);
     zGauge = Math.min(100, zGauge + TUNING.zGainOnHit);
     if (player[targetIdx].hp <= 0) zGauge = Math.min(100, zGauge + TUNING.zGainOnFaint);
   }
+  // 완전 방어 성공도 Z게이지 소폭 충전 (방어 보상)
+  if (blocked && !dodged) zGauge = Math.min(100, zGauge + TUNING.zGainOnHit);
 
   return {
     ...s,
@@ -401,7 +431,8 @@ function performEnemyAttack(s: BattleState): BattleState {
     lastAttack: {
       side: 'wild', attackerIdx, targetIdx,
       moveKo: move.ko, moveType: move.type,
-      dmg: dodged ? 0 : dmg, typeMult, crit: false, dodged, isZ: false,
+      dmg: dodged ? 0 : dmg, typeMult, crit: false, dodged,
+      blocked: blocked && !dodged, rouletteMult: defMult, isZ: false,
     },
   };
 }

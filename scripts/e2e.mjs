@@ -72,6 +72,11 @@ while (Date.now() < deadline) {
     await page.waitForTimeout(600);
     continue;
   }
+  if (await page.$('.mult-roulette')) {
+    await page.touchscreen.tap(195, 422).catch(() => {});
+    await page.waitForTimeout(500);
+    continue;
+  }
   if (await page.$('.rush-overlay')) {
     for (let i = 0; i < 8; i++) {
       await page.touchscreen.tap(195, 560).catch(() => {});
