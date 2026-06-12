@@ -3,6 +3,9 @@ const BASE = `${import.meta.env.BASE_URL}sprites`;
 
 export const artworkUrl = (id: number) => `${BASE}/artwork/${id}.png`;
 
+/** 그리드용 경량 썸네일 (~10KB) — 도감/컬렉션/팀선택에 사용 */
+export const thumbUrl = (id: number) => `${BASE}/thumb/${id}.webp`;
+
 export const battleSpriteUrl = (id: number, side: 'front' | 'back') =>
   `${BASE}/${side}/${id}.gif`;
 

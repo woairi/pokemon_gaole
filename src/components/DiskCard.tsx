@@ -1,6 +1,6 @@
 import { getSpecies } from '../engine/battle';
 import type { Grade } from '../types';
-import { artworkUrl } from '../utils/sprites';
+import { thumbUrl } from '../utils/sprites';
 import { GRADE_COLORS } from '../utils/typeColors';
 import { StarGrade } from './StarGrade';
 import { TypeBadge } from './TypeBadge';
@@ -28,7 +28,7 @@ export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props)
       >
         <img
           className="disk-card__img"
-          src={artworkUrl(speciesId)}
+          src={thumbUrl(speciesId)}
           alt={species.ko}
           loading="lazy"
           draggable={false}

@@ -7,7 +7,7 @@ import { allSpecies, getSpecies } from '../engine/battle';
 import { typeMultiplier } from '../engine/damage';
 import { RENTALS, useGame } from '../store/gameStore';
 import type { CourseId, DiskInstance, TypeName } from '../types';
-import { artworkUrl } from '../utils/sprites';
+import { thumbUrl } from '../utils/sprites';
 
 type SortMode = 'grade' | 'dex' | 'recent';
 
@@ -75,6 +75,8 @@ export function TeamSelect() {
     if (isSelected(d)) {
       setSelected(selected.filter((s) => !(s.speciesId === d.speciesId && s.rental === d.rental)));
     } else if (selected.length < 2) {
+      // 같은 종 2마리(내 디스크+렌탈 등)는 선발 불가
+      if (selected.some((s) => s.speciesId === d.speciesId)) return;
       setSelected([...selected, d]);
     }
   };
@@ -117,7 +119,7 @@ export function TeamSelect() {
               onClick={() => pick && toggle(pick)}
             >
               {pick ? (
-                <img src={artworkUrl(pick.speciesId)} alt="" draggable={false} />
+                <img src={thumbUrl(pick.speciesId)} alt="" draggable={false} />
               ) : (
                 <span className="team-select__pick-q">{i + 1}</span>
               )}

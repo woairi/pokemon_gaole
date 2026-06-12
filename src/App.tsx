@@ -19,6 +19,19 @@ export default function App() {
     else bgm.play('menu');
   }, [screen]);
 
+  return (
+    <>
+      <Screens screen={screen} />
+      {/* 가로 모드 안내 (CSS로 가로일 때만 표시) */}
+      <div className="rotate-overlay">
+        <div className="rotate-overlay__icon">📱</div>
+        <div className="rotate-overlay__text">세로로 돌려주세요!</div>
+      </div>
+    </>
+  );
+}
+
+function Screens({ screen }: { screen: ReturnType<typeof useGame.getState>['screen'] }) {
   switch (screen) {
     case 'title':
       return <TitleScreen />;

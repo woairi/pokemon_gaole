@@ -48,17 +48,37 @@ export function loadSave(): SaveData {
 }
 
 let pending: number | undefined;
+let latest: SaveData | null = null;
+
+function flush() {
+  if (latest === null) return;
+  try {
+    localStorage.setItem(KEY, JSON.stringify(latest));
+  } catch {
+    // 저장 공간 부족 등 — 게임은 계속 진행
+  }
+  latest = null;
+  if (pending !== undefined) {
+    clearTimeout(pending);
+    pending = undefined;
+  }
+}
 
 export function saveSave(save: SaveData): void {
+  latest = save;
   if (pending !== undefined) clearTimeout(pending);
   pending = window.setTimeout(() => {
     pending = undefined;
-    try {
-      localStorage.setItem(KEY, JSON.stringify(save));
-    } catch {
-      // 저장 공간 부족 등 — 게임은 계속 진행
-    }
+    flush();
   }, 250);
+}
+
+// 앱 전환/종료 시 디바운스 대기 중인 저장을 즉시 기록 (모바일에서 기록 유실 방지)
+if (typeof window !== 'undefined') {
+  window.addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) flush();
+  });
 }
 
 /** 백업 코드 생성 (한글 안전 base64) */

@@ -189,6 +189,12 @@ function pickMoves(entry, mon) {
   if (entry.moveOverride) {
     return entry.moveOverride.map((id) => moveById.get(id));
   }
+  // 레벨업으로 배우는 기술 식별 (그 포켓몬다운 기술 우선, 범용 TM 쏠림 방지)
+  const levelUp = new Set(
+    mon.moves
+      .filter((m) => m.version_group_details?.some((d) => d.move_learn_method.name === 'level-up'))
+      .map((m) => m.move.name)
+  );
   const learnable = mon.moves
     .map((m) => moveByIdent.get(m.move.name))
     .filter(isCandidate);
@@ -196,7 +202,12 @@ function pickMoves(entry, mon) {
   const seen = new Set();
   const candidates = learnable.filter((m) => !seen.has(m.id) && seen.add(m.id));
   const types = mon.types.map((t) => t.type.name);
-  const byPower = [...candidates].sort((a, b) => b.power - a.power);
+  // 정렬 우선순위: 레벨업 기술 > 위력 65~115 밴드 > 위력
+  const inBand = (m) => (m.power >= 65 && m.power <= 115 ? 1 : 0);
+  const isLevelUp = (m) => (levelUp.has(m.identifier) ? 1 : 0);
+  const byPower = [...candidates].sort(
+    (a, b) => isLevelUp(b) - isLevelUp(a) || inBand(b) - inBand(a) || b.power - a.power
+  );
   const stab = byPower.find((m) => types.includes(m.type));
   const picks = [];
   if (stab) picks.push(stab);

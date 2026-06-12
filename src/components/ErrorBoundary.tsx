@@ -11,6 +11,11 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
     return { hasError: true };
   }
 
+  componentDidCatch(error: unknown, info: unknown) {
+    // 문제 신고 시 원인 추적용
+    console.error('[가오레] 화면 오류:', error, info);
+  }
+
   render() {
     if (this.state.hasError) {
       return (

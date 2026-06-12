@@ -60,9 +60,13 @@ function scheduleNote(
 
 function tick() {
   if (!current || !isSoundEnabled()) return;
+  // 백그라운드에서는 쉬기 (탭 복귀 시 밀린 음표가 한꺼번에 터지는 것 방지)
+  if (typeof document !== 'undefined' && document.hidden) return;
   const ac = getAudioContext();
   if (!ac) return;
   const def = TRACKS[current];
+  // 스케줄 시각이 뒤처졌으면(백그라운드 스로틀 등) 현재로 따라잡기
+  if (nextStepTime < ac.currentTime) nextStepTime = ac.currentTime + 0.05;
   // 0.25초 미리보기 스케줄링
   while (nextStepTime < ac.currentTime + 0.25) {
     const i = stepIndex % def.melody.length;

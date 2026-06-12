@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { sfx } from '../audio/sfx';
 import { GetChanceOverlay } from '../components/GetChanceOverlay';
 import { HpBar } from '../components/HpBar';
@@ -91,6 +91,7 @@ export function BattleScreen() {
   const recordCatchAttempt = useGame((s) => s.recordCatchAttempt);
   const applyEvolution = useGame((s) => s.applyEvolution);
   const endBattle = useGame((s) => s.endBattle);
+  const [showForfeit, setShowForfeit] = useState(false);
 
   const phase = battle?.phase;
 
@@ -224,8 +225,20 @@ export function BattleScreen() {
     >
       <div className="battle__scenery" />
 
-      {/* 상단: Z게이지 + 스테이지 */}
+      {/* 상단: 포기 + Z게이지 + 스테이지 */}
       <div className="battle__zbar">
+        {battle.phase === 'selectMove' && (
+          <button
+            type="button"
+            className="battle__quit"
+            onClick={() => {
+              sfx.click();
+              setShowForfeit(true);
+            }}
+          >
+            ✕
+          </button>
+        )}
         <span className={`battle__zlabel${zReady ? ' battle__zlabel--ready' : ''}`}>Z</span>
         <div className="battle__ztrack">
           <div
@@ -437,6 +450,34 @@ export function BattleScreen() {
 
       {/* 효과 굉장 화면 플래시 */}
       {superFlash && <div className="flash-overlay" />}
+
+      {/* 포기 확인 */}
+      {showForfeit && (
+        <div className="modal" onClick={() => setShowForfeit(false)}>
+          <div className="modal__panel" onClick={(e) => e.stopPropagation()}>
+            <div className="modal__title">코스를 포기할까요?</div>
+            <p className="modal__desc">
+              포기하면 패배로 기록돼요.
+              <br />
+              지금까지 잡은 포켓몬은 그대로 가질 수 있어요!
+            </p>
+            <button
+              type="button"
+              className="big-btn modal__btn"
+              onClick={() => {
+                setShowForfeit(false);
+                const b = useGame.getState().battle;
+                if (b) setBattle({ ...b, phase: 'defeat' });
+              }}
+            >
+              포기하고 나가기
+            </button>
+            <button type="button" className="modal__close" onClick={() => setShowForfeit(false)}>
+              계속 싸우기!
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 스테이지 클리어 / 승리 / 패배 배너 */}
       {battle.phase === 'stageClear' && (

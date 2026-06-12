@@ -26,6 +26,8 @@ interface GameStore {
   courseId: CourseId | null;
   team: DiskInstance[];
   battle: BattleState | null;
+  /** 이번 배틀의 등급 UP 찬스 출처 — 첫 포획 성공 시 소모 처리 */
+  boostSource: 'daily' | 'stamp' | null;
   result: GameResult | null;
 
   setScreen: (s: Screen) => void;
@@ -54,6 +56,7 @@ export const useGame = create<GameStore>((set, get) => ({
   courseId: null,
   team: [],
   battle: null,
+  boostSource: null,
   result: null,
 
   setScreen: (screen) => set({ screen }),
@@ -64,13 +67,13 @@ export const useGame = create<GameStore>((set, get) => ({
     const { save, courseId } = get();
     if (!courseId) return;
     // 오늘 첫 배틀 또는 참가 스탬프 5개 교환 → 등급 UP 찬스
+    // (보너스 소모는 첫 포획 성공 시점에 기록 — 중도 이탈해도 낭비되지 않게)
     const dailyBonus = save.daily.lastDate !== today();
     const gradeBoost = dailyBonus || save.pendingBoost;
+    const boostSource = dailyBonus ? ('daily' as const) : save.pendingBoost ? ('stamp' as const) : null;
     const battle = createBattle(team, courseId, save, gradeBoost);
     const next: SaveData = {
       ...save,
-      daily: { lastDate: today() },
-      pendingBoost: dailyBonus ? save.pendingBoost : false,
       disks: { ...save.disks },
       dex: {
         ...save.dex,
@@ -86,7 +89,7 @@ export const useGame = create<GameStore>((set, get) => ({
       }
     }
     saveSave(next);
-    set({ save: next, team, battle, result: null, screen: 'battle' });
+    set({ save: next, team, battle, boostSource, result: null, screen: 'battle' });
   },
 
   setBattle: (battle) => set({ battle }),
@@ -102,12 +105,19 @@ export const useGame = create<GameStore>((set, get) => ({
   },
 
   recordCatchAttempt: (speciesId, success) => {
-    const { save, battle } = get();
+    const { save, battle, boostSource } = get();
     const species = getSpecies(speciesId);
     if (!success) {
       return { speciesId, grade: 1, result: 'escaped' } as CatchOutcome;
     }
     const grade = rollGrade(species.rarity, battle?.gradeBoost);
+    // 등급 UP 찬스 실제 사용 시점에 소모 기록 (배틀 내내 유효, 기록은 1회)
+    let boostConsumed: Partial<SaveData> = {};
+    if (battle?.gradeBoost && boostSource) {
+      boostConsumed =
+        boostSource === 'daily' ? { daily: { lastDate: today() } } : { pendingBoost: false };
+      set({ boostSource: null });
+    }
     const existing = save.disks[speciesId];
     let outcome: CatchOutcome;
     const disks = { ...save.disks };
@@ -122,6 +132,7 @@ export const useGame = create<GameStore>((set, get) => ({
     }
     const next: SaveData = {
       ...save,
+      ...boostConsumed,
       disks,
       dex: { ...save.dex, caught: uniq([...save.dex.caught, speciesId]) },
       stats: { ...save.stats, catches: save.stats.catches + 1 },
@@ -138,7 +149,8 @@ export const useGame = create<GameStore>((set, get) => ({
     // 패배 시 참가 스탬프 +1, 5개 모이면 다음 배틀 등급 UP 찬스로 교환
     let stamps = save.stats.stamps + (won ? 0 : 1);
     let pendingBoost = save.pendingBoost;
-    if (stamps >= 5) {
+    // 이미 대기 중인 찬스가 있으면 스탬프를 아껴둔다
+    if (stamps >= 5 && !pendingBoost) {
       stamps -= 5;
       pendingBoost = true;
     }

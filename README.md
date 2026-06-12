@@ -43,10 +43,13 @@
 
 ```bash
 npm install
-npm run dev        # 개발 서버
-npm test           # 배틀 엔진 단위 테스트 (vitest)
-npm run build      # 빌드 (dist/)
-npm run build:data # PokeAPI 미러에서 포켓몬 데이터·이미지 재생성
+npm run dev          # 개발 서버
+npm test             # 배틀 엔진 단위 테스트 (vitest)
+npm run build        # 빌드 (dist/) + 서비스 워커 버전 스탬프
+npm run build:data   # PokeAPI 미러에서 포켓몬 데이터·이미지 재생성
+npm run build:thumbs # 도감용 WebP 썸네일 재생성 (pip install pillow 필요)
+npm run e2e          # 전체 게임 루프 E2E (사전: npx playwright install chromium,
+                     #  npm run preview 실행 후 BASE_URL 지정)
 ```
 
 ### 구조

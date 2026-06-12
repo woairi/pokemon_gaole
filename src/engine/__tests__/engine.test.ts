@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { DiskInstance, SaveData } from '../../types';
 import { defaultSave } from '../../store/persistence';
+import { rollEvolutions } from '../events';
 import {
   STAGE_COUNT, advanceStage, applyBattleEvolution, beginSelect, canMega, chooseMega,
   chooseMove, chooseZ, continueAfterAttack, continueAfterEnemyAttack, createBattle,
@@ -81,6 +82,24 @@ describe('포획', () => {
       expect(g).toBeLessThanOrEqual(5);
     }
     expect(GRADE_WEIGHTS.SS[0]).toBe(0);
+  });
+});
+
+describe('진화 이벤트', () => {
+  it('같은 종이 2마리 출전해도 진화 이벤트는 최대 1회', () => {
+    const dupSave: SaveData = {
+      ...defaultSave(),
+      disks: { 25: { grade: 3, caughtAt: 1, timesUsed: 0 } },
+    };
+    const dupTeam: DiskInstance[] = [
+      { speciesId: 25, grade: 3 },
+      { speciesId: 25, grade: 1, rental: true }, // 렌탈은 제외되지만 종 중복 케이스 포함
+    ];
+    for (let i = 0; i < 200; i++) {
+      const events = rollEvolutions([...dupTeam, { speciesId: 25, grade: 3 }], dupSave);
+      const fromIds = events.map((e) => e.fromId);
+      expect(new Set(fromIds).size).toBe(fromIds.length);
+    }
   });
 });
 

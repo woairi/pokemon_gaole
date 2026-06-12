@@ -4,7 +4,7 @@ import { allSpecies } from '../engine/battle';
 import { BALL_MILESTONES } from '../engine/catch';
 import { useGame } from '../store/gameStore';
 import type { CourseId } from '../types';
-import { artworkUrl } from '../utils/sprites';
+import { thumbUrl } from '../utils/sprites';
 
 export function DexScreen() {
   const save = useGame((s) => s.save);
@@ -69,7 +69,7 @@ export function DexScreen() {
                 {isCaught || isSeen ? (
                   <img
                     className={`dex__img${!isCaught ? ' dex__img--silhouette' : ''}`}
-                    src={artworkUrl(sp.id)}
+                    src={thumbUrl(sp.id)}
                     alt={isCaught ? sp.ko : '???'}
                     loading="lazy"
                     draggable={false}
