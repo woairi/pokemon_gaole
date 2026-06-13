@@ -2219,3 +2219,23 @@ button {
   min-height: 40px;
   white-space: nowrap;
 }
+
+/* 디스크 카드: 전설(SS) 표시 */
+.disk-card--legendary {
+  background: linear-gradient(180deg, rgba(255, 213, 79, 0.18), rgba(123, 31, 162, 0.18));
+}
+
+.disk-card__legend {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #ffb300, #ff6f00);
+  color: #fff;
+  font-size: 10px;
+  border-radius: 8px;
+  padding: 1px 7px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 6px rgba(255, 179, 0, 0.7);
+  white-space: nowrap;
+}

@@ -16,10 +16,13 @@ interface Props {
 export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props) {
   const species = getSpecies(speciesId);
   const ring = GRADE_COLORS[grade];
+  const isLegendary = species.rarity === 'SS';
   return (
     <button
       type="button"
-      className={`disk-card${selected ? ' disk-card--selected' : ''}`}
+      className={`disk-card${selected ? ' disk-card--selected' : ''}${
+        isLegendary ? ' disk-card--legendary' : ''
+      }`}
       onClick={onClick}
     >
       <div
@@ -36,6 +39,7 @@ export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props)
             (e.target as HTMLImageElement).style.visibility = 'hidden';
           }}
         />
+        {isLegendary && <span className="disk-card__legend">⚡전설</span>}
         {rental && <span className="disk-card__rental">렌탈</span>}
       </div>
       <div className="disk-card__name">{species.ko}</div>
