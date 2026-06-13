@@ -1,16 +1,34 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { sfx } from '../audio/sfx';
 import { DiskCard } from '../components/DiskCard';
 import { DiskDetailModal } from '../components/DiskDetailModal';
 import { useGame } from '../store/gameStore';
+
+type SortMode = 'grade' | 'dex' | 'recent';
+
+const SORT_LABELS: Record<SortMode, string> = {
+  grade: '⭐ 등급순',
+  dex: '📕 도감순',
+  recent: '🕐 최신순',
+};
 
 export function CollectionScreen() {
   const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
   const [detail, setDetail] = useState<number | null>(null);
+  const [sort, setSort] = useState<SortMode>('grade');
 
-  const owned = Object.entries(save.disks)
-    .map(([id, d]) => ({ speciesId: +id, ...d }))
-    .sort((a, b) => b.grade - a.grade || a.speciesId - b.speciesId);
+  const owned = useMemo(() => {
+    const list = Object.entries(save.disks).map(([id, d]) => ({ speciesId: +id, ...d }));
+    switch (sort) {
+      case 'grade':
+        return list.sort((a, b) => b.grade - a.grade || a.speciesId - b.speciesId);
+      case 'dex':
+        return list.sort((a, b) => a.speciesId - b.speciesId);
+      case 'recent':
+        return list.sort((a, b) => b.caughtAt - a.caughtAt);
+    }
+  }, [save.disks, sort]);
 
   return (
     <div className="screen collection">
@@ -19,6 +37,19 @@ export function CollectionScreen() {
           ◀
         </button>
         <span>내 디스크 ({owned.length}장)</span>
+        {owned.length > 1 && (
+          <button
+            type="button"
+            className="collection__sort"
+            onClick={() => {
+              sfx.click();
+              const order: SortMode[] = ['grade', 'dex', 'recent'];
+              setSort(order[(order.indexOf(sort) + 1) % order.length]);
+            }}
+          >
+            {SORT_LABELS[sort]}
+          </button>
+        )}
       </div>
       {owned.length === 0 ? (
         <div className="collection__empty">

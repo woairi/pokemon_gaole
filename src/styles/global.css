@@ -2208,3 +2208,14 @@ button {
   filter: drop-shadow(0 0 3px rgba(255, 111, 0, 0.9));
   pointer-events: none;
 }
+
+/* 내 디스크 정렬 토글 */
+.collection__sort {
+  margin-left: auto;
+  padding: 8px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.15);
+  font-size: 13px;
+  min-height: 40px;
+  white-space: nowrap;
+}
