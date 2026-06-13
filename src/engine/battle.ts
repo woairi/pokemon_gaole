@@ -103,8 +103,8 @@ export interface BattleResult {
 
 export const STAGE_COUNT = 3;
 const STAGE_HP_MULT = [0.85, 1.0, 1.25]; // 스테이지별 야생 HP 배율
-const STAGE_HEAL = 0.5; // 스테이지 클리어 시 회복 (최대 HP 비율)
-const STAGE_REVIVE = 0.35; // 기절한 동료는 다음 스테이지에서 이 비율로 부활
+const STAGE_HEAL = 0.4; // 스테이지 클리어 시 회복 (최대 HP 비율)
+const STAGE_REVIVE = 0.25; // 기절한 동료는 다음 스테이지에서 이 비율로 부활
 const BOSS_WEIGHTS: Record<Rarity, number> = { C: 10, B: 25, A: 35, S: 22, SS: 8 };
 const BOSS_WEIGHTS_LEGEND: Record<Rarity, number> = { C: 0, B: 0, A: 0, S: 20, SS: 80 };
 const LEGEND_INTRUSION_CHANCE = 0.08;

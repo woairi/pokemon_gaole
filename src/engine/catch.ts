@@ -44,11 +44,11 @@ export function getBalls(caughtCount: number): Ball[] {
 }
 
 export const BASE_CATCH: Record<Rarity, number> = {
-  C: 0.85,
-  B: 0.7,
-  A: 0.5,
-  S: 0.3,
-  SS: 0.15,
+  C: 0.68,
+  B: 0.52,
+  A: 0.35,
+  S: 0.2,
+  SS: 0.1,
 };
 
 export function catchProbability(rarity: Rarity, ball: Ball, mod = 1): number {

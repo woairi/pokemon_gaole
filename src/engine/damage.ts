@@ -9,8 +9,8 @@ export const TUNING = {
   gradeDmgStep: 0.12, // 등급당 공격 +12%
   playerAtkBase: 0.35,
   playerAtkDiv: 200,
-  enemyAtkBase: 0.23,
-  enemyAtkDiv: 270,
+  enemyAtkBase: 0.3,
+  enemyAtkDiv: 235,
   defScale: 140, // 방어 감쇠: defScale / (defScale + def)
   tapBase: 0.5, // 연타 0회여도 보장되는 배율
   tapsToFill: 18, // 게이지 풀충전에 필요한 탭 수
@@ -22,8 +22,8 @@ export const TUNING = {
   // 일반 공격은 야생 최대 HP의 70%까지만 — 원킬 방지로 주고받는 재미 보장 (Z기술은 예외)
   wildDmgCapRatio: 0.7,
   megaStatMult: 1.3, // 메가진화 시 공격·방어 배율
-  zPower: 180,
-  zSplash: 0.4, // Z기술이 다른 야생에게 주는 비율
+  zPower: 300, // Z기술 위력 — 룰렛/원킬 상한이 없어 일반기술 ×3보다 확실히 강함
+  zSplash: 0.5, // Z기술이 다른 야생에게 주는 비율
   zGainPerRush: 18,
   zGainOnHit: 12,
   zGainOnFaint: 25,

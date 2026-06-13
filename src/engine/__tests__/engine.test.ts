@@ -159,6 +159,25 @@ describe('배틀 흐름', () => {
     expect(d3).toBeGreaterThan(d1 * 2); // 랜덤폭 감안해도 3배 부근
   });
 
+  it('Z기술은 일반기술 최대(×3, 캡적용)보다 강하다', () => {
+    // 같은 포켓몬·같은 조건에서 Z(룰렛X·캡X) vs 일반×3(캡O) 비교
+    const wildBig = { maxHp: 600, hp: 600 }; // 캡이 거의 안 걸리는 큰 HP
+    const mk = () => {
+      let s = createBattle([{ speciesId: 6, grade: 5 }, { speciesId: 9, grade: 5 }], 'sea', save);
+      s = beginSelect(s);
+      return { ...s, wild: s.wild.map((w) => ({ ...w, ...wildBig })) };
+    };
+    let normalSum = 0;
+    let zSum = 0;
+    const N = 60;
+    for (let i = 0; i < N; i++) {
+      normalSum += resolveRush(chooseMove(mk(), 0, 0), 1, 3).lastAttack!.dmg;
+      const zb = chooseZ({ ...mk(), zGauge: 100 }, 0);
+      zSum += resolveRush(zb, 1, 1).lastAttack!.dmg;
+    }
+    expect(zSum / N).toBeGreaterThan(normalSum / N);
+  });
+
   it('Z기술은 공격 룰렛을 건너뛴다', () => {
     let b = createBattle(team, 'grass', save);
     b = beginSelect(b);
