@@ -2177,3 +2177,15 @@ button {
   color: #81d4fa;
   text-shadow: 2px 2px 0 #01579b;
 }
+
+/* 룰렛 잠금(준비) 구간 — 탭 무시 중임을 시각적으로 표시 */
+.mult-roulette--locked .mult-roulette__value {
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  transform: scale(0.92);
+}
+
+.mult-roulette--locked .mult-roulette__hint {
+  animation: none;
+  color: #9aa;
+}
