@@ -53,6 +53,8 @@ export function MainMenu() {
         {save.stats.stamps > 0 && ` · 🎫 ${save.stats.stamps}/5`}
       </div>
 
+      <div className="menu__version">v{__APP_VERSION__}</div>
+
       {showBackup && <BackupModal onClose={() => setShowBackup(false)} />}
       {!save.settings.tutorialSeen && <TutorialOverlay onDone={markTutorialSeen} />}
     </div>
