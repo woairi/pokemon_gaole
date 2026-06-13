@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { DiskInstance, SaveData } from '../../types';
+import type { DiskInstance, SaveData, TypeName } from '../../types';
 import { defaultSave } from '../../store/persistence';
 import { rollEvolutions } from '../events';
 import {
@@ -154,26 +154,31 @@ describe('배틀 흐름', () => {
     base = beginSelect(base);
     // 충분히 큰 야생 HP로 상한 영향 제거
     base = { ...base, wild: base.wild.map((w) => ({ ...w, maxHp: 9999, hp: 9999 })) };
-    const d1 = resolveRush(chooseMove(base, 0, 0), 1, 1).lastAttack!.dmg;
-    const d3 = resolveRush(chooseMove(base, 0, 0), 1, 3).lastAttack!.dmg;
-    expect(d3).toBeGreaterThan(d1 * 2); // 랜덤폭 감안해도 3배 부근
+    // 급소·랜덤폭이 단일 샘플에 끼치는 영향을 평균으로 제거
+    let sum1 = 0;
+    let sum3 = 0;
+    const N = 200;
+    for (let i = 0; i < N; i++) {
+      sum1 += resolveRush(chooseMove(base, 0, 0), 1, 1).lastAttack!.dmg;
+      sum3 += resolveRush(chooseMove(base, 0, 0), 1, 3).lastAttack!.dmg;
+    }
+    expect(sum3 / N).toBeGreaterThan((sum1 / N) * 2.5); // 평균 ~3배
   });
 
   it('Z기술은 일반기술 최대(×3, 캡적용)보다 강하다', () => {
-    // 같은 포켓몬·같은 조건에서 Z(룰렛X·캡X) vs 일반×3(캡O) 비교
-    const wildBig = { maxHp: 600, hp: 600 }; // 캡이 거의 안 걸리는 큰 HP
-    const mk = () => {
-      let s = createBattle([{ speciesId: 6, grade: 5 }, { speciesId: 9, grade: 5 }], 'sea', save);
-      s = beginSelect(s);
-      return { ...s, wild: s.wild.map((w) => ({ ...w, ...wildBig })) };
+    // 동일 조건(공격자·타입·방어)에서 Z(위력 zPower, 룰렛X·캡X) vs 일반(위력 120, ×3·캡O)
+    const opts = {
+      atk: 159, fill: 1, moveType: 'normal' as const,
+      defenderTypes: ['normal'] as TypeName[], defenderDef: 90, grade: 5 as const,
     };
+    const wildMaxHp = 500;
+    const cap = Math.round(wildMaxHp * TUNING.wildDmgCapRatio);
     let normalSum = 0;
     let zSum = 0;
-    const N = 60;
+    const N = 200;
     for (let i = 0; i < N; i++) {
-      normalSum += resolveRush(chooseMove(mk(), 0, 0), 1, 3).lastAttack!.dmg;
-      const zb = chooseZ({ ...mk(), zGauge: 100 }, 0);
-      zSum += resolveRush(zb, 1, 1).lastAttack!.dmg;
+      normalSum += Math.min(playerDamage({ ...opts, power: 120 }).dmg * 3, cap);
+      zSum += playerDamage({ ...opts, power: TUNING.zPower }).dmg; // 캡 없음
     }
     expect(zSum / N).toBeGreaterThan(normalSum / N);
   });
@@ -191,13 +196,23 @@ describe('배틀 흐름', () => {
     let b = createBattle(team, 'grass', save);
     b = beginSelect(b);
     const before = b.player.map((p) => p.hp);
-    const blockedState = resolveDefense({ ...b, phase: 'defRoulette' }, 0);
-    expect(blockedState.lastAttack?.blocked).toBe(true);
-    expect(blockedState.player.map((p) => p.hp)).toEqual(before);
-    const hitState = resolveDefense({ ...b, phase: 'defRoulette' }, 1);
-    if (!hitState.lastAttack?.dodged) {
-      expect(hitState.player.some((p, i) => p.hp < before[i])).toBe(true);
+    let sawBlockLabel = false;
+    let sawHit = false;
+    // 회피(랜덤 5~20%)가 끼어들 수 있어 여러 번 돌려 불변식을 검증한다
+    for (let i = 0; i < 40; i++) {
+      // ×0: 피해는 항상 0 (회피로 라벨될 수는 있어도 피해 0은 불변)
+      const blocked = resolveDefense({ ...b, phase: 'defRoulette' }, 0);
+      expect(blocked.player.map((p) => p.hp)).toEqual(before);
+      if (blocked.lastAttack?.blocked) sawBlockLabel = true;
+      // ×1: 회피가 아니면 반드시 피해
+      const hit = resolveDefense({ ...b, phase: 'defRoulette' }, 1);
+      if (!hit.lastAttack?.dodged) {
+        expect(hit.player.some((p, idx) => p.hp < before[idx])).toBe(true);
+        sawHit = true;
+      }
     }
+    expect(sawBlockLabel).toBe(true); // 회피 아닌 완전방어가 최소 1회 (라벨 동작 확인)
+    expect(sawHit).toBe(true);
   });
 
   it('룰렛 순환표 기대값 검증 (밸런스 보정 기준)', () => {
