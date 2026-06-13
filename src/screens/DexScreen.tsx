@@ -9,14 +9,19 @@ import { thumbUrl } from '../utils/sprites';
 export function DexScreen() {
   const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
-  const [filter, setFilter] = useState<CourseId | 'all'>('all');
+  const [filter, setFilter] = useState<CourseId | 'all' | 'mega'>('all');
 
   const species = allSpecies()
-    .filter((sp) => filter === 'all' || sp.courses.includes(filter))
+    .filter((sp) =>
+      filter === 'all' ? true : filter === 'mega' ? !!sp.megaId : sp.courses.includes(filter)
+    )
     .sort((a, b) => a.id - b.id);
   const caught = new Set(save.dex.caught);
   const seen = new Set(save.dex.seen);
   const nextMilestone = BALL_MILESTONES.find((m) => caught.size < m.catches);
+  // 메가 가능 종 수집 현황 (실제 폼은 도감에 없으므로 기본 종 기준)
+  const megaSpecies = allSpecies().filter((sp) => sp.megaId);
+  const megaCaught = megaSpecies.filter((sp) => caught.has(sp.id)).length;
 
   return (
     <div className="screen dex">
@@ -29,7 +34,7 @@ export function DexScreen() {
         </span>
       </div>
 
-      {nextMilestone && (
+      {filter !== 'mega' && nextMilestone && (
         <div className="dex__milestone">
           🎯 {nextMilestone.catches}마리 잡으면 {nextMilestone.desc} (앞으로{' '}
           {nextMilestone.catches - caught.size}마리)
@@ -54,7 +59,21 @@ export function DexScreen() {
             {c.emoji} {c.ko.replace(' 코스', '')}
           </button>
         ))}
+        <button
+          type="button"
+          className={`dex__filter${filter === 'mega' ? ' dex__filter--on' : ''}`}
+          onClick={() => setFilter('mega')}
+        >
+          🔥 메가
+        </button>
       </div>
+
+      {filter === 'mega' && (
+        <div className="dex__milestone">
+          🔥 메가진화 가능 종 {megaCaught} / {megaSpecies.length} 수집 — 5★ 디스크로 만들면
+          배틀에서 메가진화!
+        </div>
+      )}
 
       <div className="dex__scroll">
         <div className="dex__grid">
@@ -64,8 +83,10 @@ export function DexScreen() {
             const courseEmojis = sp.courses
               .map((c) => COURSES.find((x) => x.id === c)?.emoji)
               .join('');
+            const showMega = !!sp.megaId && (isCaught || isSeen);
             return (
-              <div key={sp.id} className="dex__cell">
+              <div key={sp.id} className={`dex__cell${showMega ? ' dex__cell--mega' : ''}`}>
+                {showMega && <span className="dex__mega" title="메가진화 가능">🔥</span>}
                 {isCaught || isSeen ? (
                   <img
                     className={`dex__img${!isCaught ? ' dex__img--silhouette' : ''}`}

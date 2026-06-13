@@ -2189,3 +2189,22 @@ button {
   animation: none;
   color: #9aa;
 }
+
+/* 도감: 메가진화 가능 종 표시 */
+.dex__cell {
+  position: relative;
+}
+
+.dex__cell--mega {
+  box-shadow: inset 0 0 0 2px rgba(255, 111, 0, 0.55);
+}
+
+.dex__mega {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  font-size: 14px;
+  line-height: 1;
+  filter: drop-shadow(0 0 3px rgba(255, 111, 0, 0.9));
+  pointer-events: none;
+}
