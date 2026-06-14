@@ -24,23 +24,14 @@ export const BALL_MILESTONES = [
 ];
 
 export function getBalls(caughtCount: number): Ball[] {
-  let [poke, great, ultra, master] = [50, 30, 15, 5];
-  if (caughtCount >= 20) {
-    ultra = 20;
-    poke = 45;
-  }
-  if (caughtCount >= 50) {
-    master = 8;
-    poke = 42;
-  }
-  if (caughtCount >= 100) {
-    master = 12;
-    ultra = 22;
-    great = 28;
-    poke = 38;
-  }
-  const arcs = { poke, great, ultra, master };
-  return BALLS.map((b) => ({ ...b, arc: arcs[b.id] }));
+  // [몬스터/슈퍼/하이퍼/마스터] 룰렛 칸 비율 — 합은 항상 100.
+  // 마스터볼(확정 포획) 칸을 조금 키워 전체 디스크 획득률을 높인다.
+  // 도감 마일스톤마다 좋은 볼(특히 마스터볼) 칸이 더 넓어진다.
+  let arc = { poke: 46, great: 30, ultra: 16, master: 8 };
+  if (caughtCount >= 20) arc = { poke: 40, great: 30, ultra: 20, master: 10 };
+  if (caughtCount >= 50) arc = { poke: 36, great: 30, ultra: 21, master: 13 };
+  if (caughtCount >= 100) arc = { poke: 30, great: 28, ultra: 24, master: 18 };
+  return BALLS.map((b) => ({ ...b, arc: arc[b.id] }));
 }
 
 export const BASE_CATCH: Record<Rarity, number> = {
