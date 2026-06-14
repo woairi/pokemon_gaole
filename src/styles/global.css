@@ -1925,9 +1925,14 @@ button {
 .dex__filters {
   display: flex;
   gap: 6px;
-  padding: 10px 16px 0;
+  padding: 10px 16px 12px;
   flex-shrink: 0;
   overflow-x: auto;
+  /* 스크롤되는 그리드와 명확히 구분되도록 아래 경계선 + 그림자 */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 8px -6px rgba(0, 0, 0, 0.45);
+  position: relative;
+  z-index: 1;
 }
 
 .dex__filter {
