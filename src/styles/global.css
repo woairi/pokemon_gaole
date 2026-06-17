@@ -271,16 +271,21 @@ button {
   filter: grayscale(0.85) brightness(0.6);
 }
 
+/* line-height를 글자에 맞게 고정 — 기기별 이모지 폰트의 큰 line-box로
+   이모지와 이름 사이가 벌어지는 문제 방지 */
 .course-card__emoji {
   font-size: 30px;
+  line-height: 1;
 }
 
 .course-card__name {
   font-size: 26px;
+  line-height: 1.1;
 }
 
 .course-card__desc {
   font-size: 15px;
+  line-height: 1.2;
   opacity: 0.95;
 }
 
