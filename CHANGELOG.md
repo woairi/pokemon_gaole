@@ -212,6 +212,3 @@
 - **품질** — 배틀 엔진 단위 테스트 19개(CI에서 배포 전 실행), React 에러 바운더리,
   밸런스 시뮬레이션 기반 난이도 조정 (렌탈 팀 풀숲 클리어율 ~86%)
 - GitHub Actions → GitHub Pages 자동 배포
-
-[1.0.1]: https://github.com/doosanrndaitft-collab/pokemon_gaole/compare/v1.0.0...main
-[1.0.0]: https://github.com/doosanrndaitft-collab/pokemon_gaole/releases/tag/v1.0.0
