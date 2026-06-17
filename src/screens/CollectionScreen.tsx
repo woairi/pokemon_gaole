@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { sfx } from '../audio/sfx';
 import { DiskCard } from '../components/DiskCard';
 import { DiskDetailModal } from '../components/DiskDetailModal';
+import { EvolutionOverlay } from '../components/EvolutionOverlay';
+import type { EvolutionEvent } from '../engine/events';
 import { useGame } from '../store/gameStore';
 
 type SortMode = 'grade' | 'dex' | 'recent';
@@ -16,6 +18,7 @@ export function CollectionScreen() {
   const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
   const [detail, setDetail] = useState<number | null>(null);
+  const [evo, setEvo] = useState<EvolutionEvent | null>(null);
   const [sort, setSort] = useState<SortMode>('grade');
 
   const owned = useMemo(() => {
@@ -71,13 +74,21 @@ export function CollectionScreen() {
           </div>
         </div>
       )}
+
       {detail !== null && save.disks[detail] && (
         <DiskDetailModal
           speciesId={detail}
           disk={save.disks[detail]}
           onClose={() => setDetail(null)}
+          onEvolve={(toId) => {
+            // 디스크 상세를 닫고 진화 미니게임 시작 (등급 유지)
+            setEvo({ fromId: detail, toId, grade: save.disks[detail].grade });
+            setDetail(null);
+          }}
         />
       )}
+
+      {evo && <EvolutionOverlay ev={evo} onClose={() => setEvo(null)} />}
     </div>
   );
 }

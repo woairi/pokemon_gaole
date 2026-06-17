@@ -1,6 +1,8 @@
+import { useState } from 'react';
+import { sfx } from '../audio/sfx';
 import { getSpecies } from '../engine/battle';
 import type { OwnedDisk } from '../types';
-import { artworkUrl } from '../utils/sprites';
+import { artworkUrl, thumbUrl } from '../utils/sprites';
 import { StarGrade } from './StarGrade';
 import { TypeBadge } from './TypeBadge';
 
@@ -8,6 +10,8 @@ interface Props {
   speciesId: number;
   disk: OwnedDisk;
   onClose: () => void;
+  /** 진화 도전: 선택한 진화체 id로 미니게임을 시작한다 */
+  onEvolve?: (toId: number) => void;
 }
 
 const STAT_MAX = 180;
@@ -27,46 +31,94 @@ function StatBar({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function DiskDetailModal({ speciesId, disk, onClose }: Props) {
+export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
   const species = getSpecies(speciesId);
+  const evolvesTo = species.evolvesTo ?? [];
+  const canEvolve = !!onEvolve && evolvesTo.length > 0;
+  const [choosing, setChoosing] = useState(false);
+
+  const startEvolve = () => {
+    sfx.click();
+    if (evolvesTo.length === 1) onEvolve!(evolvesTo[0]);
+    else setChoosing(true); // 이브이 등 여러 갈래 → 직접 선택
+  };
+
   return (
     <div className="modal" onClick={onClose}>
       <div className="modal__panel disk-detail" onClick={(e) => e.stopPropagation()}>
-        <img className="disk-detail__img" src={artworkUrl(speciesId)} alt={species.ko} draggable={false} />
-        <div className="disk-detail__name">
-          No.{species.id} {species.ko}
-          {species.megaId && <span className="disk-detail__mega-badge">메가진화 가능</span>}
-        </div>
-        <StarGrade grade={disk.grade} size="big" />
-        <div className="disk-detail__types">
-          {species.types.map((t) => (
-            <TypeBadge key={t} type={t} />
-          ))}
-        </div>
-
-        <div className="disk-detail__stats">
-          <StatBar label="HP" value={species.hp} />
-          <StatBar label="공격" value={species.atk} />
-          <StatBar label="방어" value={species.def} />
-          <StatBar label="스피드" value={species.spd} />
-        </div>
-
-        <div className="disk-detail__moves">
-          {species.moves.map((m) => (
-            <div key={m.id} className="disk-detail__move">
-              <TypeBadge type={m.type} small />
-              <span className="disk-detail__move-name">{m.ko}</span>
-              <span className="disk-detail__move-power">위력 {m.power}</span>
+        {choosing ? (
+          <>
+            <div className="modal__title">어떤 모습으로 진화할까?</div>
+            <div className="evo-choose">
+              {evolvesTo.map((id) => {
+                const t = getSpecies(id);
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    className="evo-choose__item"
+                    onClick={() => onEvolve!(id)}
+                  >
+                    <img src={thumbUrl(id)} alt={t.ko} loading="lazy" draggable={false} />
+                    <span>{t.ko}</span>
+                  </button>
+                );
+              })}
             </div>
-          ))}
-        </div>
+            <button type="button" className="modal__close" onClick={() => setChoosing(false)}>
+              뒤로
+            </button>
+          </>
+        ) : (
+          <>
+            <img
+              className="disk-detail__img"
+              src={artworkUrl(speciesId)}
+              alt={species.ko}
+              draggable={false}
+            />
+            <div className="disk-detail__name">
+              No.{species.id} {species.ko}
+              {species.megaId && <span className="disk-detail__mega-badge">메가진화 가능</span>}
+            </div>
+            <StarGrade grade={disk.grade} size="big" />
+            <div className="disk-detail__types">
+              {species.types.map((t) => (
+                <TypeBadge key={t} type={t} />
+              ))}
+            </div>
 
-        <div className="disk-detail__meta">
-          {new Date(disk.caughtAt).toLocaleDateString('ko')} 획득 · 배틀 {disk.timesUsed}회 출전
-        </div>
-        <button type="button" className="modal__close" onClick={onClose}>
-          닫기
-        </button>
+            <div className="disk-detail__stats">
+              <StatBar label="HP" value={species.hp} />
+              <StatBar label="공격" value={species.atk} />
+              <StatBar label="방어" value={species.def} />
+              <StatBar label="스피드" value={species.spd} />
+            </div>
+
+            <div className="disk-detail__moves">
+              {species.moves.map((m) => (
+                <div key={m.id} className="disk-detail__move">
+                  <TypeBadge type={m.type} small />
+                  <span className="disk-detail__move-name">{m.ko}</span>
+                  <span className="disk-detail__move-power">위력 {m.power}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="disk-detail__meta">
+              {new Date(disk.caughtAt).toLocaleDateString('ko')} 획득 · 배틀 {disk.timesUsed}회 출전
+            </div>
+
+            {canEvolve && (
+              <button type="button" className="big-btn disk-detail__evolve" onClick={startEvolve}>
+                ✨ 진화 도전!
+              </button>
+            )}
+            <button type="button" className="modal__close" onClick={onClose}>
+              닫기
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

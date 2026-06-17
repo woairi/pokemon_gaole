@@ -2252,3 +2252,43 @@ button {
   color: #6c74a8;
   padding-bottom: max(8px, env(safe-area-inset-bottom));
 }
+
+/* 디스크 상세: 진화 도전 버튼 + 진화체 선택 */
+.disk-detail__evolve {
+  width: 100%;
+  margin: 4px 0 0;
+  background: linear-gradient(180deg, #b388ff, #7c4dff);
+  color: #fff;
+  box-shadow: 0 4px 0 #4527a0;
+}
+
+.evo-choose {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.evo-choose__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid transparent;
+  font-size: 13px;
+  color: #fff;
+}
+
+.evo-choose__item:active {
+  border-color: #b388ff;
+  background: rgba(179, 136, 255, 0.2);
+}
+
+.evo-choose__item img {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
