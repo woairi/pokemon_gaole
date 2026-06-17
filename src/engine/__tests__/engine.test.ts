@@ -8,6 +8,8 @@ import {
   continueAfterEnemyAttack, createBattle, finishCatch, getSpecies, resolveDefense,
   resolveRush, setTarget,
 } from '../battle';
+import { COURSES, getCourse, trainerTitle } from '../../data/courses';
+import { allSpecies as allSp } from '../battle';
 import { BASE_CATCH, GRADE_WEIGHTS, catchProbability, getBalls, rollGrade } from '../catch';
 import { TUNING, enemyDamage, playerDamage, playerMaxHp, typeMultiplier, wildMaxHp } from '../damage';
 
@@ -83,6 +85,43 @@ describe('포획', () => {
       expect(g).toBeLessThanOrEqual(5);
     }
     expect(GRADE_WEIGHTS.SS[0]).toBe(0);
+  });
+});
+
+describe('코스 풀 / 트레이너 칭호', () => {
+  it('모든 코스 풀에 야생이 2마리 이상 있다', () => {
+    for (const c of COURSES) {
+      expect(c.pool(allSp()).length).toBeGreaterThanOrEqual(2);
+    }
+  });
+  it('하늘 코스는 비행·드래곤만 출현', () => {
+    const pool = getCourse('sky').pool(allSp());
+    expect(pool.length).toBeGreaterThan(0);
+    expect(pool.every((p) => p.types.includes('flying') || p.types.includes('dragon'))).toBe(true);
+  });
+  it('챔피언 코스는 S·SS만 출현', () => {
+    const pool = getCourse('champion').pool(allSp());
+    expect(pool.length).toBeGreaterThan(0);
+    expect(pool.every((p) => p.rarity === 'S' || p.rarity === 'SS')).toBe(true);
+  });
+  it('챔피언 코스 배틀의 야생은 S·SS', () => {
+    for (let i = 0; i < 30; i++) {
+      const b = createBattle(team, 'champion', save);
+      for (const w of b.wild) {
+        expect(['S', 'SS']).toContain(getSpecies(w.speciesId).rarity);
+      }
+    }
+  });
+  it('트레이너 칭호는 포획 수·챔피언 클리어를 따른다', () => {
+    const mk = (caught: number, champ = 0): SaveData => ({
+      ...defaultSave(),
+      dex: { seen: [], caught: Array.from({ length: caught }, (_, i) => i + 1) },
+      stats: { ...defaultSave().stats, championClears: champ },
+    });
+    expect(trainerTitle(mk(0))).toBe('새내기 트레이너');
+    expect(trainerTitle(mk(50))).toBe('베테랑 트레이너');
+    expect(trainerTitle(mk(150))).toBe('포켓몬 마스터');
+    expect(trainerTitle(mk(150, 1))).toBe('🏆 챔피언'); // 챔피언이 최우선
   });
 });
 

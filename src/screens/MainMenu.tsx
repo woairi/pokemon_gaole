@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { sfx } from '../audio/sfx';
 import { BackupModal } from '../components/BackupModal';
 import { TutorialOverlay } from '../components/TutorialOverlay';
+import { trainerTitle } from '../data/courses';
 import { useGame } from '../store/gameStore';
 
 export function MainMenu() {
@@ -30,6 +31,8 @@ export function MainMenu() {
         </div>
       </div>
 
+      <div className="menu__title-line">{trainerTitle(save)}</div>
+
       {save.pendingBoost && (
         <div className="menu__boost">🎁 다음 배틀에서 등급 UP 찬스!</div>
       )}
@@ -51,6 +54,9 @@ export function MainMenu() {
       <div className="menu__stats">
         배틀 {save.stats.battles}회 · 승리 {save.stats.wins}회 · 포획 {save.stats.catches}마리
         {save.stats.stamps > 0 && ` · 🎫 ${save.stats.stamps}/5`}
+        {save.stats.championClears > 0 && (
+          <div className="menu__hof">🏆 명예의 전당 — 챔피언 코스 {save.stats.championClears}회 제패!</div>
+        )}
       </div>
 
       <div className="menu__version">v{__APP_VERSION__}</div>

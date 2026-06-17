@@ -20,7 +20,7 @@ const SORT_LABELS: Record<SortMode, string> = {
 /** 코스에서 잘 싸울 디스크 점수: 등급 + 코스 출현 포켓몬 상대 평균 상성 */
 function diskScore(disk: DiskInstance, courseId: CourseId): number {
   const species = getSpecies(disk.speciesId);
-  const pool = allSpecies().filter((p) => p.courses.includes(courseId));
+  const pool = getCourse(courseId).pool(allSpecies());
   if (!pool.length) return disk.grade;
   const avgMult =
     pool.reduce(
@@ -36,6 +36,8 @@ export function TeamSelect() {
   const courseId = useGame((s) => s.courseId);
   const setScreen = useGame((s) => s.setScreen);
   const startBattle = useGame((s) => s.startBattle);
+  const saveTeamPreset = useGame((s) => s.saveTeamPreset);
+  const deleteTeamPreset = useGame((s) => s.deleteTeamPreset);
   const [selected, setSelected] = useState<DiskInstance[]>([]);
   const [sort, setSort] = useState<SortMode>('grade');
   const [typeFilter, setTypeFilter] = useState<TypeName | null>(null);
@@ -95,6 +97,23 @@ export function TeamSelect() {
     setSelected(best);
   };
 
+  // 즐겨찾기 프리셋 불러오기: 아직 보유 중인 디스크만 선발
+  const loadPreset = (ids: number[]) => {
+    sfx.click();
+    const team = ids
+      .filter((id) => save.disks[id])
+      .slice(0, 2)
+      .map((id) => ({ speciesId: id, grade: save.disks[id].grade }));
+    setSelected(team);
+  };
+
+  const bothOwned = selected.length === 2 && selected.every((s) => !s.rental);
+  const saveCurrentPreset = () => {
+    if (!bothOwned) return;
+    sfx.fanfare();
+    saveTeamPreset(selected.map((s) => s.speciesId));
+  };
+
   const course = courseId ? getCourse(courseId) : null;
   const showRentals = owned.length < 4;
 
@@ -131,7 +150,44 @@ export function TeamSelect() {
             ✨ 추천!
           </button>
         )}
+        <button
+          type="button"
+          className="team-select__fav"
+          disabled={!bothOwned}
+          onClick={saveCurrentPreset}
+        >
+          ⭐ 저장
+        </button>
       </div>
+
+      {/* 즐겨찾기 팀 프리셋 */}
+      {save.teamPresets.length > 0 && (
+        <div className="team-select__presets">
+          {save.teamPresets.map((preset, i) => (
+            <div key={i} className="preset-chip">
+              <button
+                type="button"
+                className="preset-chip__load"
+                onClick={() => loadPreset(preset)}
+              >
+                {preset.map((id) => (
+                  <img key={id} src={thumbUrl(id)} alt={getSpecies(id).ko} draggable={false} />
+                ))}
+              </button>
+              <button
+                type="button"
+                className="preset-chip__del"
+                onClick={() => {
+                  sfx.click();
+                  deleteTeamPreset(i);
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* 정렬·필터 (디스크가 많을 때 유용) */}
       {owned.length > 6 && (

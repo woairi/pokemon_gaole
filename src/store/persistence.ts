@@ -1,26 +1,41 @@
-import type { SaveData, SaveV1, SaveV2 } from '../types';
+import type { SaveData, SaveV1, SaveV2, SaveV3 } from '../types';
 
 const KEY = 'pokemon-gaole-save';
 
-export function defaultSave(): SaveV2 {
+export function defaultSave(): SaveV3 {
   return {
-    version: 2,
+    version: 3,
     disks: {},
     dex: { seen: [], caught: [] },
-    stats: { battles: 0, wins: 0, catches: 0, zMovesUsed: 0, stamps: 0 },
+    stats: { battles: 0, wins: 0, catches: 0, zMovesUsed: 0, stamps: 0, championClears: 0 },
     settings: { sound: true, tutorialSeen: false },
     daily: { lastDate: null },
     pendingBoost: false,
+    teamPresets: [],
   };
 }
 
 function v1ToV2(v1: SaveV1): SaveV2 {
   return {
-    ...defaultSave(),
+    version: 2,
     disks: v1.disks,
     dex: v1.dex,
     stats: { ...v1.stats, stamps: 0 },
     settings: { sound: v1.settings.sound, tutorialSeen: v1.stats.battles > 0 },
+    daily: { lastDate: null },
+    pendingBoost: false,
+  };
+}
+
+function v2ToV3(v2: SaveV2): SaveV3 {
+  return {
+    ...defaultSave(),
+    disks: v2.disks,
+    dex: v2.dex,
+    stats: { ...v2.stats, championClears: 0 },
+    settings: v2.settings,
+    daily: v2.daily,
+    pendingBoost: v2.pendingBoost,
   };
 }
 
@@ -29,9 +44,11 @@ export function migrate(raw: unknown): SaveData {
   const save = raw as { version: number };
   switch (save.version) {
     case 1:
-      return v1ToV2(save as SaveV1);
+      return v2ToV3(v1ToV2(save as SaveV1));
     case 2:
-      return save as SaveV2;
+      return v2ToV3(save as SaveV2);
+    case 3:
+      return save as SaveV3;
     default:
       return defaultSave();
   }

@@ -4,7 +4,7 @@ export type TypeName =
   | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
 
 export type Rarity = 'C' | 'B' | 'A' | 'S' | 'SS';
-export type CourseId = 'grass' | 'sea' | 'cave' | 'legend';
+export type CourseId = 'grass' | 'sea' | 'cave' | 'legend' | 'sky' | 'champion';
 export type Grade = 1 | 2 | 3 | 4 | 5;
 
 export interface MoveData {
@@ -81,7 +81,30 @@ export interface SaveV2 {
   pendingBoost: boolean;
 }
 
-export type SaveData = SaveV2;
+/** 즐겨찾기 팀 프리셋: 출전했던 2마리의 종 id */
+export type TeamPreset = number[];
+
+export interface SaveV3 {
+  version: 3;
+  disks: Record<number, OwnedDisk>;
+  dex: { seen: number[]; caught: number[] };
+  stats: {
+    battles: number;
+    wins: number;
+    catches: number;
+    zMovesUsed: number;
+    stamps: number;
+    /** 챔피언 코스 클리어 횟수 (명예의 전당) */
+    championClears: number;
+  };
+  settings: { sound: boolean; tutorialSeen: boolean };
+  daily: { lastDate: string | null };
+  pendingBoost: boolean;
+  /** 즐겨찾기 팀 프리셋 (최대 4개) */
+  teamPresets: TeamPreset[];
+}
+
+export type SaveData = SaveV3;
 
 export type Screen =
   | 'title' | 'menu' | 'course' | 'team'

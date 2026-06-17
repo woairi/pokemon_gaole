@@ -41,7 +41,11 @@ interface GameStore {
   toggleSound: () => void;
   markTutorialSeen: () => void;
   replaceSave: (save: SaveData) => void;
+  saveTeamPreset: (speciesIds: number[]) => void;
+  deleteTeamPreset: (index: number) => void;
 }
+
+const MAX_PRESETS = 4;
 
 const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD (로컬)
 
@@ -154,6 +158,7 @@ export const useGame = create<GameStore>((set, get) => ({
       stamps -= 5;
       pendingBoost = true;
     }
+    const championClear = won && battle.courseId === 'champion';
     const next: SaveData = {
       ...save,
       pendingBoost,
@@ -163,6 +168,7 @@ export const useGame = create<GameStore>((set, get) => ({
         wins: save.stats.wins + (won ? 1 : 0),
         zMovesUsed: save.stats.zMovesUsed + battle.zUsedCount,
         stamps,
+        championClears: save.stats.championClears + (championClear ? 1 : 0),
       },
     };
     const result: GameResult = {
@@ -192,6 +198,25 @@ export const useGame = create<GameStore>((set, get) => ({
     setSoundEnabled(save.settings.sound);
     saveSave(save);
     set({ save });
+  },
+
+  saveTeamPreset: (speciesIds) => {
+    const { save } = get();
+    const key = [...speciesIds].sort((a, b) => a - b).join(',');
+    // 같은 조합은 중복 저장하지 않음
+    if (save.teamPresets.some((p) => [...p].sort((a, b) => a - b).join(',') === key)) return;
+    const teamPresets = [speciesIds, ...save.teamPresets].slice(0, MAX_PRESETS);
+    const next: SaveData = { ...save, teamPresets };
+    saveSave(next);
+    set({ save: next });
+  },
+
+  deleteTeamPreset: (index) => {
+    const { save } = get();
+    const teamPresets = save.teamPresets.filter((_, i) => i !== index);
+    const next: SaveData = { ...save, teamPresets };
+    saveSave(next);
+    set({ save: next });
   },
 
   applyEvolution: (ev) => {
