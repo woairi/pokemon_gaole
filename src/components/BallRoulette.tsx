@@ -6,14 +6,15 @@ import type { Ball } from '../engine/catch';
 export function BallRoulette({ balls, onSelect }: { balls: Ball[]; onSelect: (ball: Ball) => void }) {
   const [stopped, setStopped] = useState(false);
   const [selected, setSelected] = useState<Ball | null>(null);
-  const rotation = useRef(0);
+  // 시작 각도를 매번 무작위로 → 같은 타이밍 연타로 같은 볼이 나오는 패턴 방지
+  const rotation = useRef(Math.random() * 360);
   const wheelRef = useRef<HTMLDivElement>(null);
   const stopping = useRef(false);
   const lastTick = useRef(0);
 
   useEffect(() => {
     let raf = 0;
-    let speed = 7.2; // deg/frame ≈ 1.2회전/초
+    let speed = 6.5 + Math.random() * 3; // 회전 속도도 매번 다르게 (6.5~9.5 deg/frame)
     let decel = 0;
     const step = () => {
       if (stopping.current) {
@@ -55,8 +56,8 @@ export function BallRoulette({ balls, onSelect }: { balls: Ball[]; onSelect: (ba
     const stop = () => {
       if (stopping.current) return;
       stopping.current = true;
-      // ~400ms에 걸쳐 감속
-      decel = speed / 24;
+      // 감속 거리도 무작위로 → 탭 순간과 멈추는 칸 사이 관계를 흐트러뜨림
+      decel = speed / (16 + Math.random() * 20);
       setStopped(true);
     };
 
