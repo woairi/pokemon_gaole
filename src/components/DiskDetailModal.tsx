@@ -31,10 +31,15 @@ function StatBar({ label, value }: { label: string; value: number }) {
   );
 }
 
+/** 진화 도전 가능 최소 등급 — 충분히 키운 디스크만 도전 가능 */
+const EVOLVE_MIN_GRADE = 3;
+
 export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
   const species = getSpecies(speciesId);
   const evolvesTo = species.evolvesTo ?? [];
-  const canEvolve = !!onEvolve && evolvesTo.length > 0;
+  const evolvable = !!onEvolve && evolvesTo.length > 0;
+  const gradeOk = disk.grade >= EVOLVE_MIN_GRADE;
+  const canEvolve = evolvable && gradeOk;
   const [choosing, setChoosing] = useState(false);
 
   const startEvolve = () => {
@@ -113,6 +118,11 @@ export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
               <button type="button" className="big-btn disk-detail__evolve" onClick={startEvolve}>
                 ✨ 진화 도전!
               </button>
+            )}
+            {evolvable && !gradeOk && (
+              <div className="disk-detail__evolve-lock">
+                🔒 {EVOLVE_MIN_GRADE}★ 이상이면 진화에 도전할 수 있어요
+              </div>
             )}
             <button type="button" className="modal__close" onClick={onClose}>
               닫기

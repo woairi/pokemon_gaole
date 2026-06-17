@@ -7,8 +7,9 @@ import { haptic } from '../utils/haptics';
 import { iGa } from '../utils/korean';
 import { artworkUrl } from '../utils/sprites';
 
-const ZONE_START = 0.35;
-const ZONE_END = 0.65;
+const ZONE_START = 0.43;
+const ZONE_END = 0.57; // 초록 칸 14% (이전 30%) — 진화가 너무 쉽지 않게
+const SWEEP_MS = 900; // 커서 왕복 주기 (이전 1200ms) — 더 빠르게
 
 /** 진화 미니게임: 움직이는 커서를 초록 존에서 멈추면 진화 성공.
  *  배틀 결과 화면(진화 찬스)과 컬렉션의 직접 진화에서 공용으로 쓴다. */
@@ -31,7 +32,7 @@ export function EvolutionOverlay({ ev, onClose }: { ev: EvolutionEvent; onClose:
       const start = performance.now();
       let raf = 0;
       const step = (now: number) => {
-        const t = ((now - start) / 1200) % 1; // 1.2초 주기 삼각파
+        const t = ((now - start) / SWEEP_MS) % 1; // 삼각파(왕복)
         const p = t < 0.5 ? t * 2 : (1 - t) * 2;
         posRef.current = p;
         setPos(p);

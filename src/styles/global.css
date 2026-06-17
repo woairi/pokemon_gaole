@@ -2398,3 +2398,11 @@ button {
   padding: 2px 16px 6px;
   flex-shrink: 0;
 }
+
+/* 진화 도전 잠금 안내 (등급 부족) */
+.disk-detail__evolve-lock {
+  font-size: 13px;
+  color: #aab;
+  text-align: center;
+  padding: 4px 0;
+}
