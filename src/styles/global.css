@@ -2371,3 +2371,25 @@ button {
   color: #ffd54f;
   font-size: 13px;
 }
+
+/* 배틀 메시지 빨리 넘기기 */
+.message-box--skippable {
+  cursor: pointer;
+}
+
+.message-box__skip {
+  margin-left: auto;
+  color: #ffd54f;
+  font-size: 14px;
+  animation: blink 0.9s infinite;
+  flex-shrink: 0;
+}
+
+/* 팀 선택 도움말 */
+.team-select__hint {
+  text-align: center;
+  font-size: 12px;
+  color: #aab;
+  padding: 2px 16px 6px;
+  flex-shrink: 0;
+}

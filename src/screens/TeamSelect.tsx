@@ -160,6 +160,13 @@ export function TeamSelect() {
         </button>
       </div>
 
+      {/* 첫 사용자 도움말 */}
+      {owned.length >= 2 && save.teamPresets.length === 0 && (
+        <div className="team-select__hint">
+          ✨추천으로 자동 선택 · ⭐저장으로 즐겨찾기
+        </div>
+      )}
+
       {/* 즐겨찾기 팀 프리셋 */}
       {save.teamPresets.length > 0 && (
         <div className="team-select__presets">

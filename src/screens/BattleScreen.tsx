@@ -217,6 +217,14 @@ export function BattleScreen() {
   const message = buildMessage(battle);
   const attack = battle.lastAttack;
   const zReady = battle.zGauge >= 100;
+
+  // 공격/피격 연출은 메시지를 탭해 즉시 넘길 수 있다 (대기 타이머는 phase가 바뀌면 무효)
+  const skippable = battle.phase === 'attack' || battle.phase === 'enemyAttack';
+  const skip = () => {
+    const b = useGame.getState().battle;
+    if (b?.phase === 'attack') setBattle(continueAfterAttack(b));
+    else if (b?.phase === 'enemyAttack') setBattle(continueAfterEnemyAttack(b));
+  };
   const superFlash =
     (battle.phase === 'attack' || battle.phase === 'enemyAttack') &&
     attack &&
@@ -373,8 +381,16 @@ export function BattleScreen() {
         })}
       </div>
 
-      {/* 메시지 */}
-      {message && <div className="message-box">{message}</div>}
+      {/* 메시지 (공격 연출 중 탭하면 빨리 넘기기) */}
+      {message && (
+        <div
+          className={`message-box${skippable ? ' message-box--skippable' : ''}`}
+          onClick={skip}
+        >
+          {message}
+          {skippable && <span className="message-box__skip">▶</span>}
+        </div>
+      )}
 
       {/* 기술 선택 */}
       {battle.phase === 'selectMove' && (

@@ -3,7 +3,10 @@ import { sfx } from '../audio/sfx';
 import { DiskCard } from '../components/DiskCard';
 import { DiskDetailModal } from '../components/DiskDetailModal';
 import { EvolutionOverlay } from '../components/EvolutionOverlay';
+import { TypeBadge } from '../components/TypeBadge';
+import { getSpecies } from '../engine/battle';
 import type { EvolutionEvent } from '../engine/events';
+import type { TypeName } from '../types';
 import { useGame } from '../store/gameStore';
 
 type SortMode = 'grade' | 'dex' | 'recent';
@@ -20,6 +23,7 @@ export function CollectionScreen() {
   const [detail, setDetail] = useState<number | null>(null);
   const [evo, setEvo] = useState<EvolutionEvent | null>(null);
   const [sort, setSort] = useState<SortMode>('grade');
+  const [typeFilter, setTypeFilter] = useState<TypeName | null>(null);
 
   const owned = useMemo(() => {
     const list = Object.entries(save.disks).map(([id, d]) => ({ speciesId: +id, ...d }));
@@ -32,6 +36,16 @@ export function CollectionScreen() {
         return list.sort((a, b) => b.caughtAt - a.caughtAt);
     }
   }, [save.disks, sort]);
+
+  const ownedTypes = useMemo(() => {
+    const types = new Set<TypeName>();
+    for (const d of owned) for (const t of getSpecies(d.speciesId).types) types.add(t);
+    return [...types];
+  }, [owned]);
+
+  const visible = typeFilter
+    ? owned.filter((d) => getSpecies(d.speciesId).types.includes(typeFilter))
+    : owned;
 
   return (
     <div className="screen collection">
@@ -54,6 +68,28 @@ export function CollectionScreen() {
           </button>
         )}
       </div>
+      {owned.length > 6 && (
+        <div className="dex__filters">
+          <button
+            type="button"
+            className={`dex__filter${typeFilter === null ? ' dex__filter--on' : ''}`}
+            onClick={() => setTypeFilter(null)}
+          >
+            전체
+          </button>
+          {ownedTypes.map((t) => (
+            <button
+              key={t}
+              type="button"
+              className={`team-select__type-chip${typeFilter === t ? ' team-select__type-chip--on' : ''}`}
+              onClick={() => setTypeFilter(typeFilter === t ? null : t)}
+            >
+              <TypeBadge type={t} small />
+            </button>
+          ))}
+        </div>
+      )}
+
       {owned.length === 0 ? (
         <div className="collection__empty">
           아직 디스크가 없어요.
@@ -63,7 +99,7 @@ export function CollectionScreen() {
       ) : (
         <div className="collection__scroll">
           <div className="disk-grid">
-            {owned.map((d) => (
+            {visible.map((d) => (
               <DiskCard
                 key={d.speciesId}
                 speciesId={d.speciesId}

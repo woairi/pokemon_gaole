@@ -10,14 +10,16 @@ export function DexScreen() {
   const save = useGame((s) => s.save);
   const setScreen = useGame((s) => s.setScreen);
   const [filter, setFilter] = useState<CourseId | 'all' | 'mega'>('all');
+  const [uncaughtOnly, setUncaughtOnly] = useState(false);
 
+  const caught = new Set(save.dex.caught);
+  const seen = new Set(save.dex.seen);
   const species = allSpecies()
     .filter((sp) =>
       filter === 'all' ? true : filter === 'mega' ? !!sp.megaId : sp.courses.includes(filter)
     )
+    .filter((sp) => !uncaughtOnly || !caught.has(sp.id))
     .sort((a, b) => a.id - b.id);
-  const caught = new Set(save.dex.caught);
-  const seen = new Set(save.dex.seen);
   const nextMilestone = BALL_MILESTONES.find((m) => caught.size < m.catches);
   // 메가 가능 종 수집 현황 (실제 폼은 도감에 없으므로 기본 종 기준)
   const megaSpecies = allSpecies().filter((sp) => sp.megaId);
@@ -65,6 +67,13 @@ export function DexScreen() {
           onClick={() => setFilter('mega')}
         >
           🔥 메가
+        </button>
+        <button
+          type="button"
+          className={`dex__filter${uncaughtOnly ? ' dex__filter--on' : ''}`}
+          onClick={() => setUncaughtOnly((v) => !v)}
+        >
+          ❔ 안 잡은 것만
         </button>
       </div>
 
