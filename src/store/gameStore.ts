@@ -1,10 +1,11 @@
 import { create } from 'zustand';
-import { setSoundEnabled } from '../audio/sfx';
+import { setVolume } from '../audio/sfx';
 import {
   type BattleResult, type BattleState, type CatchOutcome,
   createBattle, getSpecies,
 } from '../engine/battle';
 import { rollGrade } from '../engine/catch';
+import type { Volume } from '../types';
 import { type EvolutionEvent, rollEvolutions } from '../engine/events';
 import type { CourseId, DiskInstance, SaveData, Screen } from '../types';
 import { loadSave, saveSave } from './persistence';
@@ -28,6 +29,8 @@ interface GameStore {
   battle: BattleState | null;
   /** 이번 배틀의 등급 UP 찬스 출처 — 첫 포획 성공 시 소모 처리 */
   boostSource: 'daily' | 'stamp' | null;
+  /** 연속 포획 실패 횟수 — 다음 포획 확률을 올려준다(자비 보정). 성공 시 0으로 */
+  catchMisses: number;
   result: GameResult | null;
 
   setScreen: (s: Screen) => void;
@@ -35,10 +38,11 @@ interface GameStore {
   startBattle: (team: DiskInstance[]) => void;
   setBattle: (b: BattleState) => void;
   markSeen: (ids: number[]) => void;
-  recordCatchAttempt: (speciesId: number, success: boolean) => CatchOutcome;
+  recordCatchAttempt: (speciesId: number, success: boolean, shiny?: boolean) => CatchOutcome;
   endBattle: () => void;
   applyEvolution: (ev: EvolutionEvent) => void;
-  toggleSound: () => void;
+  setVolume: (v: Volume) => void;
+  cycleVolume: () => void;
   markTutorialSeen: () => void;
   replaceSave: (save: SaveData) => void;
   saveTeamPreset: (speciesIds: number[]) => void;
@@ -50,7 +54,7 @@ const MAX_PRESETS = 4;
 const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD (로컬)
 
 const initialSave = loadSave();
-setSoundEnabled(initialSave.settings.sound);
+setVolume(initialSave.settings.volume);
 
 const uniq = (arr: number[]) => [...new Set(arr)];
 
@@ -61,6 +65,7 @@ export const useGame = create<GameStore>((set, get) => ({
   team: [],
   battle: null,
   boostSource: null,
+  catchMisses: 0,
   result: null,
 
   setScreen: (screen) => set({ screen }),
@@ -108,10 +113,12 @@ export const useGame = create<GameStore>((set, get) => ({
     set({ save: next });
   },
 
-  recordCatchAttempt: (speciesId, success) => {
-    const { save, battle, boostSource } = get();
+  recordCatchAttempt: (speciesId, success, shiny = false) => {
+    const { save, battle, boostSource, catchMisses } = get();
     const species = getSpecies(speciesId);
     if (!success) {
+      // 실패하면 다음 포획 확률이 조금씩 올라간다 (자비 보정)
+      set({ catchMisses: catchMisses + 1 });
       return { speciesId, grade: 1, result: 'escaped' } as CatchOutcome;
     }
     const grade = rollGrade(species.rarity, battle?.gradeBoost);
@@ -123,26 +130,37 @@ export const useGame = create<GameStore>((set, get) => ({
       set({ boostSource: null });
     }
     const existing = save.disks[speciesId];
+    // 샤이니는 한 번이라도 잡으면 디스크에 영구 표시 (이후 일반 개체로 안 사라짐)
+    const keepShiny = shiny || existing?.shiny;
     let outcome: CatchOutcome;
     const disks = { ...save.disks };
     if (!existing) {
-      disks[speciesId] = { grade, caughtAt: Date.now(), timesUsed: 0 };
-      outcome = { speciesId, grade, result: 'new' };
+      disks[speciesId] = { grade, caughtAt: Date.now(), timesUsed: 0, shiny: keepShiny };
+      outcome = { speciesId, grade, result: 'new', shiny };
     } else if (grade > existing.grade) {
-      disks[speciesId] = { ...existing, grade };
-      outcome = { speciesId, grade, result: 'gradeUp', prevGrade: existing.grade };
+      disks[speciesId] = { ...existing, grade, shiny: keepShiny };
+      outcome = { speciesId, grade, result: 'gradeUp', prevGrade: existing.grade, shiny };
     } else {
-      outcome = { speciesId, grade, result: 'dupe', prevGrade: existing.grade };
+      disks[speciesId] = { ...existing, shiny: keepShiny };
+      outcome = { speciesId, grade, result: 'dupe', prevGrade: existing.grade, shiny };
     }
     const next: SaveData = {
       ...save,
       ...boostConsumed,
       disks,
-      dex: { ...save.dex, caught: uniq([...save.dex.caught, speciesId]) },
-      stats: { ...save.stats, catches: save.stats.catches + 1 },
+      dex: {
+        ...save.dex,
+        caught: uniq([...save.dex.caught, speciesId]),
+        shiny: shiny ? uniq([...save.dex.shiny, speciesId]) : save.dex.shiny,
+      },
+      stats: {
+        ...save.stats,
+        catches: save.stats.catches + 1,
+        shinyCatches: save.stats.shinyCatches + (shiny ? 1 : 0),
+      },
     };
     saveSave(next);
-    set({ save: next });
+    set({ save: next, catchMisses: 0 });
     return outcome;
   },
 
@@ -195,7 +213,7 @@ export const useGame = create<GameStore>((set, get) => ({
   },
 
   replaceSave: (save) => {
-    setSoundEnabled(save.settings.sound);
+    setVolume(save.settings.volume);
     saveSave(save);
     set({ save });
   },
@@ -230,7 +248,10 @@ export const useGame = create<GameStore>((set, get) => ({
       grade: existing ? (Math.max(existing.grade, ev.grade) as typeof ev.grade) : ev.grade,
       caughtAt: existing?.caughtAt ?? Date.now(),
       timesUsed: existing?.timesUsed ?? from.timesUsed,
+      // 샤이니 디스크가 진화하면 진화체도 샤이니로 (둘 중 하나라도 샤이니면 유지)
+      shiny: existing?.shiny || from.shiny,
     };
+    const evolvedShiny = disks[ev.toId].shiny;
     const next: SaveData = {
       ...save,
       disks,
@@ -238,19 +259,26 @@ export const useGame = create<GameStore>((set, get) => ({
         ...save.dex,
         seen: uniq([...save.dex.seen, ev.toId]),
         caught: uniq([...save.dex.caught, ev.toId]),
+        shiny: evolvedShiny ? uniq([...save.dex.shiny, ev.toId]) : save.dex.shiny,
       },
     };
     saveSave(next);
     set({ save: next });
   },
 
-  toggleSound: () => {
+  setVolume: (volume) => {
     const { save } = get();
-    const next: SaveData = {
-      ...save,
-      settings: { ...save.settings, sound: !save.settings.sound },
-    };
-    setSoundEnabled(next.settings.sound);
+    const next: SaveData = { ...save, settings: { ...save.settings, volume } };
+    setVolume(volume);
+    saveSave(next);
+    set({ save: next });
+  },
+
+  cycleVolume: () => {
+    const { save } = get();
+    const volume = (((save.settings.volume + 1) % 3) as Volume); // 끄기→작게→크게→끄기
+    const next: SaveData = { ...save, settings: { ...save.settings, volume } };
+    setVolume(volume);
     saveSave(next);
     set({ save: next });
   },

@@ -1,10 +1,14 @@
 import { useState } from 'react';
+import typechartJson from '../data/typechart.json';
 import { sfx } from '../audio/sfx';
 import { getSpecies } from '../engine/battle';
-import type { OwnedDisk } from '../types';
-import { artworkUrl, thumbUrl } from '../utils/sprites';
+import { typeMultiplier } from '../engine/damage';
+import type { OwnedDisk, TypeName } from '../types';
+import { artworkUrl, shinyArtworkUrl, thumbUrl } from '../utils/sprites';
 import { StarGrade } from './StarGrade';
 import { TypeBadge } from './TypeBadge';
+
+const ALL_TYPES = Object.keys(typechartJson.ko) as TypeName[];
 
 interface Props {
   speciesId: number;
@@ -42,6 +46,16 @@ export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
   const canEvolve = evolvable && gradeOk;
   const [choosing, setChoosing] = useState(false);
 
+  // 교육용: 이 포켓몬이 공격받을 때의 타입 상성
+  const weakTo = ALL_TYPES.filter((a) => typeMultiplier(a, species.types) >= 2);
+  const resists = ALL_TYPES.filter((a) => {
+    const m = typeMultiplier(a, species.types);
+    return m > 0 && m < 1;
+  });
+  const immuneTo = ALL_TYPES.filter((a) => typeMultiplier(a, species.types) === 0);
+
+  const imgSrc = disk.shiny ? shinyArtworkUrl(speciesId) : artworkUrl(speciesId);
+
   const startEvolve = () => {
     sfx.click();
     if (evolvesTo.length === 1) onEvolve!(evolvesTo[0]);
@@ -77,12 +91,16 @@ export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
         ) : (
           <>
             <img
-              className="disk-detail__img"
-              src={artworkUrl(speciesId)}
+              className={`disk-detail__img${disk.shiny ? ' disk-detail__img--shiny' : ''}`}
+              src={imgSrc}
               alt={species.ko}
               draggable={false}
+              onError={(e) => {
+                if (disk.shiny) (e.target as HTMLImageElement).src = artworkUrl(speciesId);
+              }}
             />
             <div className="disk-detail__name">
+              {disk.shiny && <span className="disk-detail__shiny-badge">✨ 반짝이</span>}
               No.{species.id} {species.ko}
               {species.megaId && <span className="disk-detail__mega-badge">메가진화 가능</span>}
             </div>
@@ -108,6 +126,33 @@ export function DiskDetailModal({ speciesId, disk, onClose, onEvolve }: Props) {
                   <span className="disk-detail__move-power">위력 {m.power}</span>
                 </div>
               ))}
+            </div>
+
+            <div className="disk-detail__matchup">
+              <div className="disk-detail__matchup-row">
+                <span className="disk-detail__matchup-label">💥 약점</span>
+                <span className="disk-detail__matchup-types">
+                  {weakTo.length
+                    ? weakTo.map((t) => <TypeBadge key={t} type={t} small />)
+                    : <span className="disk-detail__matchup-none">없음</span>}
+                </span>
+              </div>
+              <div className="disk-detail__matchup-row">
+                <span className="disk-detail__matchup-label">😎 잘 버팀</span>
+                <span className="disk-detail__matchup-types">
+                  {resists.length
+                    ? resists.map((t) => <TypeBadge key={t} type={t} small />)
+                    : <span className="disk-detail__matchup-none">없음</span>}
+                </span>
+              </div>
+              {immuneTo.length > 0 && (
+                <div className="disk-detail__matchup-row">
+                  <span className="disk-detail__matchup-label">✨ 안 통함</span>
+                  <span className="disk-detail__matchup-types">
+                    {immuneTo.map((t) => <TypeBadge key={t} type={t} small />)}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="disk-detail__meta">

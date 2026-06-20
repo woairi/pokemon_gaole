@@ -10,7 +10,9 @@ import {
 } from '../battle';
 import { COURSES, getCourse, trainerTitle } from '../../data/courses';
 import { allSpecies as allSp } from '../battle';
-import { BASE_CATCH, GRADE_WEIGHTS, catchProbability, getBalls, rollGrade } from '../catch';
+import {
+  BASE_CATCH, BALLS, GRADE_WEIGHTS, catchProbability, getBalls, pityBonus, rollGrade,
+} from '../catch';
 import { TUNING, enemyDamage, playerDamage, playerMaxHp, typeMultiplier, wildMaxHp } from '../damage';
 
 const save: SaveData = defaultSave();
@@ -115,13 +117,45 @@ describe('코스 풀 / 트레이너 칭호', () => {
   it('트레이너 칭호는 포획 수·챔피언 클리어를 따른다', () => {
     const mk = (caught: number, champ = 0): SaveData => ({
       ...defaultSave(),
-      dex: { seen: [], caught: Array.from({ length: caught }, (_, i) => i + 1) },
+      dex: { seen: [], caught: Array.from({ length: caught }, (_, i) => i + 1), shiny: [] },
       stats: { ...defaultSave().stats, championClears: champ },
     });
     expect(trainerTitle(mk(0))).toBe('새내기 트레이너');
     expect(trainerTitle(mk(50))).toBe('베테랑 트레이너');
     expect(trainerTitle(mk(150))).toBe('포켓몬 마스터');
     expect(trainerTitle(mk(150, 1))).toBe('🏆 챔피언'); // 챔피언이 최우선
+  });
+});
+
+describe('포획 자비 보정(pity)', () => {
+  const poke = BALLS[0]; // 몬스터볼
+  it('실패가 없으면 보정은 1배', () => {
+    expect(pityBonus(0)).toBe(1);
+  });
+  it('실패할수록 보정이 커지고 상한이 있다', () => {
+    expect(pityBonus(1)).toBeGreaterThan(pityBonus(0));
+    expect(pityBonus(2)).toBeGreaterThan(pityBonus(1));
+    // 충분히 많이 실패하면 상한에 수렴 (무한정 커지지 않음)
+    expect(pityBonus(100)).toBe(pityBonus(50));
+    expect(pityBonus(100)).toBeLessThanOrEqual(1.5);
+  });
+  it('보정을 적용하면 포획 확률이 올라간다', () => {
+    const base = catchProbability('A', poke, 1);
+    const withPity = catchProbability('A', poke, pityBonus(3));
+    expect(withPity).toBeGreaterThan(base);
+    expect(withPity).toBeLessThanOrEqual(0.99);
+  });
+});
+
+describe('샤이니 등장', () => {
+  it('야생 개체에 shiny 플래그가 (대부분 false로) 정의된다', () => {
+    let shinyCount = 0;
+    for (let i = 0; i < 200; i++) {
+      const b = createBattle(team, 'grass', save);
+      for (const w of b.wild) if (w.shiny) shinyCount++;
+    }
+    // 1/150 확률 — 400마리 중 샤이니는 매우 드물어야 한다(평균 ~2.7)
+    expect(shinyCount).toBeLessThan(40);
   });
 });
 

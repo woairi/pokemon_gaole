@@ -9,6 +9,13 @@ export const thumbUrl = (id: number) => `${BASE}/thumb/${id}.webp`;
 export const battleSpriteUrl = (id: number, side: 'front' | 'back') =>
   `${BASE}/${side}/${id}.gif`;
 
+// 샤이니(색이 다른 포켓몬)는 드물게만 등장 — 빌드에 포함하지 않고 PokeAPI에서 핫링크
+const PA = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
+export const shinyArtworkUrl = (id: number) => `${PA}/other/official-artwork/shiny/${id}.png`;
+export const shinyBattleSpriteUrl = (id: number, side: 'front' | 'back') =>
+  // 샤이니 뒷모습 showdown GIF는 없으므로 뒷면은 일반 GIF로 폴백
+  side === 'front' ? `${PA}/other/showdown/shiny/${id}.gif` : `${BASE}/back/${id}.gif`;
+
 /** 이미지 프리로드 (실패/타임아웃해도 게임은 진행) */
 export function preloadImages(urls: string[], timeoutMs = 6000): Promise<void> {
   const loads = urls.map(

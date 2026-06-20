@@ -33,9 +33,13 @@ export interface Combatant {
   hp: number;
   mega?: boolean;
   intruder?: boolean; // 전설 난입 개체 (포획률 절반)
+  shiny?: boolean; // 색이 다른 포켓몬
   catchResolved?: boolean;
   caught?: boolean;
 }
+
+/** 야생이 샤이니(색이 다른 포켓몬)로 등장할 확률 */
+export const SHINY_CHANCE = 1 / 150;
 
 export interface AttackEvent {
   side: 'player' | 'wild';
@@ -60,6 +64,7 @@ export interface CatchOutcome {
   grade: Grade;
   result: 'new' | 'gradeUp' | 'dupe' | 'escaped';
   prevGrade?: Grade;
+  shiny?: boolean;
 }
 
 export interface BattleEvo {
@@ -114,7 +119,14 @@ export const INTRUDER_CATCH_MOD = 0.5;
 
 function makeWild(species: PokemonData, hpMult: number, intruder = false): Combatant {
   const maxHp = wildMaxHp(species.hp, hpMult);
-  return { speciesId: species.id, grade: 1, maxHp, hp: maxHp, intruder: intruder || undefined };
+  return {
+    speciesId: species.id,
+    grade: 1,
+    maxHp,
+    hp: maxHp,
+    intruder: intruder || undefined,
+    shiny: chance(SHINY_CHANCE) || undefined,
+  };
 }
 
 function rollWildPair(courseId: CourseId, stage: number): PokemonData[] {

@@ -46,12 +46,15 @@ export interface DiskInstance {
   speciesId: number;
   grade: Grade;
   rental?: boolean;
+  shiny?: boolean;
 }
 
 export interface OwnedDisk {
   grade: Grade;
   caughtAt: number;
   timesUsed: number;
+  /** 색이 다른 포켓몬(샤이니) 보유 여부 */
+  shiny?: boolean;
 }
 
 export interface SaveV1 {
@@ -104,8 +107,31 @@ export interface SaveV3 {
   teamPresets: TeamPreset[];
 }
 
-export type SaveData = SaveV3;
+/** 0=끄기, 1=작게, 2=크게 */
+export type Volume = 0 | 1 | 2;
+
+export interface SaveV4 {
+  version: 4;
+  disks: Record<number, OwnedDisk>;
+  dex: { seen: number[]; caught: number[]; shiny: number[] };
+  stats: {
+    battles: number;
+    wins: number;
+    catches: number;
+    zMovesUsed: number;
+    stamps: number;
+    championClears: number;
+    /** 잡은 샤이니 누적 수 */
+    shinyCatches: number;
+  };
+  settings: { volume: Volume; tutorialSeen: boolean };
+  daily: { lastDate: string | null };
+  pendingBoost: boolean;
+  teamPresets: TeamPreset[];
+}
+
+export type SaveData = SaveV4;
 
 export type Screen =
   | 'title' | 'menu' | 'course' | 'team'
-  | 'battle' | 'result' | 'collection' | 'dex';
+  | 'battle' | 'result' | 'collection' | 'dex' | 'typechart';

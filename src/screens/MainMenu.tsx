@@ -8,14 +8,16 @@ import { useGame } from '../store/gameStore';
 export function MainMenu() {
   const setScreen = useGame((s) => s.setScreen);
   const save = useGame((s) => s.save);
-  const toggleSound = useGame((s) => s.toggleSound);
+  const cycleVolume = useGame((s) => s.cycleVolume);
   const markTutorialSeen = useGame((s) => s.markTutorialSeen);
   const [showBackup, setShowBackup] = useState(false);
 
-  const go = (screen: 'course' | 'collection' | 'dex') => {
+  const go = (screen: 'course' | 'collection' | 'dex' | 'typechart') => {
     sfx.click();
     setScreen(screen);
   };
+
+  const volIcon = save.settings.volume === 0 ? '🔇' : save.settings.volume === 1 ? '🔉' : '🔊';
 
   return (
     <div className="screen menu">
@@ -25,8 +27,16 @@ export function MainMenu() {
           <button type="button" className="menu__sound" onClick={() => setShowBackup(true)}>
             💾
           </button>
-          <button type="button" className="menu__sound" onClick={toggleSound}>
-            {save.settings.sound ? '🔊' : '🔇'}
+          <button
+            type="button"
+            className="menu__sound"
+            onClick={() => {
+              cycleVolume();
+              sfx.click();
+            }}
+            aria-label="소리 크기"
+          >
+            {volIcon}
           </button>
         </div>
       </div>
@@ -48,6 +58,9 @@ export function MainMenu() {
         <button type="button" className="menu-btn" onClick={() => go('dex')}>
           <span className="menu-btn__emoji">📕</span> 도감
           <span className="menu-btn__count">{save.dex.caught.length}</span>
+        </button>
+        <button type="button" className="menu-btn" onClick={() => go('typechart')}>
+          <span className="menu-btn__emoji">🔰</span> 타입 상성표
         </button>
       </div>
 

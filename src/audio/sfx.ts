@@ -1,19 +1,23 @@
 // Web Audio로 합성한 효과음 (저작권 음원 미사용)
 let ctx: AudioContext | null = null;
-let enabled = true;
+let volume = 2; // 0=끄기, 1=작게, 2=크게
 
-export function setSoundEnabled(on: boolean) {
-  enabled = on;
+/** 볼륨 단계(0~2)를 실제 게인 배율로 */
+const vscale = () => (volume === 0 ? 0 : volume === 1 ? 0.45 : 1);
+
+export function setVolume(v: 0 | 1 | 2) {
+  volume = v;
 }
 
-export const isSoundEnabled = () => enabled;
+export const getVolume = () => volume as 0 | 1 | 2;
+export const isSoundEnabled = () => volume > 0;
 
 export function getAudioContext(): AudioContext | null {
   return ensureCtx();
 }
 
 function ensureCtx(): AudioContext | null {
-  if (!enabled) return null;
+  if (volume === 0) return null;
   try {
     if (!ctx) ctx = new AudioContext();
     if (ctx.state === 'suspended') void ctx.resume();
@@ -40,7 +44,7 @@ function tone(freq: number, dur: number, opts: ToneOpts = {}) {
   osc.type = type;
   osc.frequency.setValueAtTime(freq, t0);
   if (slideTo) osc.frequency.exponentialRampToValueAtTime(slideTo, t0 + dur);
-  gain.gain.setValueAtTime(vol, t0);
+  gain.gain.setValueAtTime(vol * vscale(), t0);
   gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
   osc.connect(gain).connect(ac.destination);
   osc.start(t0);
@@ -57,10 +61,27 @@ function noise(dur: number, vol = 0.15, delay = 0) {
   const src = ac.createBufferSource();
   src.buffer = buffer;
   const gain = ac.createGain();
-  gain.gain.setValueAtTime(vol, t0);
+  gain.gain.setValueAtTime(vol * vscale(), t0);
   gain.gain.exponentialRampToValueAtTime(0.001, t0 + dur);
   src.connect(gain).connect(ac.destination);
   src.start(t0);
+}
+
+/** 포켓몬 울음소리: PokeAPI cries(.ogg)를 핫링크로 재생. 실패해도 무음 */
+let cryAudio: HTMLAudioElement | null = null;
+export function playCry(speciesId: number) {
+  if (volume === 0 || typeof Audio === 'undefined') return;
+  try {
+    cryAudio?.pause();
+    const a = new Audio(
+      `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${speciesId}.ogg`
+    );
+    a.volume = vscale() * 0.7;
+    cryAudio = a;
+    void a.play().catch(() => {});
+  } catch {
+    /* 무음 */
+  }
 }
 
 export const sfx = {

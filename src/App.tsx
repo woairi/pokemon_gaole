@@ -8,6 +8,7 @@ import { MainMenu } from './screens/MainMenu';
 import { ResultScreen } from './screens/ResultScreen';
 import { TeamSelect } from './screens/TeamSelect';
 import { TitleScreen } from './screens/TitleScreen';
+import { TypeChartScreen } from './screens/TypeChartScreen';
 import { useGame } from './store/gameStore';
 
 export default function App() {
@@ -49,5 +50,7 @@ function Screens({ screen }: { screen: ReturnType<typeof useGame.getState>['scre
       return <CollectionScreen />;
     case 'dex':
       return <DexScreen />;
+    case 'typechart':
+      return <TypeChartScreen />;
   }
 }

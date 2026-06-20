@@ -47,6 +47,11 @@ export function catchProbability(rarity: Rarity, ball: Ball, mod = 1): number {
   return Math.min(0.99, Math.max(0.05, BASE_CATCH[rarity] * ball.mult * mod));
 }
 
+/** 연속 실패 시 다음 포획 확률을 올려주는 자비 보정 (실패 1회당 +12%, 최대 +48%) */
+const PITY_PER_MISS = 0.12;
+const PITY_MAX = 0.48;
+export const pityBonus = (misses: number) => 1 + Math.min(PITY_MAX, misses * PITY_PER_MISS);
+
 export const rollCatch = (p: number) => chance(p);
 
 /** 레어도별 등급(별) 추첨 가중치 */

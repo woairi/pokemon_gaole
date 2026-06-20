@@ -1,5 +1,7 @@
 // Web Audio로 합성한 8비트풍 BGM 루프 (저작권 음원 미사용)
-import { getAudioContext, isSoundEnabled } from './sfx';
+import { getAudioContext, getVolume, isSoundEnabled } from './sfx';
+
+const bgmScale = () => (getVolume() === 1 ? 0.45 : 1);
 
 export type Track = 'menu' | 'battle';
 
@@ -51,7 +53,7 @@ function scheduleNote(
   const gain = ac.createGain();
   osc.type = type;
   osc.frequency.value = freq;
-  gain.gain.setValueAtTime(vol, start);
+  gain.gain.setValueAtTime(vol * bgmScale(), start);
   gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
   osc.connect(gain).connect(ac.destination);
   osc.start(start);

@@ -41,7 +41,8 @@ export function ResultScreen() {
           <div className="result__disk-row">
             {catches.map((c, i) => (
               <div key={i} className="result__catch">
-                <DiskCard speciesId={c.speciesId} grade={c.grade} />
+                <DiskCard speciesId={c.speciesId} grade={c.grade} shiny={c.shiny} />
+                {c.shiny && <span className="result__tag result__tag--shiny">✨ 반짝이!</span>}
                 {c.result === 'new' && <span className="result__tag result__tag--new">NEW!</span>}
                 {c.result === 'gradeUp' && (
                   <span className="result__tag result__tag--up">

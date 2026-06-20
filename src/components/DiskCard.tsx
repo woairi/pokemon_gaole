@@ -9,11 +9,12 @@ interface Props {
   speciesId: number;
   grade: Grade;
   rental?: boolean;
+  shiny?: boolean;
   selected?: boolean;
   onClick?: () => void;
 }
 
-export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props) {
+export function DiskCard({ speciesId, grade, rental, shiny, selected, onClick }: Props) {
   const species = getSpecies(speciesId);
   const ring = GRADE_COLORS[grade];
   const isLegendary = species.rarity === 'SS';
@@ -22,7 +23,7 @@ export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props)
       type="button"
       className={`disk-card${selected ? ' disk-card--selected' : ''}${
         isLegendary ? ' disk-card--legendary' : ''
-      }`}
+      }${shiny ? ' disk-card--shiny' : ''}`}
       onClick={onClick}
     >
       <div
@@ -40,6 +41,7 @@ export function DiskCard({ speciesId, grade, rental, selected, onClick }: Props)
           }}
         />
         {isLegendary && <span className="disk-card__legend">⚡전설</span>}
+        {shiny && <span className="disk-card__shiny" title="색이 다른 포켓몬">✨</span>}
         {rental && <span className="disk-card__rental">렌탈</span>}
       </div>
       <div className="disk-card__name">{species.ko}</div>

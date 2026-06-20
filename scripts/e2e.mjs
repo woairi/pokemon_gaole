@@ -40,6 +40,24 @@ if (await page.$('.tutorial')) {
   console.log((await page.$('.tutorial')) ? '✗ 튜토리얼이 닫히지 않음' : '✓ 튜토리얼 완료');
 }
 
+// 소리 크기 3단계 순환 (끄기→작게→크게)
+const volBefore = await page.$eval('.menu__sound:last-child', (el) => el.textContent);
+await tapEl('.menu__sound:last-child');
+const volAfter = await page.$eval('.menu__sound:last-child', (el) => el.textContent);
+console.log(volBefore !== volAfter ? '✓ 소리 크기 변경' : '✗ 소리 크기 그대로');
+
+// 타입 상성표 화면
+const tcBtn = (await page.$$('.menu-btn')).at(-1);
+{
+  const box = await tcBtn.boundingBox();
+  await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
+}
+await page.waitForSelector('.tc__panel', { timeout: 5000 });
+await tapEl('.tc__pick:nth-child(3)');
+console.log('✓ 타입 상성표 화면');
+await tapEl('.back-btn');
+await page.waitForSelector('.menu', { timeout: 5000 });
+
 await tapEl('.menu-btn--battle');
 await page.waitForSelector('.course-card', { timeout: 5000 });
 console.log('✓ 코스 선택');

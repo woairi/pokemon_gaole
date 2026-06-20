@@ -1,14 +1,17 @@
-import type { SaveData, SaveV1, SaveV2, SaveV3 } from '../types';
+import type { SaveData, SaveV1, SaveV2, SaveV3, SaveV4 } from '../types';
 
 const KEY = 'pokemon-gaole-save';
 
-export function defaultSave(): SaveV3 {
+export function defaultSave(): SaveV4 {
   return {
-    version: 3,
+    version: 4,
     disks: {},
-    dex: { seen: [], caught: [] },
-    stats: { battles: 0, wins: 0, catches: 0, zMovesUsed: 0, stamps: 0, championClears: 0 },
-    settings: { sound: true, tutorialSeen: false },
+    dex: { seen: [], caught: [], shiny: [] },
+    stats: {
+      battles: 0, wins: 0, catches: 0, zMovesUsed: 0,
+      stamps: 0, championClears: 0, shinyCatches: 0,
+    },
+    settings: { volume: 2, tutorialSeen: false },
     daily: { lastDate: null },
     pendingBoost: false,
     teamPresets: [],
@@ -29,13 +32,27 @@ function v1ToV2(v1: SaveV1): SaveV2 {
 
 function v2ToV3(v2: SaveV2): SaveV3 {
   return {
-    ...defaultSave(),
+    version: 3,
     disks: v2.disks,
     dex: v2.dex,
     stats: { ...v2.stats, championClears: 0 },
     settings: v2.settings,
     daily: v2.daily,
     pendingBoost: v2.pendingBoost,
+    teamPresets: [],
+  };
+}
+
+function v3ToV4(v3: SaveV3): SaveV4 {
+  return {
+    ...defaultSave(),
+    disks: v3.disks,
+    dex: { ...v3.dex, shiny: [] },
+    stats: { ...v3.stats, shinyCatches: 0 },
+    settings: { volume: v3.settings.sound ? 2 : 0, tutorialSeen: v3.settings.tutorialSeen },
+    daily: v3.daily,
+    pendingBoost: v3.pendingBoost,
+    teamPresets: v3.teamPresets,
   };
 }
 
@@ -44,11 +61,13 @@ export function migrate(raw: unknown): SaveData {
   const save = raw as { version: number };
   switch (save.version) {
     case 1:
-      return v2ToV3(v1ToV2(save as SaveV1));
+      return v3ToV4(v2ToV3(v1ToV2(save as SaveV1)));
     case 2:
-      return v2ToV3(save as SaveV2);
+      return v3ToV4(v2ToV3(save as SaveV2));
     case 3:
-      return save as SaveV3;
+      return v3ToV4(save as SaveV3);
+    case 4:
+      return save as SaveV4;
     default:
       return defaultSave();
   }

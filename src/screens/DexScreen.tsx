@@ -14,6 +14,7 @@ export function DexScreen() {
 
   const caught = new Set(save.dex.caught);
   const seen = new Set(save.dex.seen);
+  const shiny = new Set(save.dex.shiny);
   const species = allSpecies()
     .filter((sp) =>
       filter === 'all' ? true : filter === 'mega' ? !!sp.megaId : sp.courses.includes(filter)
@@ -33,6 +34,7 @@ export function DexScreen() {
         </button>
         <span>
           도감 — 잡았다 {caught.size} / {allSpecies().length}
+          {shiny.size > 0 && <span className="dex__shiny-count"> · ✨{shiny.size}</span>}
         </span>
       </div>
 
@@ -93,9 +95,16 @@ export function DexScreen() {
               .map((c) => COURSES.find((x) => x.id === c)?.emoji)
               .join('');
             const showMega = !!sp.megaId && (isCaught || isSeen);
+            const isShiny = shiny.has(sp.id);
             return (
-              <div key={sp.id} className={`dex__cell${showMega ? ' dex__cell--mega' : ''}`}>
+              <div
+                key={sp.id}
+                className={`dex__cell${showMega ? ' dex__cell--mega' : ''}${
+                  isShiny ? ' dex__cell--shiny' : ''
+                }`}
+              >
                 {showMega && <span className="dex__mega" title="메가진화 가능">🔥</span>}
+                {isShiny && <span className="dex__shiny" title="색이 다른 포켓몬">✨</span>}
                 {isCaught || isSeen ? (
                   <img
                     className={`dex__img${!isCaught ? ' dex__img--silhouette' : ''}`}

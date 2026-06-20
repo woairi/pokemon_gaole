@@ -1,38 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
-import { sfx } from '../audio/sfx';
+import { playCry, sfx } from '../audio/sfx';
 import { type CatchOutcome, INTRUDER_CATCH_MOD, getSpecies } from '../engine/battle';
-import { type Ball, catchProbability, getBalls, rollCatch } from '../engine/catch';
+import { type Ball, catchProbability, getBalls, pityBonus, rollCatch } from '../engine/catch';
 import { useGame } from '../store/gameStore';
 import { haptic } from '../utils/haptics';
 import { eulReul, iGa } from '../utils/korean';
-import { artworkUrl } from '../utils/sprites';
+import { artworkUrl, shinyArtworkUrl } from '../utils/sprites';
 import { BallRoulette } from './BallRoulette';
 import { StarGrade } from './StarGrade';
 
 interface Props {
   speciesId: number;
   intruder?: boolean;
+  shiny?: boolean;
   gradeBoost?: boolean;
-  recordCatch: (speciesId: number, success: boolean) => CatchOutcome;
+  recordCatch: (speciesId: number, success: boolean, shiny?: boolean) => CatchOutcome;
   onDone: (outcome: CatchOutcome) => void;
 }
 
 type Stage = 'banner' | 'roulette' | 'throw' | 'shake' | 'result';
 
 /** 야생 포켓몬을 쓰러뜨렸을 때의 겟 찬스(포획) 연출 */
-export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch, onDone }: Props) {
+export function GetChanceOverlay({ speciesId, intruder, shiny, gradeBoost, recordCatch, onDone }: Props) {
   const species = getSpecies(speciesId);
   const caughtCount = useGame((s) => s.save.dex.caught.length);
+  const catchMisses = useGame((s) => s.catchMisses);
   const [stage, setStage] = useState<Stage>('banner');
   const [shakeCount, setShakeCount] = useState(0);
   const [outcome, setOutcome] = useState<CatchOutcome | null>(null);
   const ballRef = useRef<Ball | null>(null);
   const probRef = useRef(0);
   const successRef = useRef(false);
+  // 샤이니 아트워크는 핫링크 — 실패하면 일반 아트워크로 폴백
+  const imgUrl = shiny ? shinyArtworkUrl(speciesId) : artworkUrl(speciesId);
+  const onImgError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (shiny) (e.target as HTMLImageElement).src = artworkUrl(speciesId);
+  };
 
   useEffect(() => {
     if (stage === 'banner') {
       sfx.fanfare();
+      playCry(speciesId);
       const t = setTimeout(() => setStage('roulette'), 1400);
       return () => clearTimeout(t);
     }
@@ -50,11 +58,12 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
         if (count >= 3) {
           clearInterval(interval);
           setTimeout(() => {
-            const result = recordCatch(speciesId, successRef.current);
+            const result = recordCatch(speciesId, successRef.current, shiny);
             setOutcome(result);
             if (successRef.current) {
               sfx.catchSuccess();
               haptic.catch();
+              playCry(speciesId);
             } else sfx.escape();
             setStage('result');
           }, 600);
@@ -66,7 +75,8 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
 
   const onBallSelected = (ball: Ball) => {
     ballRef.current = ball;
-    const p = catchProbability(species.rarity, ball, intruder ? INTRUDER_CATCH_MOD : 1);
+    const mod = (intruder ? INTRUDER_CATCH_MOD : 1) * pityBonus(catchMisses);
+    const p = catchProbability(species.rarity, ball, mod);
     probRef.current = p;
     successRef.current = rollCatch(p);
     setStage('throw');
@@ -81,6 +91,7 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
         return (
           <>
             <div className="getchance__got">GET!!</div>
+            {shiny && <div className="getchance__shiny">✨ 색이 다른 포켓몬! ✨</div>}
             <div className="getchance__label">{eulReul(species.ko)} 잡았다!</div>
             <StarGrade grade={outcome.grade} size="big" />
             <div className="getchance__sub">
@@ -102,9 +113,12 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
         return (
           <>
             <div className="getchance__got">GET!!</div>
+            {shiny && <div className="getchance__shiny">✨ 색이 다른 포켓몬! ✨</div>}
             <div className="getchance__label">{eulReul(species.ko)} 잡았다!</div>
             <StarGrade grade={outcome.grade} size="big" />
-            <div className="getchance__sub">이미 가진 디스크보다 약했다…</div>
+            <div className="getchance__sub">
+              {shiny ? '디스크가 반짝이로 바뀌었다!' : '이미 가진 디스크보다 약했다…'}
+            </div>
           </>
         );
       case 'escaped':
@@ -121,6 +135,7 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
       {stage === 'banner' && (
         <>
           <div className="getchance__banner">GET CHANCE!!</div>
+          {shiny && <div className="getchance__shiny">✨ 색이 다른 포켓몬이다! ✨</div>}
           {gradeBoost && <div className="getchance__boost">🎁 등급 UP 찬스!</div>}
         </>
       )}
@@ -129,13 +144,14 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
         <div
           className={
             'getchance__mon' +
+            (shiny ? ' getchance__mon--shiny' : '') +
             (stage === 'shake' || (stage === 'result' && outcome?.result !== 'escaped')
               ? ' getchance__mon--hidden'
               : '') +
             (stage === 'result' && outcome?.result === 'escaped' ? ' getchance__mon--escape' : '')
           }
         >
-          <img src={artworkUrl(speciesId)} alt={species.ko} draggable={false} />
+          <img src={imgUrl} alt={species.ko} draggable={false} onError={onImgError} />
         </div>
       )}
 
@@ -164,10 +180,11 @@ export function GetChanceOverlay({ speciesId, intruder, gradeBoost, recordCatch,
         <div className="getchance__result">
           {outcome?.result !== 'escaped' && (
             <img
-              className="getchance__result-img"
-              src={artworkUrl(speciesId)}
+              className={`getchance__result-img${shiny ? ' getchance__result-img--shiny' : ''}`}
+              src={imgUrl}
               alt={species.ko}
               draggable={false}
+              onError={onImgError}
             />
           )}
           {resultLabel()}

@@ -104,6 +104,7 @@ export function CollectionScreen() {
                 key={d.speciesId}
                 speciesId={d.speciesId}
                 grade={d.grade}
+                shiny={d.shiny}
                 onClick={() => setDetail(d.speciesId)}
               />
             ))}

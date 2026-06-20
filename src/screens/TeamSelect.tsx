@@ -47,6 +47,7 @@ export function TeamSelect() {
       speciesId: +id,
       grade: d.grade,
       caughtAt: d.caughtAt,
+      shiny: d.shiny,
     }));
     switch (sort) {
       case 'grade':
@@ -245,6 +246,7 @@ export function TeamSelect() {
                   key={d.speciesId}
                   speciesId={d.speciesId}
                   grade={d.grade}
+                  shiny={d.shiny}
                   selected={isSelected(d)}
                   onClick={() => toggle(d)}
                 />

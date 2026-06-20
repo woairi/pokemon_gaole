@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { sfx } from '../audio/sfx';
+import { playCry, sfx } from '../audio/sfx';
 import { GetChanceOverlay } from '../components/GetChanceOverlay';
 import { HpBar } from '../components/HpBar';
 import { RushOverlay } from '../components/RushOverlay';
@@ -15,7 +15,9 @@ import { TUNING, typeMultiplier } from '../engine/damage';
 import { useGame } from '../store/gameStore';
 import { haptic } from '../utils/haptics';
 import { iGa, wa } from '../utils/korean';
-import { artworkUrl, battleSpriteUrl, preloadImages } from '../utils/sprites';
+import {
+  artworkUrl, battleSpriteUrl, preloadImages, shinyArtworkUrl, shinyBattleSpriteUrl,
+} from '../utils/sprites';
 import { TYPE_COLORS } from '../utils/typeColors';
 
 const ATTACK_ANIM_MS = 1700;
@@ -109,11 +111,18 @@ export function BattleScreen() {
     if (phase === 'intro' || phase === 'legendIntro') {
       if (phase === 'legendIntro') sfx.legend();
       const urls = [
-        ...battle.wild.map((w) => battleSpriteUrl(w.speciesId, 'front')),
+        ...battle.wild.map((w) =>
+          w.shiny ? shinyBattleSpriteUrl(w.speciesId, 'front') : battleSpriteUrl(w.speciesId, 'front')
+        ),
         ...battle.player.map((p) => playerSpriteUrl(p).src),
-        ...battle.wild.map((w) => artworkUrl(w.speciesId)),
+        ...battle.wild.map((w) => (w.shiny ? shinyArtworkUrl(w.speciesId) : artworkUrl(w.speciesId))),
       ];
       let cancelled = false;
+      // 등장하는 야생 포켓몬의 울음소리 (난입 연출 후 한 박자 뒤)
+      const cryTimer = setTimeout(
+        () => playCry(battle.wild[0].speciesId),
+        phase === 'legendIntro' ? 1400 : 700
+      );
       const minWait = new Promise((r) => setTimeout(r, phase === 'legendIntro' ? 2400 : 1800));
       Promise.all([preloadImages(urls), minWait]).then(() => {
         const b = current();
@@ -123,6 +132,7 @@ export function BattleScreen() {
       });
       return () => {
         cancelled = true;
+        clearTimeout(cryTimer);
       };
     }
 
@@ -295,9 +305,17 @@ export function BattleScreen() {
                 }
               }}
             >
-              <HpBar hp={w.hp} maxHp={w.maxHp} label={`${sp.ko}${w.intruder ? ' ⚠️' : ''}`} />
+              <HpBar
+                hp={w.hp}
+                maxHp={w.maxHp}
+                label={`${w.shiny ? '✨' : ''}${sp.ko}${w.intruder ? ' ⚠️' : ''}`}
+              />
               {targeted && <div className="battle__target-mark">🎯 조준!</div>}
-              <div className={`battle__sprite-box${hitNow ? ' battle__sprite-box--hit' : ''}`}>
+              <div
+                className={`battle__sprite-box${hitNow ? ' battle__sprite-box--hit' : ''}${
+                  w.shiny ? ' battle__sprite-box--shiny' : ''
+                }`}
+              >
                 {w.caught ? (
                   <div className="battle__caught">🔴 GET!</div>
                 ) : w.hp <= 0 && w.catchResolved ? (
@@ -307,9 +325,11 @@ export function BattleScreen() {
                     className={`battle__sprite battle__sprite--front${
                       w.hp <= 0 ? ' battle__sprite--fainted' : ''
                     }`}
-                    src={battleSpriteUrl(w.speciesId, 'front')}
+                    src={w.shiny ? shinyBattleSpriteUrl(w.speciesId, 'front') : battleSpriteUrl(w.speciesId, 'front')}
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = artworkUrl(w.speciesId);
+                      (e.target as HTMLImageElement).src = w.shiny
+                        ? shinyArtworkUrl(w.speciesId)
+                        : artworkUrl(w.speciesId);
                     }}
                     alt={sp.ko}
                     draggable={false}
@@ -496,6 +516,7 @@ export function BattleScreen() {
           key={`${battle.stage}-${battle.getChanceQueue[0]}`}
           speciesId={battle.wild[battle.getChanceQueue[0]].speciesId}
           intruder={battle.wild[battle.getChanceQueue[0]].intruder}
+          shiny={battle.wild[battle.getChanceQueue[0]].shiny}
           gradeBoost={battle.gradeBoost}
           recordCatch={recordCatchAttempt}
           onDone={(outcome) => {
