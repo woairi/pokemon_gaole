@@ -130,7 +130,28 @@ export interface SaveV4 {
   teamPresets: TeamPreset[];
 }
 
-export type SaveData = SaveV4;
+export interface SaveV5 {
+  version: 5;
+  disks: Record<number, OwnedDisk>;
+  dex: { seen: number[]; caught: number[]; shiny: number[] };
+  stats: {
+    battles: number;
+    wins: number;
+    catches: number;
+    zMovesUsed: number;
+    stamps: number;
+    championClears: number;
+    /** 잡은 샤이니 누적 수 */
+    shinyCatches: number;
+  };
+  /** cries = 포켓몬 울음소리 (효과음·BGM과 별개로 켜고 끔) */
+  settings: { volume: Volume; cries: boolean; tutorialSeen: boolean };
+  daily: { lastDate: string | null };
+  pendingBoost: boolean;
+  teamPresets: TeamPreset[];
+}
+
+export type SaveData = SaveV5;
 
 export type Screen =
   | 'title' | 'menu' | 'course' | 'team'

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { DiskInstance, SaveData, TypeName } from '../../types';
-import { defaultSave } from '../../store/persistence';
+import { defaultSave, migrate } from '../../store/persistence';
 import { rollEvolutions } from '../events';
 import {
   ATK_ROULETTE, DEF_ROULETTE, STAGE_COUNT, advanceStage, afterRush, applyBattleEvolution,
@@ -144,6 +144,33 @@ describe('포획 자비 보정(pity)', () => {
     const withPity = catchProbability('A', poke, pityBonus(3));
     expect(withPity).toBeGreaterThan(base);
     expect(withPity).toBeLessThanOrEqual(0.99);
+  });
+});
+
+describe('저장 마이그레이션 — 울음소리 설정(v5)', () => {
+  it('기본 저장은 울음소리 꺼짐', () => {
+    expect(defaultSave().version).toBe(5);
+    expect(defaultSave().settings.cries).toBe(false);
+  });
+  it('v4 저장은 v5로 변환되며 울음소리는 꺼짐', () => {
+    const v4 = {
+      version: 4,
+      disks: { 25: { grade: 3, caughtAt: 1, timesUsed: 0 } },
+      dex: { seen: [25], caught: [25], shiny: [] },
+      stats: {
+        battles: 1, wins: 1, catches: 1, zMovesUsed: 0,
+        stamps: 0, championClears: 0, shinyCatches: 0,
+      },
+      settings: { volume: 1, tutorialSeen: true },
+      daily: { lastDate: null },
+      pendingBoost: false,
+      teamPresets: [],
+    };
+    const m = migrate(v4);
+    expect(m.version).toBe(5);
+    expect(m.settings.cries).toBe(false);
+    expect(m.settings.volume).toBe(1); // 기존 볼륨은 유지
+    expect(m.disks[25].grade).toBe(3); // 디스크 보존
   });
 });
 

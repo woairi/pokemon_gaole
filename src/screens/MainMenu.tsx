@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { sfx } from '../audio/sfx';
+import { playCry, sfx } from '../audio/sfx';
 import { BackupModal } from '../components/BackupModal';
 import { TutorialOverlay } from '../components/TutorialOverlay';
 import { trainerTitle } from '../data/courses';
@@ -9,6 +9,7 @@ export function MainMenu() {
   const setScreen = useGame((s) => s.setScreen);
   const save = useGame((s) => s.save);
   const cycleVolume = useGame((s) => s.cycleVolume);
+  const toggleCries = useGame((s) => s.toggleCries);
   const markTutorialSeen = useGame((s) => s.markTutorialSeen);
   const [showBackup, setShowBackup] = useState(false);
 
@@ -18,6 +19,7 @@ export function MainMenu() {
   };
 
   const volIcon = save.settings.volume === 0 ? '🔇' : save.settings.volume === 1 ? '🔉' : '🔊';
+  const criesOn = save.settings.cries;
 
   return (
     <div className="screen menu">
@@ -38,7 +40,24 @@ export function MainMenu() {
           >
             {volIcon}
           </button>
+          <button
+            type="button"
+            className={`menu__sound menu__cries${criesOn ? '' : ' menu__cries--off'}`}
+            onClick={() => {
+              const turningOn = !criesOn;
+              toggleCries();
+              sfx.click();
+              if (turningOn) playCry(25); // 켜면 미리듣기 (피카츄)
+            }}
+            aria-label={criesOn ? '포켓몬 울음소리 끄기' : '포켓몬 울음소리 켜기'}
+            title="포켓몬 울음소리"
+          >
+            🐾
+          </button>
         </div>
+      </div>
+      <div className="menu__cries-hint">
+        🐾 포켓몬 울음소리 {criesOn ? 'ON' : 'OFF'}
       </div>
 
       <div className="menu__title-line">{trainerTitle(save)}</div>

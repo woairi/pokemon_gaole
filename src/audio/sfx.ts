@@ -12,6 +12,13 @@ export function setVolume(v: 0 | 1 | 2) {
 export const getVolume = () => volume as 0 | 1 | 2;
 export const isSoundEnabled = () => volume > 0;
 
+// 포켓몬 울음소리는 효과음/BGM과 별개로 켜고 끈다 (기본 꺼짐)
+let criesOn = false;
+export function setCriesEnabled(on: boolean) {
+  criesOn = on;
+}
+export const getCriesEnabled = () => criesOn;
+
 export function getAudioContext(): AudioContext | null {
   return ensureCtx();
 }
@@ -70,7 +77,7 @@ function noise(dur: number, vol = 0.15, delay = 0) {
 /** 포켓몬 울음소리: PokeAPI cries(.ogg)를 핫링크로 재생. 실패해도 무음 */
 let cryAudio: HTMLAudioElement | null = null;
 export function playCry(speciesId: number) {
-  if (volume === 0 || typeof Audio === 'undefined') return;
+  if (!criesOn || volume === 0 || typeof Audio === 'undefined') return;
   try {
     cryAudio?.pause();
     const a = new Audio(

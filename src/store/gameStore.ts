@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { setVolume } from '../audio/sfx';
+import { setCriesEnabled, setVolume } from '../audio/sfx';
 import {
   type BattleResult, type BattleState, type CatchOutcome,
   createBattle, getSpecies,
@@ -43,6 +43,7 @@ interface GameStore {
   applyEvolution: (ev: EvolutionEvent) => void;
   setVolume: (v: Volume) => void;
   cycleVolume: () => void;
+  toggleCries: () => void;
   markTutorialSeen: () => void;
   replaceSave: (save: SaveData) => void;
   saveTeamPreset: (speciesIds: number[]) => void;
@@ -55,6 +56,7 @@ const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD (로컬)
 
 const initialSave = loadSave();
 setVolume(initialSave.settings.volume);
+setCriesEnabled(initialSave.settings.cries);
 
 const uniq = (arr: number[]) => [...new Set(arr)];
 
@@ -214,8 +216,18 @@ export const useGame = create<GameStore>((set, get) => ({
 
   replaceSave: (save) => {
     setVolume(save.settings.volume);
+    setCriesEnabled(save.settings.cries);
     saveSave(save);
     set({ save });
+  },
+
+  toggleCries: () => {
+    const { save } = get();
+    const cries = !save.settings.cries;
+    const next: SaveData = { ...save, settings: { ...save.settings, cries } };
+    setCriesEnabled(cries);
+    saveSave(next);
+    set({ save: next });
   },
 
   saveTeamPreset: (speciesIds) => {

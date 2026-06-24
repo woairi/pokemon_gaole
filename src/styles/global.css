@@ -2407,6 +2407,36 @@ button {
   padding: 4px 0;
 }
 
+/* ===== 포켓몬 울음소리 토글 ===== */
+.menu__cries {
+  position: relative;
+}
+
+/* 꺼짐 상태: 흐리게 + 대각선 빗금 */
+.menu__cries--off {
+  opacity: 0.4;
+}
+
+.menu__cries--off::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 130%;
+  height: 2px;
+  background: #ff5252;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  border-radius: 2px;
+}
+
+.menu__cries-hint {
+  text-align: right;
+  font-size: 11px;
+  color: #9aa;
+  padding: 0 14px 2px;
+  margin-top: -4px;
+}
+
 /* ===== 샤이니(색이 다른 포켓몬) ===== */
 @keyframes shiny-sparkle {
   0%, 100% { filter: drop-shadow(0 0 2px #fff5b0) drop-shadow(0 0 6px #ffe066); }

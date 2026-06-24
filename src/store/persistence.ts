@@ -1,17 +1,18 @@
-import type { SaveData, SaveV1, SaveV2, SaveV3, SaveV4 } from '../types';
+import type { SaveData, SaveV1, SaveV2, SaveV3, SaveV4, SaveV5 } from '../types';
 
 const KEY = 'pokemon-gaole-save';
 
-export function defaultSave(): SaveV4 {
+export function defaultSave(): SaveV5 {
   return {
-    version: 4,
+    version: 5,
     disks: {},
     dex: { seen: [], caught: [], shiny: [] },
     stats: {
       battles: 0, wins: 0, catches: 0, zMovesUsed: 0,
       stamps: 0, championClears: 0, shinyCatches: 0,
     },
-    settings: { volume: 2, tutorialSeen: false },
+    // 울음소리는 호불호가 있어 기본은 꺼둠 (메뉴에서 켤 수 있음)
+    settings: { volume: 2, cries: false, tutorialSeen: false },
     daily: { lastDate: null },
     pendingBoost: false,
     teamPresets: [],
@@ -45,7 +46,7 @@ function v2ToV3(v2: SaveV2): SaveV3 {
 
 function v3ToV4(v3: SaveV3): SaveV4 {
   return {
-    ...defaultSave(),
+    version: 4,
     disks: v3.disks,
     dex: { ...v3.dex, shiny: [] },
     stats: { ...v3.stats, shinyCatches: 0 },
@@ -56,18 +57,29 @@ function v3ToV4(v3: SaveV3): SaveV4 {
   };
 }
 
+function v4ToV5(v4: SaveV4): SaveV5 {
+  return {
+    ...v4,
+    version: 5,
+    // 기존 사용자도 울음소리는 기본 꺼짐으로 전환 (피드백 반영)
+    settings: { volume: v4.settings.volume, cries: false, tutorialSeen: v4.settings.tutorialSeen },
+  };
+}
+
 export function migrate(raw: unknown): SaveData {
   if (!raw || typeof raw !== 'object' || !('version' in raw)) return defaultSave();
   const save = raw as { version: number };
   switch (save.version) {
     case 1:
-      return v3ToV4(v2ToV3(v1ToV2(save as SaveV1)));
+      return v4ToV5(v3ToV4(v2ToV3(v1ToV2(save as SaveV1))));
     case 2:
-      return v3ToV4(v2ToV3(save as SaveV2));
+      return v4ToV5(v3ToV4(v2ToV3(save as SaveV2)));
     case 3:
-      return v3ToV4(save as SaveV3);
+      return v4ToV5(v3ToV4(save as SaveV3));
     case 4:
-      return save as SaveV4;
+      return v4ToV5(save as SaveV4);
+    case 5:
+      return save as SaveV5;
     default:
       return defaultSave();
   }

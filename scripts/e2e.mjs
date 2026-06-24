@@ -33,7 +33,8 @@ await page.waitForSelector('.menu', { timeout: 5000 });
 console.log('✓ 메인 메뉴');
 
 if (await page.$('.tutorial')) {
-  for (let i = 0; i < 3; i++) {
+  // 슬라이드 수에 의존하지 않고 오버레이가 사라질 때까지 탭 (최대 8회)
+  for (let i = 0; i < 8 && (await page.$('.tutorial')); i++) {
     await tapEl('.tutorial__btn');
     await page.waitForTimeout(300);
   }
@@ -41,10 +42,21 @@ if (await page.$('.tutorial')) {
 }
 
 // 소리 크기 3단계 순환 (끄기→작게→크게)
-const volBefore = await page.$eval('.menu__sound:last-child', (el) => el.textContent);
-await tapEl('.menu__sound:last-child');
-const volAfter = await page.$eval('.menu__sound:last-child', (el) => el.textContent);
+const volSel = '.menu__sound[aria-label="소리 크기"]';
+const volBefore = await page.$eval(volSel, (el) => el.textContent);
+await tapEl(volSel);
+const volAfter = await page.$eval(volSel, (el) => el.textContent);
 console.log(volBefore !== volAfter ? '✓ 소리 크기 변경' : '✗ 소리 크기 그대로');
+
+// 포켓몬 울음소리 토글 (기본 꺼짐 → 켜짐)
+const criesOffBefore = await page.$('.menu__cries--off');
+await tapEl('.menu__cries');
+const criesOffAfter = await page.$('.menu__cries--off');
+console.log(
+  criesOffBefore && !criesOffAfter ? '✓ 울음소리 토글 (기본 꺼짐→켜짐)' : '✗ 울음소리 토글 실패'
+);
+// 다시 꺼서 기본 상태로
+await tapEl('.menu__cries');
 
 // 타입 상성표 화면
 const tcBtn = (await page.$$('.menu-btn')).at(-1);
