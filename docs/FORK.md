@@ -14,7 +14,20 @@
 2. 메모장 등에 코드를 보관
 3. 새 주소로 접속한 뒤 **메뉴 → 💾 → 불러오기 → 코드 붙여넣기**
 
-## 포크 & 배포 단계
+## 배포 방법 A — Vercel (가장 간단, 권장)
+
+코드 수정 없이 바로 배포돼요. `vercel.json`이 루트 경로 빌드·SPA 라우팅을 담고 있어요.
+
+1. [vercel.com/new](https://vercel.com/new) 접속 → GitHub 계정 연결
+2. **Import Git Repository**에서 `pokemon_gaole` 선택
+3. 설정은 그대로 두고 **Deploy** (프레임워크·빌드 명령·출력 폴더 자동 인식)
+4. 1~2분 뒤 `https://<프로젝트>.vercel.app/` 에서 플레이
+5. 이후 `main`(또는 기본 브랜치)에 push할 때마다 자동 재배포
+
+> Vercel은 루트 도메인에서 서비스되므로 base 경로가 `/`로 빌드돼요(`vercel.json`이 처리).
+> 저장소 이름을 바꿔도 그대로 동작합니다.
+
+## 배포 방법 B — GitHub Pages
 
 1. GitHub에서 이 저장소를 **본인 계정으로 Fork**
    - 저장소 **이름은 `pokemon_gaole` 그대로** 두세요 (경로 설정이 이름 기준)
