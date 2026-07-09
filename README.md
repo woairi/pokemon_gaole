@@ -84,8 +84,16 @@ public/sprites/          # 셀프호스팅 이미지 (아트워크·썸네일·�
 
 ### 배포
 
-`main` 브랜치에 푸시하면 GitHub Actions가 테스트 → 빌드 → `gh-pages` 브랜치로 자동 배포합니다.
-처음 한 번만 저장소 **Settings → Pages → Source**를 `gh-pages` 브랜치로 지정하세요.
+두 가지 방식을 모두 지원해요. base 경로는 빌드 시 자동으로 맞춰집니다.
+
+**① Vercel (권장)** — 저장소를 Vercel에 연결하면 push마다 자동 배포돼요.
+[vercel.com/new](https://vercel.com/new) → **Import**에서 이 저장소 선택 → 그대로 **Deploy**.
+`vercel.json`에 빌드 설정(루트 경로 `/` 빌드, SPA 라우팅)이 들어 있어 별도 설정이 필요 없어요.
+루트 도메인(`https://<프로젝트>.vercel.app/`)에서 서비스됩니다.
+
+**② GitHub Pages** — `main` 브랜치에 푸시하면 GitHub Actions가 테스트 → 빌드 →
+`gh-pages` 브랜치로 자동 배포합니다. 처음 한 번만 저장소 **Settings → Pages → Source**를
+`gh-pages` 브랜치로 지정하세요. base 경로는 저장소 이름(`/pokemon_gaole/`) 기준이에요.
 (무료 플랜에서는 저장소가 **공개**여야 Pages가 게시됩니다.)
 
 ### 포크해서 내 계정에 배포하기
